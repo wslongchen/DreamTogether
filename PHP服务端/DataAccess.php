@@ -50,6 +50,35 @@ class DataAccess {
 		else
 			return false;
 	}
-
+	function initTables(){
+		$sql = "CREATE TABLE IF NOT EXISTS dream_wordcircle (
+				ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+				wordcircle_author INT(11) NOT NULL,
+				wordcircle_date DATETIME NOT NULL,
+				wordcircle_content LONGTEXT NOT NULL,
+				wordcircle_titile text NOT NULL,
+				wordcircle_status VARCHAR(20) NOT NULL,
+				wordcircle_password VARCHAR(20) NOT NULL,
+				wordcircle_guid VARCHAR(255),
+				wordcircle_type INT(11) NOT NULL,
+				wordcircle_comment_status VARCHAR(20) NOT NULL,
+				wordcircle_comment_count INT(11)
+				);
+				CREATE TABLE IF NOT EXISTS dream_users (
+				ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+				user_login varchar(60) NOT NULL,
+				user_pass varchar(64) NOT NULL,
+				user_nickname varchar(50) NOT NULL,
+				user_email varchar(100) NOT NULL,
+				user_url VARCHAR(100) NOT NULL,
+				user_registered datetime NOT NULL,
+				user_activation_key varchar(60),
+				user_status INT(11) NOT NULL,
+				user_display_name varchar(250) NOT NULL
+				)";
+		IF($this->db!=null){
+			mysql_query($sql);
+		}
+	}
 }
 ?>
