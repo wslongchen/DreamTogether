@@ -2,6 +2,7 @@
 /**
  * 一个用来访问MySQL的类
  */
+header("Content-type:text/html;charset=utf-8");
 class DataAccess {
 	var $db;
 	//用于存储数据库连接
@@ -19,9 +20,42 @@ class DataAccess {
 		$this -> db = mysql_pconnect($host, $user, $pass);
 		//连接数据库服务器
 		mysql_select_db($db, $this -> db);
+		mysql_query("set names utf8;");
 		//选择所需数据库
 		//前者是构造函数参数
 		//后者是类的数据成员
+		//require_once('PrepareSql.php');
+		$sql = "CREATE TABLE IF NOT EXISTS dream_wordcircle (
+				ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+				wordcircle_author INT(11) NOT NULL,
+				wordcircle_date DATETIME NOT NULL,
+				wordcircle_content LONGTEXT NOT NULL,
+				wordcircle_titile text NOT NULL,
+				wordcircle_status VARCHAR(20) NOT NULL,
+				wordcircle_password VARCHAR(20) NOT NULL,
+				wordcircle_guid VARCHAR(255),
+				wordcircle_type INT(11) NOT NULL,
+				wordcircle_comment_status VARCHAR(20) NOT NULL,
+				wordcircle_comment_count INT(11)
+				),
+				CREATE TABLE IF NOT EXISTS dream_users (
+				ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+				user_login varchar(60) NOT NULL,
+				user_pass varchar(64) NOT NULL,
+				user_nickname varchar(50) NOT NULL,
+				user_email varchar(100) NOT NULL,
+				user_url VARCHAR(100) NOT NULL,
+				user_registered datetime NOT NULL,
+				user_activation_key varchar(60),
+				user_status INT(11) NOT NULL,
+				user_display_name varchar(250) NOT NULL
+				)";
+			mysql_query($sql,$this->db);
+		//$sql = new ReadSql($host, $user, $pass, $db);
+		//$rst = $sql -> Import("./log_db.sql");
+		//if ($rst) {
+		//	echo "Success！";
+		//}
 		if (!$this -> db) {
 			die('Could not connect: ' . mysql_error());
 		}
@@ -37,6 +71,10 @@ class DataAccess {
 		$this -> query = mysql_unbuffered_query($sql, $this -> db);
 		// Perform query here
 	}
+	
+	function query($sql) {
+		return mysql_query($sql);
+	}
 
 	//获取一条记录
 	/**
@@ -50,7 +88,8 @@ class DataAccess {
 		else
 			return false;
 	}
-	function initTables(){
+
+	function initTables() {
 		$sql = "CREATE TABLE IF NOT EXISTS dream_wordcircle (
 				ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
 				wordcircle_author INT(11) NOT NULL,
@@ -76,9 +115,10 @@ class DataAccess {
 				user_status INT(11) NOT NULL,
 				user_display_name varchar(250) NOT NULL
 				)";
-		IF($this->db!=null){
+		IF ($this -> db != null) {
 			mysql_query($sql);
 		}
 	}
+
 }
 ?>

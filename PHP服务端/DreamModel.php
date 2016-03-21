@@ -4,7 +4,7 @@
  * 它的主要部分是对应于各种数据操作的函数
  * 如：数据的显示、插入、删除等
  */
-class DreamsModel {
+class DreamModel {
 	var $dao;
 	//DataAccess类的一个实例（对象）
 	//! 构造函数
@@ -17,13 +17,17 @@ class DreamsModel {
 	}
 
 	function postDream($dream) {//插入一条新梦想
-		$sql = "INSERT INTO `dreamdb`.`dream_wordcircle` VALUES('" . $dream[author] . "','" . $dream[date] . "','" . $dream[content] . "','" . $dream[title] . "','" . $dream[status] . "','" . $dream[password] . "','" . $dream[guid] . "','" . $dream[type] . "','" . $dream[commentstatus] . "','" . $dream[commentcount] . "'";
+		$sql = "INSERT INTO `dream_wordcircle` (`wordcircle_author`, `wordcircle_date`, `wordcircle_content`, `wordcircle_titile`, `wordcircle_status`, `wordcircle_password`, `wordcircle_guid`, `wordcircle_type`, `wordcircle_comment_status`, `wordcircle_comment_count`) VALUES('" . $dream[author] . "','" . $dream[date] . "','" . $dream[content] . "','" . $dream[title] . "','" . $dream[status] . "','" . $dream[password] . "','" . $dream[guid] . "','" . $dream[type] . "','" . $dream[commentstatus] . "','" . $dream[commentcount] . "')";
 		//调试时用echo输出一下看看是否正确是一种常用的调试技巧
-		if($this -> dao -> fetch($sql)){
-			
+		if(!empty($dream) && $this -> dao -> query($sql)){
+			$json_out["ret"]=0;
+			$json_out["post"]="post successed";
+			return $json_out;
 		}
 		else{
-			return false;
+			$json_out["ret"]=1;
+			$json_out["post"]="post failed!";
+			return $json_out;
 		}
 	}
 
@@ -33,7 +37,7 @@ class DreamsModel {
 	}
 
 	function updateDream($dream, $id) {//更新一条梦想，$id是该梦想的id
-		$sql = "UPDATE `dreamdb`.`dream_wordcircle` SET `wordcircle_author`='" . $dream[author] . "',`wordcircle_date`='" . $dream[date] . "',`wordcircle_content`='" . $dream[content] . "',`wordcircle_titile`='" . $dream[title] . "',`wordcircle_status`='" . $dream[status] . "',`wordcircle_password`='" . $dream[password] . "',`wordcircle_guid`='" . $dream[guid] . "',`wordcircle_type`='" . $dream[type] . "',`wordcircle_comment_status`='" . $dream[commentstatus] . "',`wordcircle_comment_count`='" . $dream[commentcount] . "'";
+		$sql = "UPDATE `dreamdb`.`dream_wordcircle` SET `wordcircle_author`='" . $dream[author] . "',`wordcircle_date`='" . $dream[date] . "',`wordcircle_content`='" . $dream[content] . "',`wordcircle_titile`='" . $dream[title] . "',`wordcircle_status`='" . $dream[status] . "',`wordcircle_password`='" . $dream[password] . "',`wordcircle_guid`='" . $dream[guid] . "',`wordcircle_type`='" . $dream[type] . "',`wordcircle_comment_status`='" . $dream[commentstatus] . "',`wordcircle_comment_count`='" . $dream[commentcount] . "')";
 	}
 	function getDreamID(){
 		//$sql="SELECT ID FROM `dreamdb`.`dream_wordcircle` WHERE wordcircle_";

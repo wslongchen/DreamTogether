@@ -1,5 +1,5 @@
 <?php 
-class DreamModel{
+class UserModel{
 	var $dao;
 	
 	function __construct($dao){
@@ -8,17 +8,20 @@ class DreamModel{
 	
 	function listUser(){
 		$sql="SELECT * FROM dream_users";
-		$this->dao->fetch(sql);
+		$this->dao->fetch($sql);
 	}
 	
 	function postUser($user){
-		$sql="INSERT INTO `dreamdb`.`dream_users` VALUES ('".$user[name]."','".$user[pass]."','".$user[nickname]."','".$user[email]."','".$user[url]."','".$user[registeredate]."','".$user[activationkey]."','".$user[status]."','".$user[displayname]."')";
-		if($this->dao->fetch(sql))
-		{
-			return true;
+		$sql="INSERT INTO `dream_users`(`user_login`, `user_pass`, `user_nickname`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `user_display_name`) VALUES ('".$user['name']."','".$user['pass']."','".$user['nickname']."','".$user['email']."','".$user['url']."','".$user['registeredate']."','".$user['activationkey']."','".$user['status']."','".$user['displayname']."')";
+		if(!empty($user) && $this->dao->query($sql)){
+			$json_out["ret"]=0;
+			$json_out["post"]="post successed";
+			return $json_out;
 		}
 		else{
-			return false;
+			$json_out["ret"]=1;
+			$json_out["post"]="post failed!";
+			return $json_out;
 		}
 	}
 	
@@ -28,7 +31,7 @@ class DreamModel{
 	
 	function deleteUser($id){
 		$sql="DELETE FROM `dreamdb`.`dream_users` WHERE `dream_users`.`ID`='".$id."'";
-		if($this->dao->fetch(sql))
+		if($this->dao->fetch($sql))
 		{
 			return true;
 		}
@@ -37,15 +40,23 @@ class DreamModel{
 		}
 	}
 	
-	function loginUser($name,$pass){
-		$sql="SELECT * FROM dream_users where user_login='".$name."' and user_pass='".$pass."'";
-		$this-dao->fetch(sql);
-		if($user=$this->dao->fetch(sql)){
-			return $user;
-		}
-		else{
+	function getUser() {
+		if ($oneuser = $this -> dao -> getRow()) {
+			return $oneuser;
+		} else {
 			return false;
 		}
+	}
+	
+	function loginUser($name,$pass){
+//		$sql="SELECT * FROM dream_users where user_login='".$name."' and user_pass='".$pass."'";
+//		$this-dao->fetch($sql);
+//		if($user=$this->dao->fetch($sql)){
+//			return $user;
+//		}
+//		else{
+//			return false;
+//		}
 	}
 } 	
 ?>

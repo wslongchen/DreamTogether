@@ -2,45 +2,35 @@
 class UserController{
 	
 	var $model;
-	var $json_output;
 	
 	function __construct($dao){
 		$this->model=new UserModel($dao);
-		$json_output=array();
 	}
 	
 	function listUsers(){
 		$this->model->listUser();
 		$users=array();
-		while($user=$this->model->getDream()){
+		while($user=$this->model->getUser()){
 			array_push($users,$user);
 		}
-		$json_output["ret"]=0;
-		$json_output["post"]=$users;
+		$json_output['ret']=0;
+		$json_output['post']=$users;
+		echo json_encode($json_output);
 	}
 	
 	function postUser($user){
-		if($this->model->postUser($user))
-		{
-			$json_out["ret"]=0;
-			$json_out["post"]="post successed";
-		}
-		else
-		{
-			$json_output["ret"]=1;
-			$json_output["post"]="post failed!";	
-		}
-		
+		$json_output=$this->model->postUser($user);
+		echo json_encode($json_output);
 	}
 	
 	function login($name,$pass){
 		if($user=$this->model->loginUser($name,$pass)){
-			$json_out["ret"]=0;
+			$json_out['ret']=0;
 			$json_out["user"]=$user;
 		}
 		else{
-			$json_output["ret"]=1;
-			$json_output["post"]="post failed!";	
+			$json_output['ret']=1;
+			$json_output['post']="post failed!";	
 		}
 	}
 	
