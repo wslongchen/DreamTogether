@@ -24,14 +24,9 @@ class UserController{
 	}
 	
 	function login($name,$pass){
-		if($user=$this->model->loginUser($name,$pass)){
-			$json_out['ret']=0;
-			$json_out["user"]=$user;
-		}
-		else{
-			$json_output['ret']=1;
-			$json_output['post']="post failed!";	
-		}
+			echo "ddd";
+			$json_output=$this->model->loginUser($name,$pass);
+		 	echo json_encode($json_output);
 	}
 	
 	function output(){

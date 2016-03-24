@@ -28,6 +28,10 @@ switch ($action) {
 			$controller = new DreamController($dao);
 		$controller -> listDream();
 		}
+		if($_GET["type"]==="loginUser"){
+			$controller = new DreamController($dao);
+			$controller -> login($_GET['name'],$_GET['password']);
+		}
 		//$controller->output();
 		break;
 	case "delete" :

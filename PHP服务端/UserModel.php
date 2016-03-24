@@ -49,14 +49,17 @@ class UserModel{
 	}
 	
 	function loginUser($name,$pass){
-//		$sql="SELECT * FROM dream_users where user_login='".$name."' and user_pass='".$pass."'";
-//		$this-dao->fetch($sql);
-//		if($user=$this->dao->fetch($sql)){
-//			return $user;
-//		}
-//		else{
-//			return false;
-//		}
+		$sql="SELECT * FROM dream_users where user_login='".$name."' and user_pass='".$pass."'";
+			$this->dao->fetch($sql);
+			if($user=$this -> dao -> getRow()){
+				$json_out["ret"]=0;
+				$json_out["post"]=$user;
+				return $json_out;
+			}else{
+				$json_out["ret"]=1;
+				$json_out["post"]="login failed!";
+				return $json_out;
+			}
 	}
-} 	
+}
 ?>
