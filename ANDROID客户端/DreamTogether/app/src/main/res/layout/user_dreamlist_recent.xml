@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="top"
+    android:background="@mipmap/dreamlistbg">
+    <com.example.mrpan.dreamtogether.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/top_bar"/>
+    <com.example.mrpan.dreamtogether.view.OverScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_bar">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/imageView"
+                    android:src="@mipmap/ic_launcher"
+                    android:layout_marginLeft="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="潘安"
+                    android:id="@+id/textView4"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="36dp"
+                    android:layout_above="@+id/textView5"
+                    android:layout_toEndOf="@+id/imageView" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="一共发表了2个梦想"
+                    android:id="@+id/textView5"
+                    android:layout_marginTop="5dp"
+                    android:layout_alignBottom="@+id/imageView"
+                    android:layout_alignStart="@+id/textView4" />
+            </RelativeLayout>
+            <ExpandableListView
+                android:id="@+id/expandlist"
+                android:visibility="gone"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#ffffff"
+                android:cacheColorHint="#00000000"
+                android:childDivider="@drawable/list_line"
+                android:divider="@null"
+                android:listSelector="#00000000" >
+            </ExpandableListView>
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/dream_recent_list"
+                android:listSelector="#00000000"
+                android:background="#ffffff"
+                android:cacheColorHint="#00000000"
+                android:divider="@null"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp">
+
+            </ListView>
+
+        </LinearLayout>
+    </com.example.mrpan.dreamtogether.view.OverScrollView>
+</RelativeLayout>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="1">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_marginTop="10dp"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:background="@drawable/layout_selector">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/userImg"
+        android:src="@mipmap/ic_launcher"
+        android:layout_alignParentTop="true"
+        android:padding="10dp"
+        android:layout_alignParentStart="true" />
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_centerVertical="true"
+    android:layout_toEndOf="@+id/userImg"
+    android:id="@+id/linearLayout">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="昵称"
+        android:id="@+id/user_nickname"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/userImg" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="湖南 长沙"
+        android:id="@+id/user_infos"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/userImg" />
+</LinearLayout>
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/qrImg"
+        android:src="@mipmap/ic_launcher"
+        android:layout_alignBottom="@+id/linearLayout"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentEnd="true" />
+
+
+</RelativeLayout>
+</LinearLayout>

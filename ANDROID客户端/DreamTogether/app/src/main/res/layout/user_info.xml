@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    <com.djf.view.TitleBar 
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <com.example.mrpan.dreamtogether.view.TitleBar
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_alignParentTop="true"
-        android:id="@+id/userInfoTitleBar"
-        ></com.djf.view.TitleBar>
-    
-	    <com.djf.listview.XListView 
+        android:id="@+id/top_bar"/>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dreamBackground">
+
+    <include layout="@layout/user_info_header"
+        android:id="@+id/include"
+        />
+    <ListView
+        android:id="@+id/user_info_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/allDiaryListView"
-        android:layout_below="@+id/userInfoTitleBar"
-        android:divider="@null"
-        ></com.djf.listview.XListView>
+        android:divider="@mipmap/line"
+        android:listSelector="@color/dreamBlack"
+        android:layout_below="@+id/include">
+
+    </ListView>
 </RelativeLayout>
+</LinearLayout>
