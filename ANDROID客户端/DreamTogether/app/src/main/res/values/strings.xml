@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">梦想</string>
+    <string name="action_settings">Settings</string>
+    <string name="phone_register"><u>手机号快捷登录</u></string>
+</resources>

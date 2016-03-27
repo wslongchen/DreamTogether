@@ -44,11 +44,11 @@ class DataAccess {
 				user_pass varchar(64) NOT NULL,
 				user_nickname varchar(50) NOT NULL,
 				user_email varchar(100) NOT NULL,
-				user_url VARCHAR(100) NOT NULL,
+				user_url VARCHAR(100),
 				user_registered datetime NOT NULL,
 				user_activation_key varchar(60),
 				user_status INT(11) NOT NULL,
-				user_display_name varchar(250) NOT NULL
+				user_display_name varchar(250)
 				)";
 			mysql_query($sql,$this->db);
 		//$sql = new ReadSql($host, $user, $pass, $db);
