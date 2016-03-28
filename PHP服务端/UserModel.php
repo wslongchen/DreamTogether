@@ -12,7 +12,7 @@ class UserModel{
 	}
 	
 	function postUser($user){
-		$sql="INSERT INTO `dream_users`(`user_login`, `user_pass`, `user_nickname`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `user_display_name`) VALUES ('".$user['name']."','".$user['pass']."','".$user['nickname']."','".$user['email']."','".$user['url']."','".$user['registeredate']."','".$user['activationkey']."','".$user['status']."','".$user['displayname']."')";
+		$sql="INSERT INTO `dream_users`(`user_login`, `user_pass`, `user_nickname`, `user_img`,`user_phone`,`user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `user_display_name`) VALUES ('".$user['name']."','".$user['pass']."','".$user['nickname']."','".$user['img']."','".$user['phone']."','".$user['email']."','".$user['url']."','".$user['registeredate']."','".$user['activationkey']."','".$user['status']."','".$user['displayname']."')";
 		if(!empty($user) && $this->dao->query($sql)){
 			$json_out["ret"]=0;
 			$json_out["post"]="post successed";
@@ -48,12 +48,40 @@ class UserModel{
 		}
 	}
 	
+	function getUserMeta($id){
+		$sql="SELECT * FROM dream_users_meta where user_id='".$id."'";
+		$this->dao->fetch($sql);
+		if($meta=$this->dao->getRow()){
+			return $meta;
+		}
+		else{
+			return false;
+		}
+		
+	}
+	
+	function getUserInfo($id){
+		$sql="SELECT * FROM dream_users where ID='".$id."'";
+		$this->dao->fetch($sql);
+		if($user=$this->dao->getRow()){
+			return $user;
+		}
+		else{
+			return $id;
+		}
+	}
+	
 	function loginUser($name,$pass){
 		$sql="SELECT * FROM dream_users where user_login='".$name."' and user_pass='".$pass."'";
 			$this->dao->fetch($sql);
 			if($user=$this -> dao -> getRow()){
 				$json_out["ret"]=0;
 				$json_out["post"]=$user;
+				$metas=array();
+				while($meta=$this->getUserMeta()){
+					array_push($metas,$meta);
+				}
+				$json_out["meta"]=$metas;
 				return $json_out;
 			}else{
 				$json_out["ret"]=1;
@@ -61,5 +89,21 @@ class UserModel{
 				return $json_out;
 			}
 	}
+	
+	function insertUserMeta($meta){
+		$sql="INSERT INTO `dream_users_meta` VALUES ('"+$meta["key"]+"','"+$meta["value"]+"')";
+		if(!empty($meta) && $this->dao->query($sql)){
+			$json_out["ret"]=0;
+			$json_out["post"]="post successed";
+			return $json_out;
+		}
+		else{
+			$json_out["ret"]=1;
+			$json_out["post"]="post failed!";
+			return $json_out;
+		}
+	}
+	
+	
 }
 ?>

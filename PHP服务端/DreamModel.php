@@ -13,11 +13,11 @@ class DreamModel {
 	}
 
 	function listDreams() {//获取全部梦想
-		$this -> dao -> fetch("select * from dream_wordcircle");
+		$this -> dao -> fetch("select * from dream_posts where post_type='0'");
 	}
 
 	function postDream($dream) {//插入一条新梦想
-		$sql = "INSERT INTO `dream_wordcircle` (`wordcircle_author`, `wordcircle_date`, `wordcircle_content`, `wordcircle_titile`, `wordcircle_status`, `wordcircle_password`, `wordcircle_guid`, `wordcircle_type`, `wordcircle_comment_status`, `wordcircle_comment_count`) VALUES('" . $dream[author] . "','" . $dream[date] . "','" . $dream[content] . "','" . $dream[title] . "','" . $dream[status] . "','" . $dream[password] . "','" . $dream[guid] . "','" . $dream[type] . "','" . $dream[commentstatus] . "','" . $dream[commentcount] . "')";
+		$sql = "INSERT INTO `dream_posts` (`post_author`, `post_date`, `post_content`, `post_titile`, `post_status`, `post_password`, `post_guid`, `post_type`, `post_comment_status`, `post_comment_count`) VALUES('" . $dream[author] . "','" . $dream[date] . "','" . $dream[content] . "','" . $dream[title] . "','" . $dream[status] . "','" . $dream[password] . "','" . $dream[guid] . "','" . $dream[type] . "','" . $dream[commentstatus] . "','" . $dream[commentcount] . "')";
 		//调试时用echo输出一下看看是否正确是一种常用的调试技巧
 		if(!empty($dream) && $this -> dao -> query($sql)){
 			$json_out["ret"]=0;
@@ -30,14 +30,44 @@ class DreamModel {
 			return $json_out;
 		}
 	}
+	
+	function getDreamWithAuthor(){
+		$sql="select * from dream_posts where post_type='0'";
+		$this->listDreams();
+		$dreams=array();
+		$author=array();
+		$user=new UserModel($this->dao);
+		while($dream=$this->getDream()){
+			$userInfo=$user->getUserInfo($dream["post_author"]);
+			$dream["post_author"]=$userInfo;
+			
+			//var_dump($dream["post_author"]);
+			array_push($dreams,$dream);
+		}
+		$json_output["ret"]=0;
+		$json_output["post"]=$dreams;
+		return $json_output;
+	}
+	
+	function getDreamByAuthor($id){
+		$sql="select * from dream_posts where post_author='"+$id+"' and post_type='0'";
+		$this -> dao -> fetch($sql);
+		$dreams=array();
+		while($dream=$this->dao->getRow()){
+			array_push($dreams,$dream);
+		}
+		$json_output["ret"]=0;
+		$json_output["post"]=$dreams;
+		return $json_output;
+	}
 
 	function deleteDream($id) {//删除一条梦想，$id是该条梦想的id
-		$sql = "DELETE FROM `dreamdb`.`dream_wordcircle` WHERE `dream_wordcircle`.`ID`=" . $id;
+		$sql = "DELETE FROM `dreamdb`.`dream_posts` WHERE `dream_post`.`ID`=" . $id;
 		$this -> dao -> fetch($sql);
 	}
 
 	function updateDream($dream, $id) {//更新一条梦想，$id是该梦想的id
-		$sql = "UPDATE `dreamdb`.`dream_wordcircle` SET `wordcircle_author`='" . $dream[author] . "',`wordcircle_date`='" . $dream[date] . "',`wordcircle_content`='" . $dream[content] . "',`wordcircle_titile`='" . $dream[title] . "',`wordcircle_status`='" . $dream[status] . "',`wordcircle_password`='" . $dream[password] . "',`wordcircle_guid`='" . $dream[guid] . "',`wordcircle_type`='" . $dream[type] . "',`wordcircle_comment_status`='" . $dream[commentstatus] . "',`wordcircle_comment_count`='" . $dream[commentcount] . "')";
+		$sql = "UPDATE `dreamdb`.`dream_posts` SET `post_author`='" . $dream[author] . "',`post_date`='" . $dream[date] . "',`post_content`='" . $dream[content] . "',`post_titile`='" . $dream[title] . "',`post_status`='" . $dream[status] . "',`post_password`='" . $dream[password] . "',`post_guid`='" . $dream[guid] . "',`post_type`='" . $dream[type] . "',`post_comment_status`='" . $dream[commentstatus] . "',`post_comment_count`='" . $dream[commentcount] . "')";
 	}
 	function getDreamID(){
 		//$sql="SELECT ID FROM `dreamdb`.`dream_wordcircle` WHERE wordcircle_";

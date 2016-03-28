@@ -28,6 +28,11 @@ class DreamController{
 		echo json_encode($json_output);
 	}
 	
+	function listDreamWithAuthor(){
+		$json_out=$this->model->getDreamWithAuthor();
+		echo json_encode($json_out);
+	}
+	
 	function deleteDream($name){
 		//$this->model->deleteDream($id);
 	}

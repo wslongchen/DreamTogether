@@ -25,31 +25,45 @@ class DataAccess {
 		//前者是构造函数参数
 		//后者是类的数据成员
 		//require_once('PrepareSql.php');
-		$sql = "CREATE TABLE IF NOT EXISTS dream_wordcircle (
+		$sql = "CREATE TABLE IF NOT EXISTS dream_posts (
 				ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-				wordcircle_author INT(11) NOT NULL,
-				wordcircle_date DATETIME NOT NULL,
-				wordcircle_content LONGTEXT NOT NULL,
-				wordcircle_titile text NOT NULL,
-				wordcircle_status VARCHAR(20) NOT NULL,
-				wordcircle_password VARCHAR(20) NOT NULL,
-				wordcircle_guid VARCHAR(255),
-				wordcircle_type INT(11) NOT NULL,
-				wordcircle_comment_status VARCHAR(20) NOT NULL,
-				wordcircle_comment_count INT(11)
-				),
+				post_author INT(11) NOT NULL,
+				post_date DATETIME NOT NULL,
+				post_content LONGTEXT NOT NULL,
+				post_titile text NOT NULL,
+				post_status VARCHAR(20) NOT NULL,
+				post_password VARCHAR(20) NOT NULL,
+				post_guid VARCHAR(255),
+				post_type INT(11) NOT NULL,
+				post_comment_status VARCHAR(20) NOT NULL,
+				post_comment_count INT(11)
+				);
+				CREATE TABLE IF NOT EXISTS dream_posts_meta(
+				dpmeta_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+				post_id INT(11),
+				meta_key varchar(255),
+				meta_value longtext);
 				CREATE TABLE IF NOT EXISTS dream_users (
 				ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
 				user_login varchar(60) NOT NULL,
 				user_pass varchar(64) NOT NULL,
 				user_nickname varchar(50) NOT NULL,
+				user_img varchar(100),
+				user_phone varchar(100) NOT NULL,
 				user_email varchar(100) NOT NULL,
 				user_url VARCHAR(100),
 				user_registered datetime NOT NULL,
 				user_activation_key varchar(60),
 				user_status INT(11) NOT NULL,
 				user_display_name varchar(250)
+				)
+				CREATE TABLE IF NOT EXISTS dream_users_meta(
+				dumeta_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+				user_id INT(6) NOT NULL,
+				meta_key varchar(255) NOT NULL,
+				meta_value longtext NOT NULL
 				)";
+				
 			mysql_query($sql,$this->db);
 		//$sql = new ReadSql($host, $user, $pass, $db);
 		//$rst = $sql -> Import("./log_db.sql");
@@ -90,33 +104,26 @@ class DataAccess {
 	}
 
 	function initTables() {
-		$sql = "CREATE TABLE IF NOT EXISTS dream_wordcircle (
+		$sql = "CREATE TABLE IF NOT EXISTS dream_posts (
 				ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-				wordcircle_author INT(11) NOT NULL,
-				wordcircle_date DATETIME NOT NULL,
-				wordcircle_content LONGTEXT NOT NULL,
-				wordcircle_titile text NOT NULL,
-				wordcircle_status VARCHAR(20) NOT NULL,
-				wordcircle_password VARCHAR(20) NOT NULL,
-				wordcircle_guid VARCHAR(255),
-				wordcircle_type INT(11) NOT NULL,
-				wordcircle_comment_status VARCHAR(20) NOT NULL,
-				wordcircle_comment_count INT(11)
+				post_author INT(11) NOT NULL,
+				post_date DATETIME NOT NULL,
+				post_content LONGTEXT NOT NULL,
+				post_titile text NOT NULL,
+				post_status VARCHAR(20) NOT NULL,
+				post_password VARCHAR(20) NOT NULL,
+				post_guid VARCHAR(255),
+				post_type INT(11) NOT NULL,
+				post_comment_status VARCHAR(20) NOT NULL,
+				post_comment_count INT(11)
 				);
-				CREATE TABLE IF NOT EXISTS dream_users (
-				ID INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-				user_login varchar(60) NOT NULL,
-				user_pass varchar(64) NOT NULL,
-				user_nickname varchar(50) NOT NULL,
-				user_email varchar(100) NOT NULL,
-				user_url VARCHAR(100) NOT NULL,
-				user_registered datetime NOT NULL,
-				user_activation_key varchar(60),
-				user_status INT(11) NOT NULL,
-				user_display_name varchar(250) NOT NULL
-				)";
+				CREATE TABLE IF NOT EXISTS dream_posts_meta(
+				dpmeta_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+				post_id INT(11),
+				meta_key varchar(255),
+				meta_value longtext);";
 		IF ($this -> db != null) {
-			mysql_query($sql);
+			mysql_query($sql,$this->db);
 		}
 	}
 

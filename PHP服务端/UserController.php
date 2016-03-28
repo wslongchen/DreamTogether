@@ -24,9 +24,8 @@ class UserController{
 	}
 	
 	function login($name,$pass){
-			echo "ddd";
-			$json_output=$this->model->loginUser($name,$pass);
-		 	echo json_encode($json_output);
+		$json_output=$this->model->loginUser($name,$pass);
+		echo json_encode($json_output);
 	}
 	
 	function output(){
