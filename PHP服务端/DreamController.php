@@ -28,8 +28,8 @@ class DreamController{
 		echo json_encode($json_output);
 	}
 	
-	function listDreamWithAuthor(){
-		$json_out=$this->model->getDreamWithAuthor();
+	function listDreamWithAuthor($page,$count){
+		$json_out=$this->model->getDreamWithAuthor($page,$count);
 		echo json_encode($json_out);
 	}
 	

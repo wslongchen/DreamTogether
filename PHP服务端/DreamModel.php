@@ -13,7 +13,7 @@ class DreamModel {
 	}
 
 	function listDreams() {//获取全部梦想
-		$this -> dao -> fetch("select * from dream_posts where post_type='0'");
+		$this -> dao -> fetch("select * from dream_posts where post_type='0' order by post_date DESC,ID DESC");
 	}
 
 	function postDream($dream) {//插入一条新梦想
@@ -31,16 +31,16 @@ class DreamModel {
 		}
 	}
 	
-	function getDreamWithAuthor(){
-		$sql="select * from dream_posts where post_type='0'";
-		$this->listDreams();
+	function getDreamWithAuthor($page,$count){
+		$sql="select * from dream_posts where post_type='0' order by post_date DESC";
+		$this->dao->query($sql);
 		$dreams=array();
 		$author=array();
 		$user=new UserModel($this->dao);
-		while($dream=$this->getDream()){
+		while($dream=$this->dao->getResult()){
+			
 			$userInfo=$user->getUserInfo($dream["post_author"]);
 			$dream["post_author"]=$userInfo;
-			
 			//var_dump($dream["post_author"]);
 			array_push($dreams,$dream);
 		}
@@ -50,7 +50,7 @@ class DreamModel {
 	}
 	
 	function getDreamByAuthor($id){
-		$sql="select * from dream_posts where post_author='"+$id+"' and post_type='0'";
+		$sql="select * from dream_posts where post_author='"+$id+"' and post_type='0' order by post_date DESC";
 		$this -> dao -> fetch($sql);
 		$dreams=array();
 		while($dream=$this->dao->getRow()){

@@ -87,9 +87,19 @@ class DataAccess {
 	}
 	
 	function query($sql) {
-		return mysql_query($sql);
+		$result=mysql_query($sql,$this->db);
+		
+		$this -> queryt=$result;
+	return $result;
 	}
-
+	
+	function getResult() {
+		if ($row = mysql_fetch_array($this -> queryt, MYSQL_ASSOC))
+			//MYSQL_ASSOC参数决定了数组键名用字段名表示
+			return $row;
+		else
+			return false;
+	}
 	//获取一条记录
 	/**
 	 * 以数组形式返回查询结果的一行记录，通过循环调用该函数可遍历全部记录

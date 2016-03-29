@@ -15,6 +15,11 @@ class UserController{
 		}
 		$json_output['ret']=0;
 		$json_output['post']=$users;
+		$metas=array();
+		while($meta=$this->model->getUserMeta()){
+			array_push($metas,$meta);
+		}
+		$json_output["meta"]=$metas;
 		echo json_encode($json_output);
 	}
 	

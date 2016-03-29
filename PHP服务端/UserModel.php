@@ -50,8 +50,8 @@ class UserModel{
 	
 	function getUserMeta($id){
 		$sql="SELECT * FROM dream_users_meta where user_id='".$id."'";
-		$this->dao->fetch($sql);
-		if($meta=$this->dao->getRow()){
+		$this->dao->query($sql);
+		if($meta=$this->dao->getResult()){
 			return $meta;
 		}
 		else{
@@ -62,8 +62,8 @@ class UserModel{
 	
 	function getUserInfo($id){
 		$sql="SELECT * FROM dream_users where ID='".$id."'";
-		$this->dao->fetch($sql);
-		if($user=$this->dao->getRow()){
+		$this->dao->query($sql);
+		if($user=$this->dao->getResult()){
 			return $user;
 		}
 		else{
