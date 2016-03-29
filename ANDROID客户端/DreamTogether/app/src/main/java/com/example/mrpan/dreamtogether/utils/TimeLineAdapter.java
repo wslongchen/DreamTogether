@@ -56,7 +56,7 @@ public class TimeLineAdapter extends BaseAdapter {
             viewHolder=(ViewHolder)convertView.getTag();
         }
         Dream dream=datas.get(position);
-        viewHolder.dream_content.setText(dream.getWordcircle_content());
+        viewHolder.dream_content.setText(dream.getPost_content());
         if(position==0){
 
         }

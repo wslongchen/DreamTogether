@@ -5,16 +5,16 @@ package com.example.mrpan.dreamtogether.entity;
  */
 public class Dream extends BaseEntity{
     private int ID;
-    private String wordcircle_author;
-    private String wordcircle_date;
-    private String wordcircle_content;
-    private String wordcircle_titile;
-    private String wordcircle_status;
-    private String wordcircle_password;
-    private String wordcircle_guid;
-    private String wordcircle_type;
-    private String wordcircle_comment_status;
-    private String wordcircle_comment_count;
+    private User post_author;
+    private String post_date;
+    private String post_content;
+    private String post_titile;
+    private String post_status;
+    private String post_password;
+    private String post_guid;
+    private String post_type;
+    private String post_comment_status;
+    private String post_comment_count;
 
     public int getID() {
         return ID;
@@ -24,83 +24,83 @@ public class Dream extends BaseEntity{
         this.ID = ID;
     }
 
-    public String getWordcircle_date() {
-        return wordcircle_date;
+    public User getPost_author() {
+        return post_author;
     }
 
-    public void setWordcircle_date(String wordcircle_date) {
-        this.wordcircle_date = wordcircle_date;
+    public void setPost_author(User post_author) {
+        this.post_author = post_author;
     }
 
-    public String getWordcircle_author() {
-        return wordcircle_author;
+    public String getPost_date() {
+        return post_date;
     }
 
-    public void setWordcircle_author(String wordcircle_author) {
-        this.wordcircle_author = wordcircle_author;
+    public void setPost_date(String post_date) {
+        this.post_date = post_date;
     }
 
-    public String getWordcircle_content() {
-        return wordcircle_content;
+    public String getPost_content() {
+        return post_content;
     }
 
-    public void setWordcircle_content(String wordcircle_content) {
-        this.wordcircle_content = wordcircle_content;
+    public void setPost_content(String post_content) {
+        this.post_content = post_content;
     }
 
-    public String getWordcircle_titile() {
-        return wordcircle_titile;
+    public String getPost_titile() {
+        return post_titile;
     }
 
-    public void setWordcircle_titile(String wordcircle_titile) {
-        this.wordcircle_titile = wordcircle_titile;
+    public void setPost_titile(String post_titile) {
+        this.post_titile = post_titile;
     }
 
-    public String getWordcircle_status() {
-        return wordcircle_status;
+    public String getPost_status() {
+        return post_status;
     }
 
-    public void setWordcircle_status(String wordcircle_status) {
-        this.wordcircle_status = wordcircle_status;
+    public void setPost_status(String post_status) {
+        this.post_status = post_status;
     }
 
-    public String getWordcircle_password() {
-        return wordcircle_password;
+    public String getPost_password() {
+        return post_password;
     }
 
-    public void setWordcircle_password(String wordcircle_password) {
-        this.wordcircle_password = wordcircle_password;
+    public void setPost_password(String post_password) {
+        this.post_password = post_password;
     }
 
-    public String getWordcircle_guid() {
-        return wordcircle_guid;
+    public String getPost_guid() {
+        return post_guid;
     }
 
-    public void setWordcircle_guid(String wordcircle_guid) {
-        this.wordcircle_guid = wordcircle_guid;
+    public void setPost_guid(String post_guid) {
+        this.post_guid = post_guid;
     }
 
-    public String getWordcircle_type() {
-        return wordcircle_type;
+    public String getPost_type() {
+        return post_type;
     }
 
-    public void setWordcircle_type(String wordcircle_type) {
-        this.wordcircle_type = wordcircle_type;
+    public void setPost_type(String post_type) {
+        this.post_type = post_type;
     }
 
-    public String getWordcircle_comment_status() {
-        return wordcircle_comment_status;
+    public String getPost_comment_status() {
+        return post_comment_status;
     }
 
-    public void setWordcircle_comment_status(String wordcircle_comment_status) {
-        this.wordcircle_comment_status = wordcircle_comment_status;
+    public void setPost_comment_status(String post_comment_status) {
+        this.post_comment_status = post_comment_status;
     }
 
-    public String getWordcircle_comment_count() {
-        return wordcircle_comment_count;
+    public String getPost_comment_count() {
+        return post_comment_count;
     }
 
-    public void setWordcircle_comment_count(String wordcircle_comment_count) {
-        this.wordcircle_comment_count = wordcircle_comment_count;
+    public void setPost_comment_count(String post_comment_count) {
+        this.post_comment_count = post_comment_count;
     }
 }

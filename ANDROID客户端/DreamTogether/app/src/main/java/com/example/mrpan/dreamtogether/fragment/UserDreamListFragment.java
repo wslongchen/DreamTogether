@@ -52,13 +52,13 @@ public class UserDreamListFragment extends Fragment{
         List<Dream> dreams=new ArrayList<>();
         Dream dream;
         dream=new Dream();
-        dream.setWordcircle_content("我去，这是什么梦想！");
+        dream.setPost_content("我去，这是什么梦想！");
         dreams.add(dream);
         dream=new Dream();
-        dream.setWordcircle_content("我去，这是什么梦想！");
+        dream.setPost_content("我去，这是什么梦想！");
         dreams.add(dream);
         dream=new Dream();
-        dream.setWordcircle_content("我去，这是什么梦想！");
+        dream.setPost_content("我去，这是什么梦想！");
         dreams.add(dream);
         TimeLineAdapter timeLineAdapter=new TimeLineAdapter(dreams,context);
         dream_recent_list.setAdapter(timeLineAdapter);

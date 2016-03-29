@@ -38,14 +38,14 @@ public class DreamPublishActivity extends Activity implements View.OnClickListen
     private void init(){
         context=this;
         dream=new Dream();
-        dream.setWordcircle_titile("");
-        dream.setWordcircle_date(DateUtils.getCurrentTimeStr());
-        dream.setWordcircle_author("");
-        dream.setWordcircle_content("");
-        dream.setWordcircle_comment_count("0");
-        dream.setWordcircle_comment_status("0");
-        dream.setWordcircle_type("0");
-        dream.setWordcircle_status("0");
+//        dream.s("");
+//        dream.setWordcircle_date(DateUtils.getCurrentTimeStr());
+//        dream.setWordcircle_author(null);
+//        dream.setWordcircle_content("");
+//        dream.setWordcircle_comment_count("0");
+//        dream.setWordcircle_comment_status("0");
+//        dream.setWordcircle_type("0");
+//        dream.setWordcircle_status("0");
     }
 
     @Override

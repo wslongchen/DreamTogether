@@ -94,6 +94,7 @@ public final class RegexUtils {
 	public static boolean checkPassword(String psw) {
 		if (psw == null || psw.trim().length() == 0)
 			return false;
-		return true;
+		else
+			return true;
 	}
 }

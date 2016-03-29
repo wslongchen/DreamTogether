@@ -8,6 +8,8 @@ public class User extends BaseEntity{
     private String user_login;
     private String user_pass;
     private String user_nickname;
+    private String user_img;
+    private String user_phone;
     private String user_email;
     private String user_url;
     private String user_registered;
@@ -45,6 +47,22 @@ public class User extends BaseEntity{
 
     public void setUser_nickname(String user_nickname) {
         this.user_nickname = user_nickname;
+    }
+
+    public String getUser_img() {
+        return user_img;
+    }
+
+    public void setUser_img(String user_img) {
+        this.user_img = user_img;
+    }
+
+    public String getUser_phone() {
+        return user_phone;
+    }
+
+    public void setUser_phone(String user_phone) {
+        this.user_phone = user_phone;
     }
 
     public String getUser_email() {
@@ -94,4 +112,5 @@ public class User extends BaseEntity{
     public void setUser_display_name(String user_display_name) {
         this.user_display_name = user_display_name;
     }
+
 }

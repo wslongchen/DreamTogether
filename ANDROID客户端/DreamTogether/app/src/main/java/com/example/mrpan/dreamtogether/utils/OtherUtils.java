@@ -24,6 +24,8 @@ public class OtherUtils {
         nameValuePairs.add(new BasicNameValuePair("name",user.getUser_login()));
         nameValuePairs.add(new BasicNameValuePair("pass",user.getUser_pass()));
         nameValuePairs.add(new BasicNameValuePair("nickname",user.getUser_nickname()));
+        nameValuePairs.add(new BasicNameValuePair("img",user.getUser_img()));
+        nameValuePairs.add(new BasicNameValuePair("phone",user.getUser_phone()));
         nameValuePairs.add(new BasicNameValuePair("email",user.getUser_email()));
         nameValuePairs.add(new BasicNameValuePair("url",user.getUser_url()));
         nameValuePairs.add(new BasicNameValuePair("registeredate",user.getUser_registered()));
@@ -35,16 +37,17 @@ public class OtherUtils {
 
     public static List<NameValuePair> DreamToNameValuePair(Dream dream){
         List<NameValuePair> nameValuePairs=new ArrayList<>();
-        nameValuePairs.add(new BasicNameValuePair("author",dream.getWordcircle_author()));
-        nameValuePairs.add(new BasicNameValuePair("date",dream.getWordcircle_date()));
-        nameValuePairs.add(new BasicNameValuePair("content",dream.getWordcircle_content()));
-        nameValuePairs.add(new BasicNameValuePair("title",dream.getWordcircle_titile()));
-        nameValuePairs.add(new BasicNameValuePair("status",dream.getWordcircle_status()));
-        nameValuePairs.add(new BasicNameValuePair("password",dream.getWordcircle_password()));
-        nameValuePairs.add(new BasicNameValuePair("guid",dream.getWordcircle_guid()));
-        nameValuePairs.add(new BasicNameValuePair("type", dream.getWordcircle_type()));
-        nameValuePairs.add(new BasicNameValuePair("commentstatus",dream.getWordcircle_comment_status()));
-        nameValuePairs.add(new BasicNameValuePair("commentcount",dream.getWordcircle_comment_count()));
+        int ID=dream.getPost_author().getID();
+        nameValuePairs.add(new BasicNameValuePair("author",String.valueOf(ID)));
+        nameValuePairs.add(new BasicNameValuePair("date",dream.getPost_date()));
+        nameValuePairs.add(new BasicNameValuePair("content",dream.getPost_content()));
+        nameValuePairs.add(new BasicNameValuePair("title",dream.getPost_titile()));
+        nameValuePairs.add(new BasicNameValuePair("status",dream.getPost_status()));
+        nameValuePairs.add(new BasicNameValuePair("password",dream.getPost_password()));
+        nameValuePairs.add(new BasicNameValuePair("guid",dream.getPost_guid()));
+        nameValuePairs.add(new BasicNameValuePair("type", dream.getPost_type()));
+        nameValuePairs.add(new BasicNameValuePair("commentstatus",dream.getPost_comment_status()));
+        nameValuePairs.add(new BasicNameValuePair("commentcount",dream.getPost_comment_count()));
         return nameValuePairs;
     }
 

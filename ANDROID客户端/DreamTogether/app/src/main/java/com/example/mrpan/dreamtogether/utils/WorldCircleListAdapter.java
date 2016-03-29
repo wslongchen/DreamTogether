@@ -43,8 +43,8 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
     {
         // 给ViewHolder设置元素
         Dream p = dreams.get(i);
-        viewHolder.dream_content.setText(p.getWordcircle_content());
-        viewHolder.dream_author.setText(p.getWordcircle_author());
+        viewHolder.dream_content.setText(p.getPost_content());
+        viewHolder.dream_author.setText(p.getPost_author().getUser_nickname());
       //  viewHolder.dream_comments_names.setVisibility(View.GONE);
 //        viewHolder.dream_date.setText(p.getWordcircle_date());
 //        if(p.getWordcircle_comment_count()==null){

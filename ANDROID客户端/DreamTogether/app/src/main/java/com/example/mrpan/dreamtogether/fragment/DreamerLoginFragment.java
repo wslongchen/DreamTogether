@@ -169,7 +169,7 @@ public class DreamerLoginFragment extends Fragment implements View.OnClickListen
                         }
                         if (ret == Config.RESULT_RET_SUCCESS) {
                             UserPosts userPosts = (UserPosts) GsonUtils.getEntity(msg.obj.toString(), UserPosts.class);
-                            List<User> users = userPosts.getPosts();
+                            List<User> users = userPosts.getPost();
                             Toast.makeText(context,"登录成功！",Toast.LENGTH_LONG).show();
                             FragmentTransaction transaction = getFragmentManager().beginTransaction();
                             Bundle bundle=new Bundle();
