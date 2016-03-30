@@ -26,13 +26,16 @@ import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.entity.UserPosts;
 import com.example.mrpan.dreamtogether.http.HttpHelper;
 import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
+import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DialogUtils;
 import com.example.mrpan.dreamtogether.utils.GsonUtils;
 import com.example.mrpan.dreamtogether.utils.Md5Utils;
+import com.example.mrpan.dreamtogether.utils.MySharePreference;
 import com.example.mrpan.dreamtogether.utils.RegexUtils;
 import com.example.mrpan.dreamtogether.view.DeletableEditText;
 import com.example.mrpan.dreamtogether.view.LXiuXiu;
+import com.example.mrpan.dreamtogether.view.TitleBar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,6 +59,8 @@ public class DreamerLoginFragment extends Fragment implements View.OnClickListen
     private DeletableEditText loginName,loginPassword;
 
     private RelativeLayout newUserRegister;
+
+    private TitleBar titleBar;
 
     LXiuXiu lXiuXiu1;
 
@@ -87,6 +92,8 @@ public class DreamerLoginFragment extends Fragment implements View.OnClickListen
         loginBtn.setOnClickListener(this);
         newUserRegister=(RelativeLayout)currentView.findViewById(R.id.newUserRegister);
         newUserRegister.setOnClickListener(this);
+        titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
+        titleBar.showCenterTitle("个人中心");
     }
 
     @Override
@@ -171,6 +178,9 @@ public class DreamerLoginFragment extends Fragment implements View.OnClickListen
                             UserPosts userPosts = (UserPosts) GsonUtils.getEntity(msg.obj.toString(), UserPosts.class);
                             List<User> users = userPosts.getPost();
                             Toast.makeText(context,"登录成功！",Toast.LENGTH_LONG).show();
+                            MySharePreference mySharePreference=new MySharePreference(context);
+                            mySharePreference.commitBoolean("isLogin",true);
+                            CacheUtils.saveHttpCache(Config.DIR_CACHE_PATH,"user_info",users.get(0));
                             FragmentTransaction transaction = getFragmentManager().beginTransaction();
                             Bundle bundle=new Bundle();
                             bundle.putSerializable("data", users.get(0));

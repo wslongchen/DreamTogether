@@ -12,8 +12,12 @@ import android.widget.TextView;
 
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.Dream;
+import com.example.mrpan.dreamtogether.entity.Meta;
+import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.view.NoScrollGridView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -44,7 +48,24 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
         // 给ViewHolder设置元素
         Dream p = dreams.get(i);
         viewHolder.dream_content.setText(p.getPost_content());
-        viewHolder.dream_author.setText(p.getPost_author().getUser_nickname());
+        User u=p.getPost_author();
+        viewHolder.dream_author.setText(u.getUser_nickname());
+        if(u.getUser_img().equals("")){
+           viewHolder.author_img.setImageResource(R.mipmap.ic_launcher);
+        }
+        else{
+
+        }
+//        List<Meta> metas=dreams.get(i).getMetas();
+//        List<HashMap<String,Object>> datas=new ArrayList<>();
+//        for (Meta m:metas) {
+//            if(m.getMeta_key().equals("dream_img")){
+//                //
+//            }
+//            HashMap<String,Object> data=new HashMap<>();
+//            data.put("url",m.getMeta_value());
+//        }
+//        DreamImageGridAdapter gridAdapter=new DreamImageGridAdapter(mContext,)
       //  viewHolder.dream_comments_names.setVisibility(View.GONE);
 //        viewHolder.dream_date.setText(p.getWordcircle_date());
 //        if(p.getWordcircle_comment_count()==null){
@@ -97,7 +118,7 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
             dream_date = (TextView) v.findViewById(R.id.dream_date);
             dream_comments_names = (TextView) v.findViewById(R.id.dream_comments_names);
             dream_img_gridView=(NoScrollGridView)v.findViewById(R.id.dream_img_gridView);
-            author_img = (ImageView) v.findViewById(R.id.author_img);
+            author_img = (ImageView) v.findViewById(R.id.dream_author_img);
             dream_comments_layout=(RelativeLayout)v.findViewById(R.id.dream_comments_layout);
         }
     }

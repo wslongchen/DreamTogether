@@ -156,7 +156,6 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
                             @Override
                             public void onSuccess(String url, String result) {
                                 dialog.dismiss();
-                                MyLog.i("222",result);
                                 Message message = new Message();
                                 message.arg1 = Config.HTTP_REQUEST_SUCCESS;
                                 message.obj = result;

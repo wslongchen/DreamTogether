@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dream_bg"
+    android:orientation="vertical" >
+
+    <com.example.mrpan.dreamtogether.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/top_bar"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dreamWhite">
+        <EditText
+            android:id="@+id/dream_post_content"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:layout_margin="8dp"
+            android:gravity="left|top"
+            android:hint="分享您的那点新鲜事儿..."
+            android:background="@null" >
+        </EditText>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dreamWhite">
+        <GridView
+            android:id="@+id/dream_post_scrollgridview"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:horizontalSpacing="3dp"
+            android:numColumns="4"
+            android:scrollbars="none"
+            android:verticalSpacing="5dp" >
+        </GridView>
+    </LinearLayout>
+
+</LinearLayout>

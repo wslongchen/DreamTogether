@@ -21,6 +21,7 @@ import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.GsonUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.utils.WorldCircleListAdapter;
+import com.example.mrpan.dreamtogether.view.TitleBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ import java.util.List;
 /**
  * Created by mrpan on 16/3/17.
  */
-public class WorldCircleFragment extends Fragment{
+public class WorldCircleFragment extends Fragment implements View.OnClickListener{
 
     public final static String TAG="WorldCircle";
 
@@ -39,6 +40,8 @@ public class WorldCircleFragment extends Fragment{
     private HttpHelper httpHelper;
 
     private DreamPosts dreams;
+
+    private TitleBar titleBar;
 
     @Nullable
     @Override
@@ -53,6 +56,9 @@ public class WorldCircleFragment extends Fragment{
     }
 
     void initView(){
+        titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
+        titleBar.showRight("梦想圈",R.mipmap.ic_launcher,this);
+
         recyclerView=(RecyclerView)currentView.findViewById(R.id.dream_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         // 设置ItemAnimator
@@ -74,7 +80,7 @@ public class WorldCircleFragment extends Fragment{
                         {
                             case Config.ALL_DREAM:
                                 dreams=(DreamPosts) GsonUtils.getEntity(msg.obj.toString(), DreamPosts.class);
-                                List<Dream> dreamList=dreams.getPosts();
+                                List<Dream> dreamList=dreams.getPost();
                                 WorldCircleListAdapter worldCircleListAdapter=new WorldCircleListAdapter(getActivity(),dreamList);
                                 recyclerView.setAdapter(worldCircleListAdapter);
                                 break;
@@ -89,6 +95,11 @@ public class WorldCircleFragment extends Fragment{
             super.handleMessage(msg);
         }
     };
+
+    @Override
+    public void onClick(View v) {
+
+    }
 
     class DreamHttpResponseCallBack implements HttpResponseCallBack {
         private int position;

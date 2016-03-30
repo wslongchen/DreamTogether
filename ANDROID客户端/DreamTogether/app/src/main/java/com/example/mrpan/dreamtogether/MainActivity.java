@@ -3,6 +3,7 @@ package com.example.mrpan.dreamtogether;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,8 +30,10 @@ import com.example.mrpan.dreamtogether.fragment.DreamerLoginFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamerRegisterFragment;
 import com.example.mrpan.dreamtogether.fragment.WorldCircleFragment;
 import com.example.mrpan.dreamtogether.http.HttpHelper;
+import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DialogUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
+import com.example.mrpan.dreamtogether.utils.MySharePreference;
 import com.example.mrpan.dreamtogether.view.loadview.Load2Dialog;
 
 import java.util.HashMap;
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private WorldCircleFragment worldCircleFragment=null;
     private DreamerLoginFragment dreamerLoginFragment=null;
     private DreamerInfoFragment dreamerInfoFragment=null;
-    private DreamerRegisterFragment dreamerRegisterFragment=null;
+    //private DreamerRegisterFragment dreamerRegisterFragment=null;
     private DreamSearchFragment dreamSearchFragment=null;
 
 
@@ -68,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_content, worldCircleFragment);
-        transaction.addToBackStack(null);
+        //transaction.addToBackStack(null);
         transaction.commit();
 
         imageView=(ImageView)findViewById(R.id.toggle_btn);
@@ -148,20 +151,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.menu_home:
                 transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.frame_content,fragmentHashMap.get(WorldCircleFragment.TAG));
-                transaction.addToBackStack(null);
+                //transaction.addToBackStack(null);
                 transaction.commit();
                 break;
             case R.id.menu_auth:
+                MySharePreference mySharePreference=new MySharePreference(this);
+                boolean isLogin=mySharePreference.getBoolean("isLogin",false);
                 transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame_content,fragmentHashMap.get(DreamerLoginFragment.TAG));
-                transaction.addToBackStack(null);
+                if(isLogin){
+                    transaction.replace(R.id.frame_content,fragmentHashMap.get(DreamerInfoFragment.TAG));
+                }else{
+                    transaction.replace(R.id.frame_content,fragmentHashMap.get(DreamerLoginFragment.TAG));
+                }
+                //transaction.addToBackStack(null);
                 transaction.commit();
                 break;
             case R.id.menu_more:
-//                transaction = getSupportFragmentManager().beginTransaction();
-//                transaction.replace(R.id.frame_content,fragmentHashMap.get(WorldCircleFragment.TAG));
-//                transaction.addToBackStack(null);
-//                transaction.commit();
+                Intent intent=new Intent();
+                Bundle bundle=new Bundle();
+                bundle.putInt("type", Config.POST_TYPE);
+                intent.putExtras(bundle);
+                intent.setClass(this, OtherActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.left_in, R.anim.left_out);
 
                 break;
             default:

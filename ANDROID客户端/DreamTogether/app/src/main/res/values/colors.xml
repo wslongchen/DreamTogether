@@ -10,4 +10,7 @@
     <color name="dreamYellow">#ff7300</color>
     <color name="dreamWhite">#ffffff</color>
     <color name="dramGrey">#C1CDCD</color>
+    <color name="dream_bg">#E5E5E5</color>
+    <color name="dreamTransparent">#0000</color>
+    <color name="dreamTransparent2">#8000</color><!-- 透明 -->
 </resources>

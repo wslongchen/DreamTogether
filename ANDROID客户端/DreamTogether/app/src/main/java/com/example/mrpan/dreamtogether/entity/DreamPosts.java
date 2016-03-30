@@ -9,7 +9,6 @@ import java.util.Objects;
 public class DreamPosts extends BaseEntity{
     private int ret;
     private List<Dream> post;
-
     public int getRet() {
         return ret;
     }
@@ -18,11 +17,11 @@ public class DreamPosts extends BaseEntity{
         this.ret = ret;
     }
 
-    public List<Dream> getPosts() {
+    public List<Dream> getPost() {
         return post;
     }
 
-    public void setPosts(List<Dream> posts) {
-        this.post = posts;
+    public void setPost(List<Dream> post) {
+        this.post = post;
     }
 }

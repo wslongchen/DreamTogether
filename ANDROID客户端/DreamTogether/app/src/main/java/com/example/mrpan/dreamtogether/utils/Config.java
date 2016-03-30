@@ -15,12 +15,15 @@ public class Config {
     public static String TYPE_CONN = "TYPE_CONN";
     public static int TYPE_ALL = 0;
     public static int TYPE_WIFI = 1;
-    public static String DIR_PATH = Environment.getExternalStorageDirectory()
-            .toString()  +"/AnnHome/Cache/";
+    public static String DIR_CACHE_PATH = Environment.getExternalStorageDirectory()
+            .toString()  +"/Dream/Cache/";
     public static String DIR_IMAGE_PATH = Environment.getExternalStorageDirectory()
-            .toString() + "/AnnHome/Image/";
+            .toString() + "/Dream/Image/";
     public static String DIR_DATABASE_PATH=Environment.getExternalStorageDirectory()
-            .toString() +"AnnHome/DataBase/";
+            .toString() +"Dream/DataBase/";
+
+    public static final int TAKE_PICTURE = 0x000000;
+
     public static final int DATA_SHOW=0012;
     public static final int NET_ERROR=0013;
     public static final int SHOW_NEXT = 0011;
@@ -50,5 +53,6 @@ public class Config {
 
     public static final int REGISTER_TYPE=1010;
     public static final int TIMELINE_TYPE=1011;
+    public static final int POST_TYPE=1012;
 
 }

@@ -1,5 +1,7 @@
 package com.example.mrpan.dreamtogether.entity;
 
+import java.util.List;
+
 /**
  * Created by mrpan on 16/3/16.
  */
@@ -16,6 +18,7 @@ public class User extends BaseEntity{
     private String user_activation_key;
     private String user_status;
     private String user_display_name;
+    private List<Meta> metas;
 
     public int getID() {
         return ID;
@@ -113,4 +116,11 @@ public class User extends BaseEntity{
         this.user_display_name = user_display_name;
     }
 
+    public List<Meta> getMetas() {
+        return metas;
+    }
+
+    public void setMetas(List<Meta> metas) {
+        this.metas = metas;
+    }
 }

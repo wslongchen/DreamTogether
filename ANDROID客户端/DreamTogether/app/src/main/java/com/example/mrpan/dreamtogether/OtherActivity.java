@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
+import com.example.mrpan.dreamtogether.fragment.DreamPostFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamerRegisterFragment;
 import com.example.mrpan.dreamtogether.fragment.UserDreamListFragment;
 import com.example.mrpan.dreamtogether.fragment.WorldCircleFragment;
@@ -21,6 +22,7 @@ public class OtherActivity extends FragmentActivity {
     private DreamerRegisterFragment dreamerRegisterFragment;
     private FragmentTransaction transaction=null;
     private UserDreamListFragment userDreamListFragment;
+    private DreamPostFragment dreamPostFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,13 @@ public class OtherActivity extends FragmentActivity {
             case Config.TIMELINE_TYPE:
                 transaction = getSupportFragmentManager().beginTransaction();
                 //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
-                transaction.replace(R.id.other_layout,fragmentHashMap.get(userDreamListFragment.TAG));
+                transaction.replace(R.id.other_layout,fragmentHashMap.get(UserDreamListFragment.TAG));
                 //transaction.addToBackStack(null);
+                transaction.commit();
+                break;
+            case Config.POST_TYPE:
+                transaction=getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.other_layout,fragmentHashMap.get(DreamPostFragment.TAG));
                 transaction.commit();
                 break;
             default:
@@ -53,10 +60,12 @@ public class OtherActivity extends FragmentActivity {
         fragmentHashMap=new HashMap<>();
         dreamerRegisterFragment=new DreamerRegisterFragment();
         userDreamListFragment=new UserDreamListFragment();
+        dreamPostFragment=new DreamPostFragment();
 
 
         fragmentHashMap.put(DreamerRegisterFragment.TAG, dreamerRegisterFragment);
         fragmentHashMap.put(UserDreamListFragment.TAG,userDreamListFragment);
+        fragmentHashMap.put(DreamPostFragment.TAG,dreamPostFragment);
 
 
     }

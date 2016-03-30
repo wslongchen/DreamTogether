@@ -1,5 +1,7 @@
 package com.example.mrpan.dreamtogether.entity;
 
+import java.util.List;
+
 /**
  * Created by mrpan on 16/3/16.
  */
@@ -15,6 +17,8 @@ public class Dream extends BaseEntity{
     private String post_type;
     private String post_comment_status;
     private String post_comment_count;
+    private List<Meta> metas;
+
 
     public int getID() {
         return ID;
@@ -102,5 +106,13 @@ public class Dream extends BaseEntity{
 
     public void setPost_comment_count(String post_comment_count) {
         this.post_comment_count = post_comment_count;
+    }
+
+    public List<Meta> getMetas() {
+        return metas;
+    }
+
+    public void setMetas(List<Meta> metas) {
+        this.metas = metas;
     }
 }

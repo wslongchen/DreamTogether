@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.User;
+import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.UserInfoAdapter;
 
@@ -55,8 +56,11 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
         }
         context=getActivity();
         Bundle data=getArguments();
-        user= (User) data.getSerializable("data");
-
+        if(data!=null) {
+            user = (User) data.getSerializable("data");
+        }else{
+            user=(User)CacheUtils.readHttpCache(Config.DIR_CACHE_PATH,"user_info");
+        }
         initView();
 
         return currentView;
