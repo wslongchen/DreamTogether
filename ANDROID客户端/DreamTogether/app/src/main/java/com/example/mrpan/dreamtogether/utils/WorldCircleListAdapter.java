@@ -50,11 +50,14 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
         viewHolder.dream_content.setText(p.getPost_content());
         User u=p.getPost_author();
         viewHolder.dream_author.setText(u.getUser_nickname());
-        if(u.getUser_img().equals("")){
+        if(u.getUser_img()==null||u.getUser_img().isEmpty()){
            viewHolder.author_img.setImageResource(R.mipmap.ic_launcher);
         }
         else{
 
+        }
+        if(p.getPost_comment_count()==null){
+            viewHolder.dream_comments_layout.setVisibility(View.GONE);
         }
 //        List<Meta> metas=dreams.get(i).getMetas();
 //        List<HashMap<String,Object>> datas=new ArrayList<>();

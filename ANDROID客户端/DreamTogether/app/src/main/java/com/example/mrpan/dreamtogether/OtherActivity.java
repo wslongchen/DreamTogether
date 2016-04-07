@@ -1,12 +1,16 @@
 package com.example.mrpan.dreamtogether;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
 import com.example.mrpan.dreamtogether.fragment.DreamPostFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamerRegisterFragment;
+import com.example.mrpan.dreamtogether.fragment.PhotoFragment;
+import com.example.mrpan.dreamtogether.fragment.PicSelectFragment;
+import com.example.mrpan.dreamtogether.fragment.SelectImageGridFragment;
 import com.example.mrpan.dreamtogether.fragment.UserDreamListFragment;
 import com.example.mrpan.dreamtogether.fragment.WorldCircleFragment;
 import com.example.mrpan.dreamtogether.utils.Config;
@@ -23,6 +27,10 @@ public class OtherActivity extends FragmentActivity {
     private FragmentTransaction transaction=null;
     private UserDreamListFragment userDreamListFragment;
     private DreamPostFragment dreamPostFragment;
+    private PhotoFragment photoFragment;
+    private PicSelectFragment picSelectFragment;
+    private SelectImageGridFragment selectImageGridFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,7 @@ public class OtherActivity extends FragmentActivity {
             case Config.POST_TYPE:
                 transaction=getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.other_layout,fragmentHashMap.get(DreamPostFragment.TAG));
+                transaction.addToBackStack(null);
                 transaction.commit();
                 break;
             default:
@@ -61,12 +70,16 @@ public class OtherActivity extends FragmentActivity {
         dreamerRegisterFragment=new DreamerRegisterFragment();
         userDreamListFragment=new UserDreamListFragment();
         dreamPostFragment=new DreamPostFragment();
-
+        photoFragment=new PhotoFragment();
+        picSelectFragment=new PicSelectFragment();
+        selectImageGridFragment=new SelectImageGridFragment();
 
         fragmentHashMap.put(DreamerRegisterFragment.TAG, dreamerRegisterFragment);
         fragmentHashMap.put(UserDreamListFragment.TAG,userDreamListFragment);
         fragmentHashMap.put(DreamPostFragment.TAG,dreamPostFragment);
-
+        fragmentHashMap.put(PhotoFragment.TAG,photoFragment);
+        fragmentHashMap.put(PicSelectFragment.TAG,picSelectFragment);
+        fragmentHashMap.put(SelectImageGridFragment.TAG,selectImageGridFragment);
 
     }
 }

@@ -97,47 +97,4 @@ public class DreamPostGridAdapter extends BaseAdapter {
         public ImageView image;
     }
 
-//    Handler handler = new Handler() {
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case 1:
-//                    adapter.notifyDataSetChanged();
-//                    break;
-//            }
-//            super.handleMessage(msg);
-//        }
-//    };
-//
-//    public void loading() {
-//        new Thread(new Runnable() {
-//            public void run() {
-//                while (true) {
-//                    if (BitmapUtils.max == BitmapUtils.drr.size()) {
-//                        Message message = new Message();
-//                        message.what = 1;
-//                        handler.sendMessage(message);
-//                        break;
-//                    } else {
-//                        try {
-//                            String path = BitmapUtils.drr.get(BitmapUtils.max);
-//                            System.out.println(path);
-//                            Bitmap bm = BitmapUtils.revitionImageSize(path);
-//                            BitmapUtils.bmp.add(bm);
-//                            String newStr = path.substring(
-//                                    path.lastIndexOf("/") + 1,
-//                                    path.lastIndexOf("."));
-//                            //FileUtils.saveBitmap(bm, "" + newStr);
-//                            BitmapUtils.max += 1;
-//                            Message message = new Message();
-//                            message.what = 1;
-//                            handler.sendMessage(message);
-//                        } catch (IOException e) {
-//
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//            }
-//        }).start();
-//    }
 }

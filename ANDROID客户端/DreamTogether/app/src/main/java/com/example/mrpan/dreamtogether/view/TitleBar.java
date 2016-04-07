@@ -24,6 +24,7 @@ public class TitleBar extends RelativeLayout {
     private ImageView rightImage;
     private TextView centerTitle;
     private TextView rightStr;
+    private TextView leftStr;
     private RelativeLayout allView;
 
     public TitleBar(Context context, AttributeSet attrs, int defStyle) {
@@ -52,6 +53,7 @@ public class TitleBar extends RelativeLayout {
         centerTitle=(TextView)titleBarView.findViewById(R.id.title);
         allView=(RelativeLayout)titleBarView.findViewById(R.id.titleBarView);
         rightStr=(TextView)titleBarView.findViewById(R.id.titleBarRightStr);
+        leftStr=(TextView)titleBarView.findViewById(R.id.titleBarLeftStr);
     }
 
     /**
@@ -121,6 +123,29 @@ public class TitleBar extends RelativeLayout {
         rightStr.setTextSize(16);
     }
 
+
+    /**
+     * 左边文字+右边文字
+     * @param title
+     * @param leftStrs
+     * @param rightStrs
+     * @param leftClick
+     * @param rightClick
+     */
+    public void showLeftStrAndRightStr(String title,String leftStrs,String rightStrs,OnClickListener leftClick,OnClickListener rightClick){
+        centerTitle.setVisibility(View.VISIBLE);
+        centerTitle.setText(title);
+        leftStr.setText(leftStrs);
+        leftStr.setVisibility(View.VISIBLE);
+        rightStr.setText(rightStrs);
+        rightStr.setVisibility(View.VISIBLE);
+        leftStr.setOnClickListener(leftClick);
+        rightStr.setOnClickListener(rightClick);
+        rightStr.setTextSize(16);
+        leftStr.setTextSize(16);
+    }
+
+
     /**
      * 设置背景颜色
      * @param color
@@ -129,6 +154,8 @@ public class TitleBar extends RelativeLayout {
         allView.setBackgroundColor(color);
 
     }
+
+
 
     /**
      * 只显示标题
@@ -140,6 +167,15 @@ public class TitleBar extends RelativeLayout {
     }
 
 
+    public void updateRightStr(String str){
+        if(rightStr.getVisibility()==VISIBLE)
+            rightStr.setText(str);
+    }
+
+    public void setRightStrEnable(boolean value){
+        if(rightStr.getVisibility()==VISIBLE)
+            rightStr.setEnabled(value);
+    }
 
 }
 

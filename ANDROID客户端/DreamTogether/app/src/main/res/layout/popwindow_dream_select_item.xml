@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+
     android:background="@color/dreamTransparent2" >
 
     <LinearLayout
@@ -9,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#ffffff"
+        android:background="@color/dream_bg"
+        android:gravity="bottom"
         android:orientation="vertical" >
 
         <TextView
@@ -20,7 +23,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:background="@color/dreamWhite">
 
             <Button
                 android:id="@+id/dream_item_popupwindows_camera"
@@ -41,7 +45,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:background="@color/dreamWhite">
 
             <Button
                 android:id="@+id/dream_item_popupwindows_Photo"
@@ -56,7 +61,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="#f3f3f3" />
+            android:background="#f3f3f3"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/dream_item_popupwindows_cancel"
@@ -64,8 +70,10 @@
             android:layout_height="55dp"
             android:background="@drawable/btn_pop_item_bg"
             android:textColor="#585858"
+            android:layout_marginTop="15dp"
+
             android:textSize="18sp"
             android:text="取消" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
