@@ -50,10 +50,15 @@ class DreamModel {
 	}
 	
 	function getDreamByAuthor($id){
-		$sql="select * from dream_posts where post_author='"+$id+"' and post_type='0' order by post_date DESC";
-		$this -> dao -> fetch($sql);
+		$sql="select * from dream_posts where post_author='".$id."' and post_type='0' order by post_date DESC";
+		$this -> dao -> query($sql);
 		$dreams=array();
-		while($dream=$this->dao->getRow()){
+		$user=new UserModel($this->dao);
+		while($dream=$this->dao->getResult()){
+			
+			$userInfo=$user->getUserInfo($dream["post_author"]);
+			$dream["post_author"]=$userInfo;
+			//var_dump($dream["post_author"]);
 			array_push($dreams,$dream);
 		}
 		$json_output["ret"]=0;

@@ -12,8 +12,8 @@ class UserModel{
 	}
 	
 	function postUser($user){
-		$sql="INSERT INTO `dream_users`(`user_login`, `user_pass`, `user_nickname`, `user_img`,`user_phone`,`user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `user_display_name`) VALUES ('".$user['name']."','".$user['pass']."','".$user['nickname']."','".$user['img']."','".$user['phone']."','".$user['email']."','".$user['url']."','".$user['registeredate']."','".$user['activationkey']."','".$user['status']."','".$user['displayname']."')";
-		if(!empty($user) && $this->dao->query($sql)){
+		$sql="INSERT INTO `dream_users`(`user_login`, `user_pass`, `user_nickname`, `user_img`,`user_phone`,`user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `user_display_name`) VALUES ('".$user['name']."','".$user['pass']."','".$user['nickname']."','".$user['img']."','".$user['phone']."','".$user['email']."','".$user['url']."','".$user['registeredate']."','".$user['activationkey']."','".$user['status']."','".$user['displayname']."')";		
+if(!empty($user) && $this->dao->query($sql)){
 			$json_out["ret"]=0;
 			$json_out["post"]="post successed";
 			return $json_out;
@@ -62,8 +62,8 @@ class UserModel{
 	
 	function getUserInfo($id){
 		$sql="SELECT * FROM dream_users where ID='".$id."'";
-		$this->dao->query($sql);
-		if($user=$this->dao->getResult()){
+		$this->dao->fetch($sql);
+		if($user=$this->dao->getRow()){
 			return $user;
 		}
 		else{
@@ -76,8 +76,10 @@ class UserModel{
 			$this->dao->fetch($sql);
 			if($user=$this -> dao -> getRow()){
 				$json_out["ret"]=0;
-				$json_out["post"]=$user;
+				$users=array();
 				$metas=array();
+				array_push($users,$user);
+				$json_out["post"]=$users;
 				while($meta=$this->getUserMeta()){
 					array_push($metas,$meta);
 				}

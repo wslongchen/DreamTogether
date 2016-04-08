@@ -18,19 +18,27 @@ switch ($action) {
 			$controller = new DreamController($dao);
 			$controller -> publishDream($_POST);
 		}
+		if($_GET["type"]==="photo"){
+			$up=new FileUitls();
+			$up->uploadfiles();
+		}
 		break;
 	case "list" :
-		if($_GET["type"]==="user"){
+		if ($_GET["type"] === "user") {
 			$controller = new UserController($dao);
 			$controller -> listUsers();
 		}
-		if($_GET["type"]==="dream"){
+		if ($_GET["type"] === "dream") {
 			$controller = new DreamController($dao);
-		$controller -> listDream();
+			$controller -> listDreamWithAuthor();
 		}
-		if($_GET["type"]==="loginUser"){
+		if ($_GET["type"] === "loginUser") {
 			$controller = new DreamController($dao);
-			$controller -> login($_GET['name'],$_GET['password']);
+			$controller -> login($_GET['name'], $_GET['password']);
+		}
+		if ($_GET["type"] === "getDreamByAuthor") {
+			$controller = new DreamController($dao);
+			$controller -> listDreamByAnthor($_GET['id']);
 		}
 		//$controller->output();
 		break;
@@ -42,4 +50,5 @@ switch ($action) {
 		break;
 	//默认为显示留言
 }
+
 ?>
