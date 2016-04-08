@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_gravity="top"
-    android:background="@mipmap/dreamlistbg">
+    android:background="@color/dream_bg"
+    >
     <com.example.mrpan.dreamtogether.view.TitleBar
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -19,7 +19,8 @@
             android:orientation="vertical">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="80dp">
+                android:layout_height="80dp"
+                android:background="@color/dreamWhite">
 
                 <ImageView
                     android:layout_width="50dp"
@@ -38,7 +39,7 @@
                     android:id="@+id/textView4"
                     android:layout_marginLeft="20dp"
                     android:layout_marginStart="36dp"
-                    android:layout_above="@+id/textView5"
+                    android:layout_above="@+id/dream_recent_count"
                     android:layout_toEndOf="@+id/imageView" />
 
                 <TextView
@@ -46,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="一共发表了2个梦想"
-                    android:id="@+id/textView5"
+                    android:id="@+id/dream_recent_count"
                     android:layout_marginTop="5dp"
                     android:layout_alignBottom="@+id/imageView"
                     android:layout_alignStart="@+id/textView4" />
@@ -56,23 +57,22 @@
                 android:visibility="gone"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="#ffffff"
-                android:cacheColorHint="#00000000"
+                android:background="@color/dreamWhite"
+                android:cacheColorHint="@color/dreamTransparent"
                 android:childDivider="@drawable/list_line"
                 android:divider="@null"
-                android:listSelector="#00000000" >
+                android:listSelector="@color/dreamTransparent" >
             </ExpandableListView>
 
             <ListView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/dream_recent_list"
-                android:listSelector="#00000000"
-                android:background="#ffffff"
-                android:cacheColorHint="#00000000"
+                android:listSelector="@color/dreamTransparent"
+                android:background="@color/dreamWhite"
+                android:cacheColorHint="@color/dreamTransparent"
                 android:divider="@null"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp">
+                >
 
             </ListView>
 

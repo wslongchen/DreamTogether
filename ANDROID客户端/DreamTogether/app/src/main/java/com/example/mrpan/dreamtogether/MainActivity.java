@@ -167,13 +167,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 transaction.commit();
                 break;
             case R.id.menu_more:
-                Intent intent=new Intent();
-                Bundle bundle=new Bundle();
-                bundle.putInt("type", Config.POST_TYPE);
-                intent.putExtras(bundle);
-                intent.setClass(this, OtherActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.left_in, R.anim.left_out);
 
                 break;
             default:

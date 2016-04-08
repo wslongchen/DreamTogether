@@ -1,19 +1,18 @@
-package com.example.mrpan.dreamtogether.utils;
+package com.example.mrpan.dreamtogether.adapter;
 
 import java.util.List;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.mrpan.dreamtogether.BitmapCache;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.ImageBucket;
+import com.example.mrpan.dreamtogether.utils.BitmapCache;
 
 public class ImageBucketAdapter extends BaseAdapter {
 

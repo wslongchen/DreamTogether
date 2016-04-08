@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,9 +17,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -31,7 +28,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mrpan.dreamtogether.OtherActivity;
@@ -44,11 +40,10 @@ import com.example.mrpan.dreamtogether.utils.BitmapUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DateUtils;
 import com.example.mrpan.dreamtogether.utils.DialogUtils;
-import com.example.mrpan.dreamtogether.utils.DreamPostGridAdapter;
+import com.example.mrpan.dreamtogether.adapter.DreamPostGridAdapter;
 import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.utils.OtherUtils;
 import com.example.mrpan.dreamtogether.utils.RegexUtils;
-import com.example.mrpan.dreamtogether.view.DeletableEditText;
 import com.example.mrpan.dreamtogether.view.TitleBar;
 
 import org.json.JSONException;
@@ -328,6 +323,9 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                     Toast.makeText(context,"不能为空！",Toast.LENGTH_LONG).show();
                 }
                 break;
+            case R.id.titleBarLeftStr:
+                getActivity().finish();
+                break;
             default:
                 break;
         }
@@ -358,6 +356,7 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                         try {
                             String path = BitmapUtils.drr.get(BitmapUtils.max);
                             Bitmap bm = BitmapUtils.revitionImageSize(path);
+                            System.out.println(path);
                             BitmapUtils.bmp.add(bm);
                             String newStr = path.substring(
                                     path.lastIndexOf("/") + 1,

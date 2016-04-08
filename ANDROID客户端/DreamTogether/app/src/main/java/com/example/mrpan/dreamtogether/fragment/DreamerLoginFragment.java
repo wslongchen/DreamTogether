@@ -31,6 +31,7 @@ import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DialogUtils;
 import com.example.mrpan.dreamtogether.utils.GsonUtils;
 import com.example.mrpan.dreamtogether.utils.Md5Utils;
+import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.utils.MySharePreference;
 import com.example.mrpan.dreamtogether.utils.RegexUtils;
 import com.example.mrpan.dreamtogether.view.DeletableEditText;
@@ -166,32 +167,32 @@ public class DreamerLoginFragment extends Fragment implements View.OnClickListen
         public void handleMessage(Message msg) {
             switch (msg.arg1){
                 case Config.HTTP_REQUEST_SUCCESS:
-                    if(msg.obj!=null){
-                        int ret=0;
+                    if(msg.obj!=null) {
+                        int ret = 0;
                         try {
                             JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF\uFEFF\uFEFF", ""));
                             ret = jsonObject.getInt("ret");
+                            if (ret == Config.RESULT_RET_SUCCESS) {
+                                MyLog.i("dd", msg.obj.toString());
+                                UserPosts userPosts = (UserPosts) GsonUtils.getEntity(msg.obj.toString(), UserPosts.class);
+                                List<User> users = userPosts.getPost();
+                                Toast.makeText(context, "登录成功！", Toast.LENGTH_LONG).show();
+                                MySharePreference mySharePreference = new MySharePreference(context);
+                                mySharePreference.commitBoolean("isLogin", true);
+                                CacheUtils.saveHttpCache(Config.DIR_CACHE_PATH, "user_info", users.get(0));
+                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("data", users.get(0));
+                                MainActivity.fragmentHashMap.get(DreamerInfoFragment.TAG).setArguments(bundle);
+                                transaction.replace(R.id.frame_content, MainActivity.fragmentHashMap.get(DreamerInfoFragment.TAG));
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+                            } else {
+                                Toast.makeText(context, "登录失败！", Toast.LENGTH_LONG).show();
+                            }
                         } catch (JSONException e) {
+                            Toast.makeText(context, "登录失败！", Toast.LENGTH_LONG).show();
                             e.printStackTrace();
-                        }
-                        if (ret == Config.RESULT_RET_SUCCESS) {
-                            UserPosts userPosts = (UserPosts) GsonUtils.getEntity(msg.obj.toString(), UserPosts.class);
-                            List<User> users = userPosts.getPost();
-                            Toast.makeText(context,"登录成功！",Toast.LENGTH_LONG).show();
-                            MySharePreference mySharePreference=new MySharePreference(context);
-                            mySharePreference.commitBoolean("isLogin",true);
-                            CacheUtils.saveHttpCache(Config.DIR_CACHE_PATH,"user_info",users.get(0));
-                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                            Bundle bundle=new Bundle();
-                            bundle.putSerializable("data", users.get(0));
-                            MainActivity.fragmentHashMap.get(DreamerInfoFragment.TAG).setArguments(bundle);
-                            transaction.replace(R.id.frame_content, MainActivity.fragmentHashMap.get(DreamerInfoFragment.TAG));
-                            transaction.addToBackStack(null);
-                            transaction.commit();
-                        }
-                        else
-                        {
-                            Toast.makeText(context,"登录失败！",Toast.LENGTH_LONG).show();
                         }
                     }
 

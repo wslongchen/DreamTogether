@@ -1,4 +1,4 @@
-package com.example.mrpan.dreamtogether.utils;
+package com.example.mrpan.dreamtogether.adapter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,9 +16,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.mrpan.dreamtogether.BitmapCache;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.ImageItem;
+import com.example.mrpan.dreamtogether.utils.BitmapCache;
+import com.example.mrpan.dreamtogether.utils.BitmapUtils;
+import com.example.mrpan.dreamtogether.utils.MyLog;
 
 public class ImageGridAdapter extends BaseAdapter {
 
@@ -121,7 +123,7 @@ public class ImageGridAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				String path = dataList.get(position).imagePath;
-				boolean isHave=BitmapUtils.drr.contains(path);
+				boolean isHave= BitmapUtils.drr.contains(path);
 				if ((BitmapUtils.drr.size() + selectTotal) < 9) {
 					item.isSelected = !item.isSelected;
 					if (item.isSelected) {
@@ -130,7 +132,7 @@ public class ImageGridAdapter extends BaseAdapter {
 						holder.text.setBackgroundResource(R.drawable.bgd_relatly_line);
 						selectTotal++;
 						//int count=selectTotal+BitmapUtils.drr.size();
-						MyLog.i("sss","selectTotal:"+selectTotal);
+						MyLog.i("sss", "selectTotal:" + selectTotal);
 						if (textcallback != null)
 							textcallback.onListen(selectTotal);
 						if(isHave)

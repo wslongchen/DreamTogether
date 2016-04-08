@@ -20,6 +20,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -102,7 +103,7 @@ public class HttpHelper {
 
     }
 
-    public void asyHttpPostRequest(String url,String JsonStr, HttpResponseCallBack httpCallBack) {
+    public void asyHttpPostRequest(String url,String files, HttpResponseCallBack httpCallBack) {
 
 
         if (null != appPreference) {
@@ -112,7 +113,7 @@ public class HttpHelper {
             if (state.equals(Network.NetWorkState.MOBILE)) {
 
                 if (permission == Config.TYPE_ALL) {
-                    threadPool.execute(getPostHttpThread(url, JsonStr, httpCallBack));
+                    threadPool.execute(getPostHttpThread(url, files, httpCallBack));
                 } else if (permission == Config.TYPE_WIFI) {
                     httpCallBack.onFailure(0, Con_Permission,
                             "请在设置中打开MOBILE连接 ");
@@ -120,15 +121,15 @@ public class HttpHelper {
                 }
                 // 未知网络
                 else {
-                    threadPool.execute(getPostHttpThread(url, JsonStr, httpCallBack));
+                    threadPool.execute(getPostHttpThread(url, files, httpCallBack));
                 }
 
             } else {
-                threadPool.execute(getPostHttpThread(url, JsonStr, httpCallBack));
+                threadPool.execute(getPostHttpThread(url, files, httpCallBack));
             }
 
         } else {
-            threadPool.execute(getPostHttpThread(url, JsonStr, httpCallBack));
+            threadPool.execute(getPostHttpThread(url, files, httpCallBack));
         }
 
     }
@@ -251,7 +252,7 @@ public class HttpHelper {
         };
 
     }
-    private Runnable getPostHttpThread(final String adress_Http, final String params, final HttpResponseCallBack httpCallBack){
+    private Runnable getPostHttpThread(final String adress_Http, final String path, final HttpResponseCallBack httpCallBack){
 
         return new Runnable() {
             int responseCode = -1;
@@ -260,6 +261,9 @@ public class HttpHelper {
             BufferedReader reader = null;
             HttpURLConnection conn = null;
             URL url = null;
+            String end = "\r\n";
+            String twoHyphens = "--";
+            String boundary = "******";
 
             @Override
             public void run() {
@@ -272,12 +276,27 @@ public class HttpHelper {
                     conn.setUseCaches(false);
                     conn.setInstanceFollowRedirects(true);
                     conn.setRequestProperty("Content-Type", "application/json");
+                    conn.setRequestProperty("Content-Type",
+                            "multipart/form-data;boundary=" + boundary);
                     conn.connect();
                     DataOutputStream out = new DataOutputStream(conn
                             .getOutputStream());
-                    byte[] content = params.getBytes("utf-8");
-                    out.write(content, 0, content.length);
-                   responseCode=conn.getResponseCode();
+                    out.writeBytes(twoHyphens + boundary + end);
+                    out.writeBytes("Content-Disposition: form-data; name=\"uploadfile\"; filename=\""
+                            + path.substring(path.lastIndexOf("/") + 1) + "\"" + end);
+                    out.writeBytes(end);
+                    FileInputStream fis = new FileInputStream(path);
+                    byte[] buffer = new byte[8192]; // 8k
+                    int count = 0;
+                    // 读取文件
+                    while ((count = fis.read(buffer)) != -1) {
+                        out.write(buffer, 0, count);
+                    }
+                    fis.close();
+                    out.writeBytes(end);
+                    out.writeBytes(twoHyphens + boundary + twoHyphens + end);
+                    out.flush();
+                    responseCode=conn.getResponseCode();
                     if (responseCode == 200) {
                         reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
                         String line = "";
@@ -285,6 +304,7 @@ public class HttpHelper {
                             // line = new String(line.getBytes(), "utf-8");
                             returnLine += line;
                         }
+
                         httpCallBack.onSuccess(adress_Http,
                                 returnLine);
 

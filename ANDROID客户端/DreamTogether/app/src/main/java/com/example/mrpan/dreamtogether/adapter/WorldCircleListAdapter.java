@@ -1,8 +1,7 @@
-package com.example.mrpan.dreamtogether.utils;
+package com.example.mrpan.dreamtogether.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,9 @@ import android.widget.TextView;
 
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.Dream;
-import com.example.mrpan.dreamtogether.entity.Meta;
 import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.view.NoScrollGridView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -56,7 +52,7 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
         else{
 
         }
-        if(p.getPost_comment_count()==null){
+        if(p.getPost_comment_count()==null && p.getPost_comment_count().equals("")){
             viewHolder.dream_comments_layout.setVisibility(View.GONE);
         }
 //        List<Meta> metas=dreams.get(i).getMetas();

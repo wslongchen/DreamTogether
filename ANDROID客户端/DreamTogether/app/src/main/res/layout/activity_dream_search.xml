@@ -29,7 +29,7 @@
             android:paddingRight="8dp"
             android:paddingTop="7dp"
             android:singleLine="true"
-            android:textColor="#ffffff"
+            android:textColor="@color/dreamWhite"
             android:textCursorDrawable="@null"
             android:textSize="16dp" />
 

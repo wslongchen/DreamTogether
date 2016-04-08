@@ -27,7 +27,6 @@
         </activity>
         <activity android:name=".OtherActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".BitmapCache"/>
     </application>
 
 </manifest>

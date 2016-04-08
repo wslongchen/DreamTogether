@@ -45,6 +45,12 @@ public class Config {
     public static final String CREATE_USER="http://dream.mrpann.com/index.php?action=post&type=user";
     private static final String LOGIN_Str="http://dream.mrpann.com/index.php?action=list&type=loginUser&name=";
     private static final String LOGIN_Str2="&password=";
+    private static final String REQUEST_ALL_AUTHOR_DREAM="http://dream.mrpann.com/index.php?action=list&type=getDreamByAuthor&id=";
+
+    public static String GetDreamByAuthor(int id){
+        return REQUEST_ALL_AUTHOR_DREAM+id;
+    }
+
     public static String Login_User(String name,String pass){
        return LOGIN_Str+name+LOGIN_Str2+pass;
     }

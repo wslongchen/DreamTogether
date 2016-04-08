@@ -48,16 +48,18 @@ public class OtherActivity extends FragmentActivity {
                 transaction.commit();
                 break;
             case Config.TIMELINE_TYPE:
+                int ID=bundle.getInt("data");
                 transaction = getSupportFragmentManager().beginTransaction();
                 //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
-                transaction.replace(R.id.other_layout,fragmentHashMap.get(UserDreamListFragment.TAG));
+                transaction.replace(R.id.other_layout, fragmentHashMap.get(UserDreamListFragment.TAG));
+                ((UserDreamListFragment)fragmentHashMap.get(UserDreamListFragment.TAG)).setAuthorID(ID);
                 //transaction.addToBackStack(null);
                 transaction.commit();
                 break;
             case Config.POST_TYPE:
                 transaction=getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.other_layout,fragmentHashMap.get(DreamPostFragment.TAG));
-                transaction.addToBackStack(null);
+                transaction.replace(R.id.other_layout, fragmentHashMap.get(DreamPostFragment.TAG));
+                //transaction.addToBackStack(null);
                 transaction.commit();
                 break;
             default:

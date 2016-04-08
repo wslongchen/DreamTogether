@@ -1,4 +1,4 @@
-package com.example.mrpan.dreamtogether.utils;
+package com.example.mrpan.dreamtogether.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.example.mrpan.dreamtogether.R;
+import com.example.mrpan.dreamtogether.utils.BitmapUtils;
 
 import java.io.IOException;
 

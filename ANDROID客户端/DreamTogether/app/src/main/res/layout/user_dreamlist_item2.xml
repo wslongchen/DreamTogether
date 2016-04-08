@@ -2,29 +2,46 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:background="#FFFFFF"
-android:gravity="center_vertical"
-    android:minHeight="150dp">
+android:background="@color/dreamWhite"
+android:gravity="fill_vertical"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:visibility="visible">
+
     <LinearLayout
     android:layout_width="68dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_marginLeft="10dp"
     android:gravity="right">
+        <TextView
+            android:id="@+id/dream_recent_date_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2017"
+            android:textSize="24dp"
+            android:textColor="@color/dreamDarkBlack" >
+        </TextView>
     <TextView
-    android:id="@+id/textView1"
+    android:id="@+id/dream_recent_date_month_day"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="May.20"
     android:textSize="20dp"
-    android:textColor="#23a7ff" >
+    android:textColor="@color/dreamSkyBlue" >
     </TextView>
     <TextView
+        android:id="@+id/dream_recent_date_hour"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="08:00"
     android:textSize="15dp"
-    android:textColor="#999999" >
+    android:textColor="@color/dreamDarkGery" >
     </TextView>
     </LinearLayout>
 <FrameLayout
@@ -79,11 +96,13 @@ android:gravity="center_vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="取她回家"
-    android:textColor="#23a7ff" >
+    android:textColor="@color/dreamSkyBlue" >
     </TextView>
     </LinearLayout>
 
     </FrameLayout>
+</LinearLayout>
+
 </LinearLayout>
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.example.mrpan.dreamtogether;
+package com.example.mrpan.dreamtogether.utils;
 
 import java.io.BufferedInputStream;
 import java.io.File;

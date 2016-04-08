@@ -17,13 +17,13 @@ import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.entity.DreamPosts;
 import com.example.mrpan.dreamtogether.http.HttpHelper;
 import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
+import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.GsonUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
-import com.example.mrpan.dreamtogether.utils.WorldCircleListAdapter;
+import com.example.mrpan.dreamtogether.adapter.WorldCircleListAdapter;
 import com.example.mrpan.dreamtogether.view.TitleBar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,7 +67,19 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
         recyclerView.setHasFixedSize(true);
         httpHelper=HttpHelper.getInstance();
         httpHelper.asyHttpGetRequest(Config.REQUEST_ALL_DREAM, new DreamHttpResponseCallBack(Config.ALL_DREAM));
+        //httpHelper.asyHttpPostRequest("http://dream.mrpann.com/index.php?action=post&type=photo","/storage/09E4-361E/Pictures/icon_news.png",new DreamHttpResponseCallBack(12));
+        DreamPosts cache= (DreamPosts) CacheUtils.readHttpCache(Config.DIR_CACHE_PATH,"all_dream");
+        if(cache.getPost().size()>0)
+            dreams=cache;
     }
+
+    private void showData(){
+        if(dreams!=null&&dreams.getPost().size()>0){
+            WorldCircleListAdapter worldCircleListAdapter=new WorldCircleListAdapter(getActivity(),dreams.getPost());
+            recyclerView.setAdapter(worldCircleListAdapter);
+        }
+    }
+
 
     Handler handler=new Handler(){
         @Override
@@ -81,8 +93,8 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                             case Config.ALL_DREAM:
                                 dreams=(DreamPosts) GsonUtils.getEntity(msg.obj.toString(), DreamPosts.class);
                                 List<Dream> dreamList=dreams.getPost();
-                                WorldCircleListAdapter worldCircleListAdapter=new WorldCircleListAdapter(getActivity(),dreamList);
-                                recyclerView.setAdapter(worldCircleListAdapter);
+                                CacheUtils.saveHttpCache(Config.DIR_CACHE_PATH, "all_dream", dreams);
+                                showData();
                                 break;
                             default:
                                 break;

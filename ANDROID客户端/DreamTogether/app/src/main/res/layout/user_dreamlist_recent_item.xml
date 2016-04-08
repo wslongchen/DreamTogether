@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:text="TextView"
-        android:textColor="#999999" >
+        android:textColor="@color/dreamDarkGery" >
     </TextView>
 
     <ImageView
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textColor="#000000" >
+                android:textColor="@color/dreamBlack" >
             </TextView>
 
             <TextView
@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textColor="#23a7ff" >
+                android:textColor="@color/dreamSkyBlue" >
             </TextView>
         </LinearLayout>
 
@@ -71,11 +71,11 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:background="#a1111111"
+                android:background="@color/dreamDarkGery"
                 android:padding="3dp"
                 android:singleLine="true"
                 android:text="123"
-                android:textColor="#ffffff"
+                android:textColor="@color/dreamWhite"
                 android:textSize="12sp" >
             </TextView>
         </FrameLayout>

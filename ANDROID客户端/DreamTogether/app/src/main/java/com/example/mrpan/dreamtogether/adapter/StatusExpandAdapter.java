@@ -1,4 +1,4 @@
-package com.example.mrpan.dreamtogether.utils;
+package com.example.mrpan.dreamtogether.adapter;
 
 import java.util.List;
 

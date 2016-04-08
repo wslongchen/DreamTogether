@@ -2,6 +2,8 @@ package com.example.mrpan.dreamtogether.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,14 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.Dream;
+import com.example.mrpan.dreamtogether.entity.DreamPosts;
 import com.example.mrpan.dreamtogether.entity.OneStatusEntity;
 import com.example.mrpan.dreamtogether.entity.TwoStatusEntity;
-import com.example.mrpan.dreamtogether.entity.User;
-import com.example.mrpan.dreamtogether.utils.StatusExpandAdapter;
-import com.example.mrpan.dreamtogether.utils.TimeLineAdapter;
+import com.example.mrpan.dreamtogether.http.HttpHelper;
+import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
+import com.example.mrpan.dreamtogether.utils.Config;
+import com.example.mrpan.dreamtogether.utils.GsonUtils;
+import com.example.mrpan.dreamtogether.utils.MyLog;
+import com.example.mrpan.dreamtogether.adapter.StatusExpandAdapter;
+import com.example.mrpan.dreamtogether.adapter.TimeLineAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +44,12 @@ public class UserDreamListFragment extends Fragment{
     private ExpandableListView expandlistView;
     private StatusExpandAdapter statusAdapter;
     private ListView dream_recent_list;
-    
+
+    private List<Dream> dreamList;
+
+    private TextView dream_count;
+
+    private int AuthorID=0;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,23 +62,58 @@ public class UserDreamListFragment extends Fragment{
 
         //initView();
 
-        dream_recent_list=(ListView)currentView.findViewById(R.id.dream_recent_list);
-        List<Dream> dreams=new ArrayList<>();
-        Dream dream;
-        dream=new Dream();
-        dream.setPost_content("我去，这是什么梦想！");
-        dreams.add(dream);
-        dream=new Dream();
-        dream.setPost_content("我去，这是什么梦想！");
-        dreams.add(dream);
-        dream=new Dream();
-        dream.setPost_content("我去，这是什么梦想！");
-        dreams.add(dream);
-        TimeLineAdapter timeLineAdapter=new TimeLineAdapter(dreams,context);
-        dream_recent_list.setAdapter(timeLineAdapter);
+        init();
 
         return currentView;
 
+    }
+
+    private void init(){
+        dream_recent_list=(ListView)currentView.findViewById(R.id.dream_recent_list);
+        dream_count=(TextView)currentView.findViewById(R.id.dream_recent_count);
+        if(AuthorID==0){
+
+        }else{
+            HttpHelper.getInstance().asyHttpGetRequest(Config.GetDreamByAuthor(AuthorID), new HttpResponseCallBack() {
+                @Override
+                public void onSuccess(String url, String result) {
+                    MyLog.i("DDD",result);
+                    Message msg = new Message();
+                    msg.arg1 = Config.HTTP_REQUEST_SUCCESS;
+                    msg.obj=result;
+                    handler.sendMessage(msg);
+                }
+
+                @Override
+                public void onFailure(int httpResponseCode, int errCode, String err) {
+                    MyLog.i("DDD",err);
+                    Message msg = new Message();
+                    msg.arg1 = Config.HTTP_REQUEST_ERROR;
+                    handler.sendMessage(msg);
+                }
+            });
+        }
+
+//        List<Dream> dreams=new ArrayList<>();
+//        Dream dream;
+//        dream=new Dream();
+//        dream.setPost_content("我去，这是什么梦想！");
+//        dreams.add(dream);
+//        dream=new Dream();
+//        dream.setPost_content("我去，这是什么梦想！");
+//        dreams.add(dream);
+//        dream=new Dream();
+//        dream.setPost_content("我去，这是什么梦想！");
+//        dreams.add(dream);
+//        TimeLineAdapter timeLineAdapter=new TimeLineAdapter(dreams,context);
+//        dream_recent_list.setAdapter(timeLineAdapter);
+    }
+
+    void showData(){
+        if(dreamList!=null){
+            TimeLineAdapter timeLineAdapter=new TimeLineAdapter(dreamList,context);
+            dream_recent_list.setAdapter(timeLineAdapter);
+        }
     }
 
     private void initView() {
@@ -149,5 +198,46 @@ public class UserDreamListFragment extends Fragment{
             oneList.add(one);
         }
         Log.i(TAG, "二级状态：" + oneList.get(0).getTwoList().get(0).getStatusName());
+    }
+
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.arg1){
+                case Config.HTTP_REQUEST_SUCCESS:
+                    if(msg.obj!=null) {
+                        try {
+                            DreamPosts dreams = (DreamPosts) GsonUtils.getEntity(msg.obj.toString(), DreamPosts.class);
+
+                            if (dreams.getRet() == Config.RESULT_RET_SUCCESS) {
+                                dreamList = dreams.getPost();
+                                dream_count.setText("一共发表了"+dreams.getPost().size()+"个梦想");
+                                showData();
+                            } else {
+                                Toast.makeText(context, "获取用户梦想失败！", Toast.LENGTH_LONG).show();
+                            }
+                        }catch (Exception ex){
+                            Toast.makeText(context, "获取用户梦想失败！", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+
+                    break;
+                case Config.HTTP_REQUEST_ERROR:
+                    Toast.makeText(context,"联网失败！",Toast.LENGTH_LONG).show();
+                    break;
+                default:
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
+
+    public int getAuthorID() {
+        return AuthorID;
+    }
+
+    public void setAuthorID(int authorID) {
+        AuthorID = authorID;
     }
 }

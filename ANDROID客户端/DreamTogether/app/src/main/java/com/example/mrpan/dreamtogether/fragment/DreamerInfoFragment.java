@@ -1,7 +1,6 @@
 package com.example.mrpan.dreamtogether.fragment;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,7 +19,8 @@ import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
-import com.example.mrpan.dreamtogether.utils.UserInfoAdapter;
+import com.example.mrpan.dreamtogether.adapter.UserInfoAdapter;
+import com.example.mrpan.dreamtogether.view.TitleBar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +46,8 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
 
     private User user=null;
 
+    private TitleBar titleBar=null;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,7 +70,8 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
     }
 
     private void initView(){
-
+        titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
+        titleBar.showRight("我的梦想",R.mipmap.ic_launcher,this);
         userInfoList=(ListView)currentView.findViewById(R.id.user_info_list);
         userNickname=(TextView)currentView.findViewById(R.id.user_nickname);
         userImg=(ImageView)currentView.findViewById(R.id.userImg);
@@ -127,6 +130,7 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
                 Intent intent=new Intent();
                 Bundle bundle=new Bundle();
                 bundle.putInt("type", Config.TIMELINE_TYPE);
+                bundle.putInt("data",user.getID());
                 intent.putExtras(bundle);
                 intent.setClass(context, OtherActivity.class);
                 startActivity(intent);
@@ -143,6 +147,15 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
         switch (v.getId()){
             case R.id.qrImg:
                 Toast.makeText(context,"QR",Toast.LENGTH_LONG).show();
+                break;
+            case R.id.titleBarRightImage:
+                Intent intent=new Intent();
+                Bundle bundle=new Bundle();
+                bundle.putInt("type", Config.POST_TYPE);
+                intent.putExtras(bundle);
+                intent.setClass(context, OtherActivity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.top_in, R.anim.top_out);
                 break;
             default:
                 break;

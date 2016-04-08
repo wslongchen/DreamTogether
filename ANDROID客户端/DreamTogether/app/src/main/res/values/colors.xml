@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="dreamBlue">#92e2e2</color>
+    <color name="dreamSkyBlue">#23a7ff</color>
     <color name="dreamBackground">#eceaea</color>
     <color name="dreamBrown">#ff4e0a13</color>
     <color name="dreamBlack">#000000</color>
@@ -11,6 +12,8 @@
     <color name="dreamWhite">#ffffff</color>
     <color name="dramGrey">#C1CDCD</color>
     <color name="dream_bg">#E5E5E5</color>
+    <color name="dreamDarkGery">#999999</color>
+    <color name="dreamDarkBlack">#585858</color>
     <color name="dreamTransparent">#0000</color>
     <color name="dreamTransparent2">#8000</color><!-- 透明 -->
 </resources>

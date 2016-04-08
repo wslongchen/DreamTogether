@@ -1,6 +1,7 @@
 package com.example.mrpan.dreamtogether.utils;
 
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,11 +29,32 @@ public class DateUtils {
         return mDate;
     }
 
+    public static String getShortSpellMonth(Date date){
+        String[] monthSpells={"Jan.","Feb.","Mar.","Apr.","May.","Jun.","Jul.","Aug.","Sep.","Oct.","Nov.","Dec."};
+        return monthSpells[date.getMonth()];
+    }
 
     public static String getCurrentTimeStr(){
         Date date=new Date(System.currentTimeMillis());
         SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String mDate=dateFormat.format(date);
         return mDate;
+    }
+
+    /**
+     * 字符串转换成日期
+     * @param str
+     * @return date
+     */
+    public static Date StrToDate(String str) {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = format.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 }

@@ -1,7 +1,6 @@
 package com.example.mrpan.dreamtogether.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,17 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.PopupWindow;
 
 import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.ImageBucket;
 import com.example.mrpan.dreamtogether.utils.AlbumHelper;
-import com.example.mrpan.dreamtogether.utils.DreamPostGridAdapter;
-import com.example.mrpan.dreamtogether.utils.ImageBucketAdapter;
+import com.example.mrpan.dreamtogether.adapter.ImageBucketAdapter;
 import com.example.mrpan.dreamtogether.view.TitleBar;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
