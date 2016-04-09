@@ -23,6 +23,11 @@ class UserController{
 		echo json_encode($json_output);
 	}
 	
+	function getUserByID($id){
+		$json_out=$this->model->getUserInfoByID($id);
+		echo json_encode($json_out);
+	}
+	
 	function postUser($user){
 		$json_output=$this->model->postUser($user);
 		echo json_encode($json_output);

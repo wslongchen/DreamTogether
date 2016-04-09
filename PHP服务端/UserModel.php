@@ -71,6 +71,23 @@ if(!empty($user) && $this->dao->query($sql)){
 		}
 	}
 	
+	function getUserInfoByID($id){
+		$sql="SELECT * FROM dream_users where ID='".$id."'";
+		$this->dao->fetch($sql);
+		$users=array();
+		if($user=$this->dao->getRow()){
+			$json_out["ret"]=0;
+			array_push($users,$user);
+			$json_out["post"]=$users;
+			return $json_out;
+		}
+		else{
+			$json_out["ret"]=1;
+			$json_out["post"]="request failed!";
+			return $json_out;
+		}
+	}
+	
 	function loginUser($name,$pass){
 		$sql="SELECT * FROM dream_users where user_login='".$name."' and user_pass='".$pass."'";
 			$this->dao->fetch($sql);

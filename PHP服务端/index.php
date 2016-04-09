@@ -33,12 +33,16 @@ switch ($action) {
 			$controller -> listDreamWithAuthor();
 		}
 		if ($_GET["type"] === "loginUser") {
-			$controller = new DreamController($dao);
+			$controller = new UserController($dao);
 			$controller -> login($_GET['name'], $_GET['password']);
+		}
+		if($_GET["type"] === "getUserByID") {
+			$controller = new UserController($dao);
+			$controller -> getUserByID($_GET['id']);
 		}
 		if ($_GET["type"] === "getDreamByAuthor") {
 			$controller = new DreamController($dao);
-			$controller -> listDreamByAnthor($_GET['id']);
+			$controller -> listDreamByAuthor($_GET['id']);
 		}
 		//$controller->output();
 		break;
