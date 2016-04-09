@@ -25,7 +25,7 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:id="@+id/imageView"
+                    android:id="@+id/dream_recent_uimg"
                     android:src="@mipmap/ic_launcher"
                     android:layout_marginLeft="20dp"
                     android:layout_centerVertical="true"
@@ -36,11 +36,11 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="潘安"
-                    android:id="@+id/textView4"
+                    android:id="@+id/dream_recent_user"
                     android:layout_marginLeft="20dp"
                     android:layout_marginStart="36dp"
                     android:layout_above="@+id/dream_recent_count"
-                    android:layout_toEndOf="@+id/imageView" />
+                    android:layout_toEndOf="@+id/dream_recent_uimg" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -49,8 +49,21 @@
                     android:text="一共发表了2个梦想"
                     android:id="@+id/dream_recent_count"
                     android:layout_marginTop="5dp"
-                    android:layout_alignBottom="@+id/imageView"
-                    android:layout_alignStart="@+id/textView4" />
+                    android:layout_alignBottom="@+id/dream_recent_uimg"
+                    android:layout_alignStart="@+id/dream_recent_user" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:id="@+id/imageButton"
+                    android:text="发私信"
+                    android:textSize="14dp"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/dreamWhite"
+                    android:background="@color/dreamSkyBlue"
+                    android:layout_alignBaseline="@+id/dream_recent_user"
+                    android:layout_alignBottom="@+id/dream_recent_user"
+                    android:layout_toEndOf="@+id/dream_recent_user" />
             </RelativeLayout>
             <ExpandableListView
                 android:id="@+id/expandlist"

@@ -97,4 +97,16 @@ public final class RegexUtils {
 		else
 			return true;
 	}
+
+	/**
+	 * 验证密码
+	 *
+	 * @return
+	 */
+	public static boolean checkPasswordValid(String psw,String psw2) {
+		if (!psw.equals(psw2))
+			return false;
+		else
+			return true;
+	}
 }

@@ -69,8 +69,8 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
         httpHelper.asyHttpGetRequest(Config.REQUEST_ALL_DREAM, new DreamHttpResponseCallBack(Config.ALL_DREAM));
         //httpHelper.asyHttpPostRequest("http://dream.mrpann.com/index.php?action=post&type=photo","/storage/09E4-361E/Pictures/icon_news.png",new DreamHttpResponseCallBack(12));
         DreamPosts cache= (DreamPosts) CacheUtils.readHttpCache(Config.DIR_CACHE_PATH,"all_dream");
-        if(cache.getPost().size()>0)
-            dreams=cache;
+//        if(cache.getPost().size()>0)
+  //          dreams=cache;
     }
 
     private void showData(){

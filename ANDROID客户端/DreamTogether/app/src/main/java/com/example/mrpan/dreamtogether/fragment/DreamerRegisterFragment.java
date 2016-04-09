@@ -52,7 +52,7 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
     private HttpHelper httpHelper=null;
     private Context context=null;
 
-    private DeletableEditText name,password,email,nickname,phone;
+    private DeletableEditText name,password,password_valid,email,nickname,phone;
     private TextView xieyi;
     private Button registerBtn;
     private CheckBox register_agree_ck;
@@ -85,6 +85,7 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
         name=(DeletableEditText)currentView.findViewById(R.id.register_loginName);
         nickname=(DeletableEditText)currentView.findViewById(R.id.register_nickname);
         password=(DeletableEditText)currentView.findViewById(R.id.register_password);
+        password_valid=(DeletableEditText)currentView.findViewById(R.id.register_password_valid);
         email=(DeletableEditText)currentView.findViewById(R.id.register_email);
         xieyi=(TextView)currentView.findViewById(R.id.register_tvAboutAgreement);
         register_agree_ck=(CheckBox)currentView.findViewById(R.id.register_ck);
@@ -125,9 +126,14 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
         user.setUser_status("0");
         user.setUser_registered(DateUtils.getCurrentTimeStr());
         String pass=password.getText().toString();
+        String pass2=password_valid.getText().toString();
         user.setUser_pass(Md5Utils.StrToMd5(pass));
-        if(!RegexUtils.checkPassword(namestr) && !RegexUtils.checkPassword(emailstr) && !RegexUtils.checkPassword(nicknamestr) && !RegexUtils.checkPassword(phonestr)){
+        if(!RegexUtils.checkPassword(namestr) && !RegexUtils.checkPassword(emailstr) && !RegexUtils.checkPassword(nicknamestr) && !RegexUtils.checkPassword(phonestr)&& !RegexUtils.checkPassword(pass)&& !RegexUtils.checkPassword(pass2)){
             Toast.makeText(context,"输入项不能为空！",Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else if(!RegexUtils.checkPasswordValid(pass,pass2)){
+            Toast.makeText(context,"两次输入的密码不一致！",Toast.LENGTH_LONG).show();
             return false;
         }
         else if(!RegexUtils.checkEmail(emailstr)){

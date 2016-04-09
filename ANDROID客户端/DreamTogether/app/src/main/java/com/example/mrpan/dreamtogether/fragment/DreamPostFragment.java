@@ -77,6 +77,8 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
 
     private Dialog dialog=null;
 
+    private int UserID;
+
 
 
     @Override
@@ -291,7 +293,7 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                     dialog.show();
                     Dream dream=new Dream();
                     User user=new User();
-                    user.setID(1);
+                    user.setID(UserID);
                     dream.setPost_author(user);
                     dream.setPost_content(content);
                     dream.setPost_date(DateUtils.getCurrentTimeStr());
@@ -418,4 +420,12 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
             super.handleMessage(msg);
         }
     };
+
+    public int getUserID() {
+        return UserID;
+    }
+
+    public void setUserID(int userID) {
+        UserID = userID;
+    }
 }

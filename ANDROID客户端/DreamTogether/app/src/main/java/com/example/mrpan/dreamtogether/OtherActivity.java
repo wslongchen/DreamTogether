@@ -39,6 +39,7 @@ public class OtherActivity extends FragmentActivity {
         initView();
         Bundle bundle=getIntent().getExtras();
         int type=bundle.getInt("type");
+        int ID=0;
         switch (type){
             case Config.REGISTER_TYPE:
                 transaction = getSupportFragmentManager().beginTransaction();
@@ -48,7 +49,7 @@ public class OtherActivity extends FragmentActivity {
                 transaction.commit();
                 break;
             case Config.TIMELINE_TYPE:
-                int ID=bundle.getInt("data");
+                ID=bundle.getInt("data");
                 transaction = getSupportFragmentManager().beginTransaction();
                 //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
                 transaction.replace(R.id.other_layout, fragmentHashMap.get(UserDreamListFragment.TAG));
@@ -57,8 +58,10 @@ public class OtherActivity extends FragmentActivity {
                 transaction.commit();
                 break;
             case Config.POST_TYPE:
+                ID=bundle.getInt("data");
                 transaction=getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.other_layout, fragmentHashMap.get(DreamPostFragment.TAG));
+                ((DreamPostFragment)fragmentHashMap.get(DreamPostFragment.TAG)).setUserID(ID);
                 //transaction.addToBackStack(null);
                 transaction.commit();
                 break;

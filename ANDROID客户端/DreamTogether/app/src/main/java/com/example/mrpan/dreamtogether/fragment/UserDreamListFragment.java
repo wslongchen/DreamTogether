@@ -19,6 +19,8 @@ import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.entity.DreamPosts;
 import com.example.mrpan.dreamtogether.entity.OneStatusEntity;
 import com.example.mrpan.dreamtogether.entity.TwoStatusEntity;
+import com.example.mrpan.dreamtogether.entity.User;
+import com.example.mrpan.dreamtogether.entity.UserPosts;
 import com.example.mrpan.dreamtogether.http.HttpHelper;
 import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
 import com.example.mrpan.dreamtogether.utils.Config;
@@ -47,7 +49,7 @@ public class UserDreamListFragment extends Fragment{
 
     private List<Dream> dreamList;
 
-    private TextView dream_count;
+    private TextView dream_count,dream_user;
 
     private int AuthorID=0;
     
@@ -70,28 +72,13 @@ public class UserDreamListFragment extends Fragment{
 
     private void init(){
         dream_recent_list=(ListView)currentView.findViewById(R.id.dream_recent_list);
+        dream_user=(TextView)currentView.findViewById(R.id.dream_recent_user);
         dream_count=(TextView)currentView.findViewById(R.id.dream_recent_count);
         if(AuthorID==0){
 
         }else{
-            HttpHelper.getInstance().asyHttpGetRequest(Config.GetDreamByAuthor(AuthorID), new HttpResponseCallBack() {
-                @Override
-                public void onSuccess(String url, String result) {
-                    MyLog.i("DDD",result);
-                    Message msg = new Message();
-                    msg.arg1 = Config.HTTP_REQUEST_SUCCESS;
-                    msg.obj=result;
-                    handler.sendMessage(msg);
-                }
-
-                @Override
-                public void onFailure(int httpResponseCode, int errCode, String err) {
-                    MyLog.i("DDD",err);
-                    Message msg = new Message();
-                    msg.arg1 = Config.HTTP_REQUEST_ERROR;
-                    handler.sendMessage(msg);
-                }
-            });
+            HttpHelper.getInstance().asyHttpGetRequest(Config.GetDreamByAuthor(AuthorID), new RecentListHttpResponse(0));
+            HttpHelper.getInstance().asyHttpGetRequest(Config.GetUserByID(AuthorID), new RecentListHttpResponse(1));
         }
 
 //        List<Dream> dreams=new ArrayList<>();
@@ -200,27 +187,77 @@ public class UserDreamListFragment extends Fragment{
         Log.i(TAG, "二级状态：" + oneList.get(0).getTwoList().get(0).getStatusName());
     }
 
+    class RecentListHttpResponse implements HttpResponseCallBack {
+
+        private int position;
+
+        public RecentListHttpResponse(int position){
+            this.position=position;
+        }
+
+        @Override
+        public void onSuccess(String url, String result) {
+            Message msg = new Message();
+            msg.arg1 = Config.HTTP_REQUEST_SUCCESS;
+            msg.arg2=position;
+            msg.obj=result;
+            handler.sendMessage(msg);
+        }
+
+        @Override
+        public void onFailure(int httpResponseCode, int errCode, String err) {
+            Message msg = new Message();
+            msg.arg1 = Config.HTTP_REQUEST_ERROR;
+            handler.sendMessage(msg);
+        }
+    }
+
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.arg1){
                 case Config.HTTP_REQUEST_SUCCESS:
-                    if(msg.obj!=null) {
-                        try {
-                            DreamPosts dreams = (DreamPosts) GsonUtils.getEntity(msg.obj.toString(), DreamPosts.class);
+                    switch (msg.arg2){
+                        case 0:
+                            if(msg.obj!=null) {
+                                try {
+                                    DreamPosts dreams = (DreamPosts) GsonUtils.getEntity(msg.obj.toString(), DreamPosts.class);
 
-                            if (dreams.getRet() == Config.RESULT_RET_SUCCESS) {
-                                dreamList = dreams.getPost();
-                                dream_count.setText("一共发表了"+dreams.getPost().size()+"个梦想");
-                                showData();
-                            } else {
-                                Toast.makeText(context, "获取用户梦想失败！", Toast.LENGTH_LONG).show();
+                                    if (dreams.getRet() == Config.RESULT_RET_SUCCESS) {
+                                        dreamList = dreams.getPost();
+                                        dream_user.setText("");
+                                        dream_count.setText("一共发表了"+dreams.getPost().size()+"个梦想");
+                                        showData();
+                                    } else {
+                                        Toast.makeText(context, "获取用户梦想失败！", Toast.LENGTH_LONG).show();
+                                    }
+                                }catch (Exception ex){
+                                    Toast.makeText(context, "获取用户梦想失败！", Toast.LENGTH_LONG).show();
+                                }
+
                             }
-                        }catch (Exception ex){
-                            Toast.makeText(context, "获取用户梦想失败！", Toast.LENGTH_LONG).show();
-                        }
+                            break;
+                        case 1:
+                            if(msg.obj!=null) {
+                                try {
+                                    UserPosts users = (UserPosts) GsonUtils.getEntity(msg.obj.toString(), UserPosts.class);
 
+                                    if (users.getRet() == Config.RESULT_RET_SUCCESS) {
+                                        User user= users.getPost().get(0);
+                                        dream_user.setText(user.getUser_nickname());
+                                    } else {
+                                        Toast.makeText(context, "获取用户信息失败！", Toast.LENGTH_LONG).show();
+                                    }
+                                }catch (Exception ex){
+                                    Toast.makeText(context, "获取用户信息失败！", Toast.LENGTH_LONG).show();
+                                }
+
+                            }
+                            break;
+                        default:
+                            break;
                     }
+
 
                     break;
                 case Config.HTTP_REQUEST_ERROR:

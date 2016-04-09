@@ -1,5 +1,6 @@
 package com.example.mrpan.dreamtogether.fragment;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,12 +15,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mrpan.dreamtogether.MainActivity;
 import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.adapter.UserInfoAdapter;
+import com.example.mrpan.dreamtogether.utils.MySharePreference;
 import com.example.mrpan.dreamtogether.view.TitleBar;
 
 import java.util.ArrayList;
@@ -105,8 +108,8 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
         data=new HashMap<>();
         data.put("isNull", false);
         data.put("menuImg", R.mipmap.ic_launcher);
-        data.put("menuText", "菜单二");
-        data.put("menu","menu3");
+        data.put("menuText", "退出登录");
+        data.put("menu","menuExit");
         datas.add(data);
         data=new HashMap<>();
         data.put("isNull", true);
@@ -135,6 +138,14 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
                 intent.setClass(context, OtherActivity.class);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                break;
+            case "menuExit":
+                MySharePreference mySharePreference=new MySharePreference(context);
+                mySharePreference.commitBoolean("isLogin",false);
+                android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_content,MainActivity.fragmentHashMap.get(DreamerLoginFragment.TAG));
+                //transaction.addToBackStack(null);
+                transaction.commit();
                 break;
             default:
                 break;

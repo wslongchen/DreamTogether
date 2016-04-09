@@ -108,7 +108,7 @@ public class DreamerLoginFragment extends Fragment implements View.OnClickListen
                 if(RegexUtils.checkPassword(name) && RegexUtils.checkPassword(password)) {
                     dialog= DialogUtils.getLoadDialog(getActivity());
                     dialog.show();
-                    HttpHelper.getInstance().asyHttpGetRequest(Config.Login_User(name, password), new HttpResponseCallBack() {
+                    HttpHelper.getInstance().asyHttpGetRequest(Config.Login_User(name, Md5Utils.StrToMd5(password)), new HttpResponseCallBack() {
                         @Override
                         public void onSuccess(String url, String result) {
                             dialog.dismiss();
