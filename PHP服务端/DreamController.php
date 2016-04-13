@@ -13,8 +13,10 @@ class DreamController{
 		
 		echo json_encode($json_out);
 		
-		
-		
+	}
+	function publishDreamImg($dream,$files){
+		$json_out=$this->model->postDreamImg($dream,$files);
+		echo json_encode($json_out);	
 	}
 	 
 	function listDream(){

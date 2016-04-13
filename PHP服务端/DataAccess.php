@@ -31,6 +31,7 @@ class DataAccess {
 				post_date DATETIME NOT NULL,
 				post_content LONGTEXT NOT NULL,
 				post_titile text NOT NULL,
+				post_imgs varchar(255),
 				post_status VARCHAR(20) NOT NULL,
 				post_password VARCHAR(20) NOT NULL,
 				post_guid VARCHAR(255),
@@ -62,7 +63,15 @@ class DataAccess {
 				user_id INT(6) NOT NULL,
 				meta_key varchar(255) NOT NULL,
 				meta_value longtext NOT NULL
-				)";
+				)
+				CREATE TABLE IF NOT EXISTS dream_feedback(
+				id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			    time varchar(200) NOT NULL,
+			    content varchar(500) NOT NULL,
+			    name varchar(20) DEFAULT NULL,
+			    contact varchar(20) DEFAULT NULL
+				)
+				";
 				
 			mysql_query($sql,$this->db);
 		//$sql = new ReadSql($host, $user, $pass, $db);

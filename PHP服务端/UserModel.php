@@ -109,6 +109,19 @@ if(!empty($user) && $this->dao->query($sql)){
 			}
 	}
 	
+	function updateUserImg($file){
+		$sql="update dream_users set user_img='".$file."'";
+		if($this->dao->query($sql)){
+			$json_out["ret"]=0;
+			$json_out["post"]="post successed";
+			return $json_out;
+		}else{
+			$json_out["ret"]=1;
+			$json_out["post"]="post failed!";
+			return $json_out;
+		}
+	}
+	
 	function insertUserMeta($meta){
 		$sql="INSERT INTO `dream_users_meta` VALUES ('"+$meta["key"]+"','"+$meta["value"]+"')";
 		if(!empty($meta) && $this->dao->query($sql)){
