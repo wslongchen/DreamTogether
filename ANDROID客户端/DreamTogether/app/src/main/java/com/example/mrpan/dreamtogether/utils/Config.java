@@ -12,6 +12,9 @@ public class Config {
      *
      * values 1 表示 仅在wifi下使用 values 0 表示 都可以使用
      */
+
+    public static boolean IS_DEBUG=true;
+
     public static String TYPE_CONN = "TYPE_CONN";
     public static int TYPE_ALL = 0;
     public static int TYPE_WIFI = 1;
@@ -41,8 +44,9 @@ public class Config {
 
     public static final String REQUEST_ALL_DREAM="http://dream.mrpann.com/index.php?action=list&type=dream";
     public static final String REQUEST_ALL_USER="http://dream.mrpann.com/index.php?action=list&type=user";
-    public static final String CREATE_DREAM="http://dream.mrpann.com/index.php?action=post&type=dream";
+    public static final String CREATE_DREAM="http://dream.mrpann.com/index.php?action=post&type=dream";//"http://dream.mrpann.com/allpost.php?action=postDreamImg"
     public static final String CREATE_USER="http://dream.mrpann.com/index.php?action=post&type=user";
+    public static final String CREATE_DREAM_WITH_IMG="http://dream.mrpann.com/allpost.php?action=postDreamImg";
     private static final String LOGIN_Str="http://dream.mrpann.com/index.php?action=list&type=loginUser&name=";
     private static final String LOGIN_Str2="&password=";
     private static final String REQUEST_ALL_AUTHOR_DREAM="http://dream.mrpann.com/index.php?action=list&type=getDreamByAuthor&id=";
@@ -66,5 +70,8 @@ public class Config {
     public static final int REGISTER_TYPE=1010;
     public static final int TIMELINE_TYPE=1011;
     public static final int POST_TYPE=1012;
+
+
+    public static final int REQUEST_CODE_PERMISSIONS=123;
 
 }

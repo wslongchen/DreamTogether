@@ -55,15 +55,15 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:id="@+id/imageButton"
+                    android:id="@+id/contanct_dreamer"
                     android:text="发私信"
                     android:textSize="14dp"
                     android:layout_marginLeft="5dp"
                     android:textColor="@color/dreamWhite"
                     android:background="@color/dreamSkyBlue"
-                    android:layout_alignBaseline="@+id/dream_recent_user"
-                    android:layout_alignBottom="@+id/dream_recent_user"
-                    android:layout_toEndOf="@+id/dream_recent_user" />
+                    android:layout_above="@+id/dream_recent_count"
+                    android:layout_toEndOf="@+id/dream_recent_user"
+                    android:layout_toRightOf="@+id/dream_recent_user" />
             </RelativeLayout>
             <ExpandableListView
                 android:id="@+id/expandlist"

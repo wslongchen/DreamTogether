@@ -1,13 +1,19 @@
 package com.example.mrpan.dreamtogether;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -38,7 +44,7 @@ import com.example.mrpan.dreamtogether.view.loadview.Load2Dialog;
 
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends FragmentActivity implements View.OnClickListener {
 
     public static HashMap<String,Fragment> fragmentHashMap=null;
     private WorldCircleFragment worldCircleFragment=null;
@@ -52,8 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FragmentTransaction transaction=null;
     private PopupWindow popWindow;
     private DisplayMetrics dm;
-    ImageView imageView;
-    FrameLayout menuHome,menuAuth,menuMore;
+    ImageView home_iv,auth_iv,message_iv,more_iv;
+    FrameLayout menuHome,menuAuth,menuMessage,menuMore;
 
     private void initView(){
         fragmentHashMap=new HashMap<>();
@@ -62,20 +68,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dreamerLoginFragment=new DreamerLoginFragment();
         fragmentHashMap.put(DreamerLoginFragment.TAG,dreamerLoginFragment);
         dreamerInfoFragment=new DreamerInfoFragment();
-        fragmentHashMap.put(DreamerInfoFragment.TAG,dreamerInfoFragment);
+        fragmentHashMap.put(DreamerInfoFragment.TAG, dreamerInfoFragment);
        // dreamerRegisterFragment=new DreamerRegisterFragment();
         //fragmentHashMap.put(DreamerRegisterFragment.TAG,dreamerRegisterFragment);
         dreamSearchFragment=new DreamSearchFragment();
-        fragmentHashMap.put(DreamSearchFragment.TAG,dreamSearchFragment);
+        fragmentHashMap.put(DreamSearchFragment.TAG, dreamSearchFragment);
 
 
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_content, worldCircleFragment);
-        //transaction.addToBackStack(null);
-        transaction.commit();
 
-        imageView=(ImageView)findViewById(R.id.toggle_btn);
-        imageView.setOnClickListener(this);
 
         menuAuth=(FrameLayout)findViewById(R.id.menu_auth);
         menuAuth.setOnClickListener(this);
@@ -83,15 +83,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         menuHome.setOnClickListener(this);
         menuMore=(FrameLayout)findViewById(R.id.menu_more);
         menuMore.setOnClickListener(this);
+        menuMessage=(FrameLayout)findViewById(R.id.menu_message);
+        menuMessage.setOnClickListener(this);
+        home_iv=(ImageView)findViewById(R.id.image_home);
+        message_iv=(ImageView)findViewById(R.id.image_message);
+        auth_iv=(ImageView)findViewById(R.id.image_auth);
+        more_iv=(ImageView)findViewById(R.id.image_more);
+
+        home_click();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        HttpHelper httpHelper=HttpHelper.getInstance();
-        initView();
+        initPermission();
 
+        initView();
+    }
+
+    private void initPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            //申请WRITE_EXTERNAL_STORAGE权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    Config.REQUEST_CODE_PERMISSIONS);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case Config.REQUEST_CODE_PERMISSIONS:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // Permission Granted
+                    //callDirectly("15574968442");
+                } else {
+                    // Permission Denied
+                    Toast.makeText(this, "请在设置里允许dream使用存储功能,否则会影响缓存功能！", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -99,76 +135,86 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //
 //    }
 
-    /**
-     * 显示PopupWindow弹出菜单
-     */
-    private void showPopupWindow(View parent) {
-        if (popWindow == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            View view = layoutInflater.inflate(R.layout.popwindow_layout, null);
-            dm = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(dm);
-            // 创建一个PopuWidow对象
-            popWindow = new PopupWindow(view, dm.widthPixels, LinearLayout.LayoutParams.WRAP_CONTENT);
+    //点击图片切换事件
+    private void home_click(){
+        home_iv.setSelected(true);
+        menuHome.setSelected(true);
+        auth_iv.setSelected(false);
+        menuAuth.setSelected(false);
+        message_iv.setSelected(false);
+        menuMessage.setSelected(false);
+        more_iv.setSelected(false);
+        menuMore.setSelected(false);
+
+        transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_content,fragmentHashMap.get(WorldCircleFragment.TAG));
+        //transaction.addToBackStack(null);
+        transaction.commit();
+
+
+    }
+
+    private void auth_click(){
+
+        home_iv.setSelected(false);
+        menuHome.setSelected(false);
+        auth_iv.setSelected(true);
+        menuAuth.setSelected(true);
+        message_iv.setSelected(false);
+        menuMessage.setSelected(false);
+        more_iv.setSelected(false);
+        menuMore.setSelected(false);
+
+        MySharePreference mySharePreference=new MySharePreference(this);
+        boolean isLogin=mySharePreference.getBoolean("isLogin",false);
+        transaction = getSupportFragmentManager().beginTransaction();
+        if(isLogin){
+            transaction.replace(R.id.frame_content,fragmentHashMap.get(DreamerInfoFragment.TAG));
+        }else{
+            transaction.replace(R.id.frame_content,fragmentHashMap.get(DreamerLoginFragment.TAG));
         }
-        // 使其聚集 ，要想监听菜单里控件的事件就必须要调用此方法
-        popWindow.setFocusable(true);
-        // 设置允许在外点击消失
-        popWindow.setOutsideTouchable(true);
-        // 设置背景，这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景
-        popWindow.setBackgroundDrawable(new BitmapDrawable());
-        // PopupWindow的显示及位置设置
-        // popWindow.showAtLocation(parent, Gravity.FILL, 0, 0);
-        popWindow.showAsDropDown(parent, 0, 0);
+        //transaction.addToBackStack(null);
+        transaction.commit();
+    }
 
-        popWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+    private void message_click(){
+        home_iv.setSelected(false);
+        menuHome.setSelected(false);
+        auth_iv.setSelected(false);
+        menuAuth.setSelected(false);
+        message_iv.setSelected(true);
+        menuMessage.setSelected(true);
+        more_iv.setSelected(false);
+        menuMore.setSelected(false);
+    }
 
-            @Override
-            public void onDismiss() {
-
-            }
-        });
-
-        // 监听触屏事件
-        popWindow.setTouchInterceptor(new View.OnTouchListener() {
-            public boolean onTouch(View view, MotionEvent event) {
-                // 改变显示的按钮图片为正常状态
-                // changeButtonImage();
-                popWindow.dismiss();
-                return false;
-            }
-        });
+    private void more_click(){
+        home_iv.setSelected(false);
+        menuHome.setSelected(false);
+        auth_iv.setSelected(false);
+        menuAuth.setSelected(false);
+        message_iv.setSelected(false);
+        menuMessage.setSelected(false);
+        more_iv.setSelected(true);
+        menuMore.setSelected(true);
     }
 
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.toggle_btn:
-                showPopupWindow(imageView);
-                break;
             case R.id.menu_home:
-                transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame_content,fragmentHashMap.get(WorldCircleFragment.TAG));
-                //transaction.addToBackStack(null);
-                transaction.commit();
+                home_click();
                 break;
             case R.id.menu_auth:
-                MySharePreference mySharePreference=new MySharePreference(this);
-                boolean isLogin=mySharePreference.getBoolean("isLogin",false);
-                transaction = getSupportFragmentManager().beginTransaction();
-                if(isLogin){
-                    transaction.replace(R.id.frame_content,fragmentHashMap.get(DreamerInfoFragment.TAG));
-                }else{
-                    transaction.replace(R.id.frame_content,fragmentHashMap.get(DreamerLoginFragment.TAG));
-                }
-                //transaction.addToBackStack(null);
-                transaction.commit();
+                auth_click();
                 break;
             case R.id.menu_more:
-
+                more_click();
                 break;
+            case R.id.menu_message:
+                message_click();
             default:
 
                 break;
@@ -176,6 +222,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private long exitTime = 0;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

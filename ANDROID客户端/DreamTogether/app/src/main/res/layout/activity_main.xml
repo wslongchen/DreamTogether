@@ -35,49 +35,58 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
-                        android:id="@+id/image_home"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top|center"
-                        android:src="@mipmap/ic_launcher" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/image_home"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="top|center"
+                            android:src="@drawable/menu_home_select"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:text="菜单1"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp" />
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="-10dp"
+                            android:id="@+id/home_tips_newmessage"
+                            android:src="@mipmap/tips_newmessage"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/image_home" />
+                    </RelativeLayout>
+
                 </FrameLayout>
 
                 <FrameLayout
-                    android:id="@+id/menu_2"
+                    android:id="@+id/menu_message"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
-                        android:id="@+id/image_auth"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top|center"
-                        android:src="@mipmap/ic_launcher" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/image_message"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="top|center"
+                            android:src="@drawable/menu_message_select"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:text="菜单2"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp" />
-                </FrameLayout>
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="-10dp"
+                            android:id="@+id/auth_tips_newmessage"
+                            android:src="@mipmap/tips_newmessage"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/image_message" />
+                    </RelativeLayout>
 
-
-                <FrameLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" >
                 </FrameLayout>
 
 
@@ -87,20 +96,28 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
-                        android:id="@+id/image_space"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top|center"
-                        android:src="@mipmap/ic_launcher" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/image_auth"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="top|center"
+                            android:src="@drawable/menu_auth_select"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:text="菜单3"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp" />
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="-10dp"
+                            android:id="@+id/message_tips_newmessage"
+                            android:src="@mipmap/tips_newmessage"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/image_auth" />
+                    </RelativeLayout>
+
                 </FrameLayout>
 
                 <FrameLayout
@@ -109,20 +126,27 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
-                        android:id="@+id/image_more"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top|center"
-                        android:src="@mipmap/ic_launcher" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/image_more"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="top|center"
+                            android:src="@drawable/menu_more_select"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:text="菜单4"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp" />
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="-10dp"
+                            android:id="@+id/more_tips_newmessage"
+                            android:src="@mipmap/tips_newmessage"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/image_more" />
+                    </RelativeLayout>
                 </FrameLayout>
             </LinearLayout>
 
@@ -132,25 +156,6 @@
                 android:background="@android:color/black" >
             </LinearLayout>
         </FrameLayout>
-
-        <ImageView
-            android:id="@+id/toggle_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignTop="@+id/frameMenu"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/ic_launcher" />
-
-        <ImageView
-            android:id="@+id/plus_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignTop="@+id/frameMenu"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/ic_launcher"
-            android:visibility="gone"/>
 
     </RelativeLayout>
 

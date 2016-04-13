@@ -1,19 +1,24 @@
 package com.example.mrpan.dreamtogether.fragment;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -41,6 +46,7 @@ import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DateUtils;
 import com.example.mrpan.dreamtogether.utils.DialogUtils;
 import com.example.mrpan.dreamtogether.adapter.DreamPostGridAdapter;
+import com.example.mrpan.dreamtogether.utils.FileUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.utils.OtherUtils;
 import com.example.mrpan.dreamtogether.utils.RegexUtils;
@@ -51,6 +57,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mrpan on 16/3/30.
@@ -229,7 +237,8 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                     .findViewById(R.id.dream_item_popupwindows_cancel);
             bt1.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    photo();
+                    onPhoto();
+                    //onCall("15574968442");
                     dismiss();
                 }
             });
@@ -240,6 +249,9 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                     transaction.replace(R.id.other_layout, OtherActivity.fragmentHashMap.get(PicSelectFragment.TAG));
                     transaction.addToBackStack(null);
                     transaction.commit();
+//                    Intent intent = new Intent(Intent.ACTION_PICK);
+//                    intent.setType("image/*");//相片类型
+//                    startActivityForResult(intent, 7);
                     dismiss();
                 }
             });
@@ -259,6 +271,47 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_CALL_PHONE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    photo();
+                    // Permission Granted
+                    //callDirectly("15574968442");
+                } else {
+                    // Permission Denied
+                    Toast.makeText(getActivity(), "CALL_PHONE Denied", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    private void callDirectly(String mobile){
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.CALL");
+        intent.setData(Uri.parse("tel:" + mobile));
+        context.startActivity(intent);
+    }
+
+    public void onPhoto() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA);
+            if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_ASK_CALL_PHONE);
+                return;
+            } else {
+                //上面已经写好的拨号方法
+                photo();
+            }
+        } else {
+            //上面已经写好的拨号方法
+            photo();
+        }
+    }
 
     //拍照
     public void photo() {
@@ -269,6 +322,24 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
         Uri imageUri = Uri.fromFile(file);
         openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(openCameraIntent, Config.TAKE_PICTURE);
+    }
+
+    final public static int REQUEST_CODE_ASK_CALL_PHONE = 123;
+
+    public void onCall(String mobile){
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.CALL_PHONE);
+            if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CALL_PHONE},REQUEST_CODE_ASK_CALL_PHONE);
+                return;
+            }else{
+                //上面已经写好的拨号方法
+                callDirectly(mobile);
+            }
+        } else {
+            //上面已经写好的拨号方法
+            callDirectly(mobile);
+        }
     }
 
     @Override
@@ -301,25 +372,18 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                     dream.setPost_comment_status("0");
                     dream.setPost_type("0");
                     dream.setPost_status("0");
-                    HttpHelper.getInstance().asyHttpPostRequest(Config.CREATE_DREAM, OtherUtils.DreamToNameValuePair(dream), new HttpResponseCallBack() {
-                        @Override
-                        public void onSuccess(String url, String result) {
-                            dialog.dismiss();
-                            Message message = new Message();
-                            message.arg1 = Config.HTTP_REQUEST_SUCCESS;
-                            message.obj = result;
-                            myHander.sendMessage(message);
-                        }
-
-                        @Override
-                        public void onFailure(int httpResponseCode, int errCode, String err) {
-                            if (dialog.isShowing())
-                                dialog.dismiss();
-                            Message message = new Message();
-                            message.arg1 = Config.HTTP_REQUEST_ERROR;
-                            myHander.sendMessage(message);
-                        }
-                    });
+                    List<String> list = new ArrayList<String>();
+                for (int i = 0; i < BitmapUtils.drr.size(); i++) {
+                    String Str = BitmapUtils.drr.get(i).substring(
+                            BitmapUtils.drr.get(i).lastIndexOf("/") + 1,
+                            BitmapUtils.drr.get(i).lastIndexOf("."));
+                    list.add(Config.DIR_IMAGE_PATH+Str+".JPEG");
+                }
+                    if(list.size()>0){
+                        HttpHelper.getInstance().asyHttpPostRequest(Config.CREATE_DREAM_WITH_IMG, OtherUtils.DreamToMap(dream), list,new DreamPostHttpResponseCallBack(2));
+                    }else {
+                        HttpHelper.getInstance().asyHttpPostRequest(Config.CREATE_DREAM, OtherUtils.DreamToNameValuePair(dream), new DreamPostHttpResponseCallBack(1));
+                    }
 
                 }else {
                     Toast.makeText(context,"不能为空！",Toast.LENGTH_LONG).show();
@@ -359,11 +423,14 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                             String path = BitmapUtils.drr.get(BitmapUtils.max);
                             Bitmap bm = BitmapUtils.revitionImageSize(path);
                             System.out.println(path);
+                            if(BitmapUtils.bmp.contains(bm)){
+
+                            }
                             BitmapUtils.bmp.add(bm);
                             String newStr = path.substring(
                                     path.lastIndexOf("/") + 1,
                                     path.lastIndexOf("."));
-                            //FileUtils.saveBitmap(bm, "" + newStr);
+                            FileUtils.saveBitmap(bm, newStr,Config.DIR_IMAGE_PATH);
                             BitmapUtils.max += 1;
                             Message message = new Message();
                             message.what = 1;
@@ -390,26 +457,31 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
         public void handleMessage(Message msg) {
             switch (msg.arg1){
                 case Config.HTTP_REQUEST_SUCCESS:
-                    if(msg.obj!=null){
-                        int ret=0;
-                        try {
-                            JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF\uFEFF\uFEFF", ""));
-                            ret = jsonObject.getInt("ret");
-                            if (ret == Config.RESULT_RET_SUCCESS) {
-                                Toast.makeText(context,"发表成功！",Toast.LENGTH_LONG).show();
-                                //Intent intent = new Intent(context, WorldCircleFragment.class);
-                                //startActivityForResult(intent, Config.RESULT_RET_SUCCESS);
-                                getActivity().finish();
-                                // Toast.makeText(context, "Publish successed!", Toast.LENGTH_LONG).show();
-                            } else
-                            {
-                                Toast.makeText(context, "发表失败！", Toast.LENGTH_LONG).show();
+                    switch (msg.arg2){
+                        case 1:
+                            if(msg.obj!=null){
+                                int ret=0;
+                                try {
+                                    JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF\uFEFF\uFEFF", ""));
+                                    ret = jsonObject.getInt("ret");
+                                    if (ret == Config.RESULT_RET_SUCCESS) {
+                                        Toast.makeText(context,"发表成功！",Toast.LENGTH_LONG).show();
+                                        //Intent intent = new Intent(context, WorldCircleFragment.class);
+                                        //startActivityForResult(intent, Config.RESULT_RET_SUCCESS);
+                                        getActivity().finish();
+                                        // Toast.makeText(context, "Publish successed!", Toast.LENGTH_LONG).show();
+                                    } else
+                                    {
+                                        Toast.makeText(context, "发表失败！", Toast.LENGTH_LONG).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                            break;
+                        default:
+                            break;
                     }
-
                     break;
                 case Config.HTTP_REQUEST_ERROR:
                     Toast.makeText(context,"联网失败！",Toast.LENGTH_LONG).show();
@@ -420,6 +492,31 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
             super.handleMessage(msg);
         }
     };
+
+    class DreamPostHttpResponseCallBack implements HttpResponseCallBack {
+        private int flag;
+
+        public DreamPostHttpResponseCallBack(int flag){
+            super();
+            this.flag=flag;
+        }
+
+        @Override
+        public void onSuccess(String url, String result) {
+            Message message = new Message();
+            message.arg1 = Config.HTTP_REQUEST_SUCCESS;
+            message.arg2=flag;
+            message.obj = result;
+            myHander.sendMessage(message);
+        }
+
+        @Override
+        public void onFailure(int httpResponseCode, int errCode, String err) {
+            Message message = new Message();
+            message.arg1 = Config.HTTP_REQUEST_ERROR;
+            myHander.sendMessage(message);
+        }
+    }
 
     public int getUserID() {
         return UserID;

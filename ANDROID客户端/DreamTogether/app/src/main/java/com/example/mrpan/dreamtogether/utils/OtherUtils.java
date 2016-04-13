@@ -12,7 +12,9 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Formatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mrpan on 16/3/16.
@@ -49,6 +51,22 @@ public class OtherUtils {
         nameValuePairs.add(new BasicNameValuePair("commentstatus",dream.getPost_comment_status()));
         nameValuePairs.add(new BasicNameValuePair("commentcount",dream.getPost_comment_count()));
         return nameValuePairs;
+    }
+
+    public static Map<String,String> DreamToMap(Dream dream){
+        Map<String,String> map=new HashMap<>();
+        int ID=dream.getPost_author().getID();
+        map.put("author", String.valueOf(ID));
+        map.put("date", dream.getPost_date().toString());
+        map.put("content", dream.getPost_content().toString());
+        map.put("title", dream.getPost_titile().toString());
+        map.put("status", dream.getPost_status().toString());
+        map.put("password", dream.getPost_password().toString());
+        map.put("guid", dream.getPost_guid().toString());
+        map.put("type", dream.getPost_type().toString());
+        map.put("commentstatus", dream.getPost_comment_status().toString());
+        map.put("commentcount",dream.getPost_comment_count().toString());
+        return map;
     }
 
 }

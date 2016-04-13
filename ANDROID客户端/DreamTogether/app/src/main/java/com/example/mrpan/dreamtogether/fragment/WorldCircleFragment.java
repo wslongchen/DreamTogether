@@ -15,16 +15,27 @@ import android.view.ViewGroup;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.entity.DreamPosts;
+import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.http.HttpHelper;
 import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
 import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
+import com.example.mrpan.dreamtogether.utils.DateUtils;
 import com.example.mrpan.dreamtogether.utils.GsonUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.adapter.WorldCircleListAdapter;
+import com.example.mrpan.dreamtogether.utils.OtherUtils;
 import com.example.mrpan.dreamtogether.view.TitleBar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by mrpan on 16/3/17.
@@ -67,8 +78,40 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
         recyclerView.setHasFixedSize(true);
         httpHelper=HttpHelper.getInstance();
         httpHelper.asyHttpGetRequest(Config.REQUEST_ALL_DREAM, new DreamHttpResponseCallBack(Config.ALL_DREAM));
-        //httpHelper.asyHttpPostRequest("http://dream.mrpann.com/index.php?action=post&type=photo","/storage/09E4-361E/Pictures/icon_news.png",new DreamHttpResponseCallBack(12));
-        DreamPosts cache= (DreamPosts) CacheUtils.readHttpCache(Config.DIR_CACHE_PATH,"all_dream");
+//        List<String> fs=new ArrayList<>();
+//        fs.add("/storage/emulated/0/DCIM/browser-photos/1458103871032.jpg");///storage/09E4-361E/Pictures/icon_news.png
+//        fs.add("/storage/F10A-1818/网络图片/03.jpg");
+//        fs.add("/storage/emulated/0/DCIM/browser-photos/1458103871032.jpg");
+//        Dream dream=new Dream();
+//        User user=new User();
+//        user.setID(2);
+//        dream.setPost_author(user);
+//        dream.setPost_content("SSSSS");
+//        dream.setPost_date(DateUtils.getCurrentTimeStr());
+//        dream.setPost_comment_count("0");
+//        dream.setPost_titile("null");
+//        dream.setPost_comment_status("0");
+//        dream.setPost_type("0");
+//        dream.setPost_status("0");
+//        dream.setPost_password("null");
+//        dream.setPost_guid("null");
+//        Map map=OtherUtils.DreamToMap(dream);
+
+//        Map<String,String> map=new HashMap<>();
+//        map.put("author", "2");
+//        map.put("date", "2016-02-02");
+//        map.put("content","sss");
+//        map.put("title", "ddd");
+//        map.put("status", "0");
+//        map.put("password", "null");
+//        map.put("guid", "null");
+//        map.put("type", "0");
+//        map.put("commentstatus", "0");
+//        map.put("commentcount","0");
+//        httpHelper.asyHttpPostRequest("http://dream.mrpann.com/allpost.php?action=postDreamImg",map, fs, new DreamHttpResponseCallBack(12));
+//        DreamPosts cache= (DreamPosts) CacheUtils.readHttpCache(Config.DIR_CACHE_PATH,"all_dream");
+//        if(cache!=null)
+//            dreams=cache;
 //        if(cache.getPost().size()>0)
   //          dreams=cache;
     }
@@ -91,9 +134,18 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                         switch (msg.arg2)
                         {
                             case Config.ALL_DREAM:
-                                dreams=(DreamPosts) GsonUtils.getEntity(msg.obj.toString(), DreamPosts.class);
+//                                JSONObject jsonObject = null;
+//                                try {
+//                                    jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF\uFEFF\uFEFF", ""));
+//                                    int ret = jsonObject.getInt("ret");
+//                                    System.out.println(ret+":ddd");
+//                                } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                }
+                                DreamPosts dream= (DreamPosts) GsonUtils.getEntity("{\"ret\":0,\"post\":[{\"ID\":\"12\",\"post_author\":{\"ID\":\"5\",\"user_login\":\"longchen\",\"user_pass\":\"662e0103accf08eecbefc3d51302d182\",\"user_nickname\":\"\\u6f58\\u5b89\",\"user_img\":\"\",\"user_phone\":\"15574968443\",\"user_email\":\"wslongchen@qq.com\",\"user_url\":\"\",\"user_registered\":\"2016-04-09 14:44:08\",\"user_activation_key\":\"\",\"user_status\":\"0\",\"user_display_name\":\"\"},\"post_date\":\"2016-04-09 14:49:42\",\"post_content\":\"\\u5475\\u5475\",\"post_titile\":\"\",\"post_imgs\":null,\"post_status\":\"0\",\"post_password\":\"\",\"post_guid\":\"\",\"post_type\":\"0\",\"post_comment_status\":\"0\",\"post_comment_count\":\"0\"}]}",DreamPosts.class);
+                                dreams=(DreamPosts) GsonUtils.getEntity(msg.obj.toString().trim(), DreamPosts.class);
                                 List<Dream> dreamList=dreams.getPost();
-                                CacheUtils.saveHttpCache(Config.DIR_CACHE_PATH, "all_dream", dreams);
+                                //CacheUtils.saveHttpCache(Config.DIR_CACHE_PATH, "all_dream", dreams);
                                 showData();
                                 break;
                             default:

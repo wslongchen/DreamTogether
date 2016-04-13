@@ -1,9 +1,13 @@
 package com.example.mrpan.dreamtogether.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
+import android.graphics.Bitmap;
 import android.os.Environment;
+import android.util.Log;
 
 public class FileUtils {
 	/**
@@ -59,5 +63,26 @@ public class FileUtils {
 		File file = new File(path);
 		long newModeifyTime = System.currentTimeMillis();
 		file.setLastModified(newModeifyTime);
+	}
+	public static void saveBitmap(Bitmap bm, String picName,String path) {
+		File file = new File(path);
+		try {
+			if (!file.exists()) {
+				file.mkdirs();
+			}
+			File f = new File(path, picName + ".JPEG");
+			if (f.exists()) {
+				f.delete();
+			}
+			FileOutputStream out = new FileOutputStream(f);
+			bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
+			out.flush();
+			out.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

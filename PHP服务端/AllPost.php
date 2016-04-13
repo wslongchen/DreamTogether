@@ -59,14 +59,14 @@ switch ($action) {
 					//设置随机数长度
 					$name = implode(".", $filename);
 					//$name1=$name.".Mcncc";
-					$uploadfile = $name ."." . strtolower(fileext($_FILES[$file]['name']));
+					$uploadfile = $base_path.$name ."." . strtolower(fileext($_FILES[$file]['name']));
 				} while(file_exists($uploadfile));
 
 				if (move_uploaded_file($_FILES[$file]['tmp_name'], $uploadfile)) {
 					if (is_uploaded_file($_FILES[$file]['tmp_name'])) {
 						$flag=false;echo "222";
 					} else {
-						$f="dream.mrpann.com/uploads/".$uploadfile;
+						$f="dream.mrpann.com/uploads/".$name ."." . strtolower(fileext($_FILES[$file]['name']));
 						array_push($files,$f);
 					}
 				}

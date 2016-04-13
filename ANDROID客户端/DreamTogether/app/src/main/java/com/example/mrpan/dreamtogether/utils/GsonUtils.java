@@ -10,15 +10,16 @@ import com.google.gson.Gson;
  */
 public class GsonUtils {
 
-    public static BaseEntity getEntity(String content, Class<?> clazz){
+    public static BaseEntity getEntity(String content, Class<?> clazz) {
 
-        if(TextUtils.isEmpty(content))
+        if (TextUtils.isEmpty(content))
             return null;
 
         Gson gson = new Gson();
 
         try {
-            BaseEntity baseEntity = (BaseEntity) gson.fromJson(content.replace("\uFEFF\uFEFF\uFEFF",""), clazz);
+            BaseEntity baseEntity = (BaseEntity) gson.fromJson(content.replace("\uFEFF\uFEFF\uFEFF", ""), clazz);
+
             return baseEntity;
         } catch (Exception e) {
             e.printStackTrace();

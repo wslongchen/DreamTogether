@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,6 +15,8 @@ import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.view.NoScrollGridView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -52,8 +55,27 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
         else{
 
         }
-        if(p.getPost_comment_count()==null && p.getPost_comment_count().equals("")){
+        if(p.getPost_comment_count()==null || p.getPost_comment_count().equals("")||p.getPost_comment_count().equals("0")){
             viewHolder.dream_comments_layout.setVisibility(View.GONE);
+        }
+        if(p.getPost_imgs().length()>0 && !p.getPost_imgs().trim().isEmpty() && !p.getPost_imgs().equals("")){
+            String[] imgs=p.getPost_imgs().split(",");
+            List<HashMap<String,String>> lists=new ArrayList<>();
+            for(int j=0;j<imgs.length;j++){
+                HashMap<String,String> map=new HashMap<>();
+                map.put("url","http://"+imgs[j]);
+                lists.add(map);
+            }
+            viewHolder.dream_img_gridView.setVisibility(View.VISIBLE);
+            viewHolder.dream_img_gridView.setAdapter(new DreamImageGridAdapter(mContext,lists));
+            viewHolder.dream_img_gridView
+                    .setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent,
+                                                View view, int position, long id) {
+                            // imageBrower(position,bean.urls);
+                        }
+                    });
         }
 //        List<Meta> metas=dreams.get(i).getMetas();
 //        List<HashMap<String,Object>> datas=new ArrayList<>();
@@ -64,14 +86,7 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
 //            HashMap<String,Object> data=new HashMap<>();
 //            data.put("url",m.getMeta_value());
 //        }
-//        DreamImageGridAdapter gridAdapter=new DreamImageGridAdapter(mContext,)
-      //  viewHolder.dream_comments_names.setVisibility(View.GONE);
-//        viewHolder.dream_date.setText(p.getWordcircle_date());
-//        if(p.getWordcircle_comment_count()==null){
-//            viewHolder.dream_comments_layout.setVisibility(View.GONE);
-//        }
-        //viewHolder.dream_img_gridView.setAdapter();//images gridview
-        //viewHolder.dream_img_gridView.setVisibility(View.GONE);
+
 //        viewHolder.favorite_total.setText(p.getDate()+"  from "+p.getAuthor());
 //        if(p.getImage().length>0)
 //        {

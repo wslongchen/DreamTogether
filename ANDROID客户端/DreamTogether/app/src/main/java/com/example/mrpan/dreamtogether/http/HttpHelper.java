@@ -25,12 +25,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -103,7 +106,7 @@ public class HttpHelper {
 
     }
 
-    public void asyHttpPostRequest(String url,String files, HttpResponseCallBack httpCallBack) {
+    public void asyHttpPostRequest(String url,Map<String,String> params,List<String> files, HttpResponseCallBack httpCallBack) {
 
 
         if (null != appPreference) {
@@ -113,7 +116,7 @@ public class HttpHelper {
             if (state.equals(Network.NetWorkState.MOBILE)) {
 
                 if (permission == Config.TYPE_ALL) {
-                    threadPool.execute(getPostHttpThread(url, files, httpCallBack));
+                    threadPool.execute(getPostHttpThread(url, params,files, httpCallBack));
                 } else if (permission == Config.TYPE_WIFI) {
                     httpCallBack.onFailure(0, Con_Permission,
                             "请在设置中打开MOBILE连接 ");
@@ -121,15 +124,15 @@ public class HttpHelper {
                 }
                 // 未知网络
                 else {
-                    threadPool.execute(getPostHttpThread(url, files, httpCallBack));
+                    threadPool.execute(getPostHttpThread(url, params,files, httpCallBack));
                 }
 
             } else {
-                threadPool.execute(getPostHttpThread(url, files, httpCallBack));
+                threadPool.execute(getPostHttpThread(url,params, files, httpCallBack));
             }
 
         } else {
-            threadPool.execute(getPostHttpThread(url, files, httpCallBack));
+            threadPool.execute(getPostHttpThread(url, params,files, httpCallBack));
         }
 
     }
@@ -392,6 +395,127 @@ public class HttpHelper {
             }
         };
     }
+
+
+    private Runnable getPostHttpThread(final String adress_Http,final Map<String,String> map, final List<String> files, final HttpResponseCallBack httpCallBack){
+
+        return new Runnable() {
+            int responseCode = -1;
+            OutputStream outtStream = null;
+            String returnLine = "";
+            BufferedReader reader = null;
+            HttpURLConnection conn = null;
+            URL url = null;
+            String end = "\r\n";
+            String twoHyphens = "--";
+            String boundary = "******";
+
+            @Override
+            public void run() {
+                try {
+                    String dataStr=null;
+                    if (map != null && map.size() != 0 && !map.isEmpty()) {
+                        StringBuffer sb = new StringBuffer( );
+                        for (Map.Entry<String, String> entry : map.entrySet()) {
+                            // 如果请求参数中有中文，需要进行URLEncoder编码 gbk/utf8
+                            sb.append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue(), "utf-8"));
+                            sb.append("&");
+                        }
+                        sb.deleteCharAt(sb.length() - 1);
+                        dataStr=sb.toString();
+                    }
+
+//                    if (map != null && !map.isEmpty()) {
+//                        StringBuffer sb = new StringBuffer( );
+//                        for (Map.Entry<String, String> entry : map.entrySet())
+//                            sb.append("&").append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue(), "utf-8"));
+//                        dataStr=sb.toString().substring(1);
+//                    }
+                    url= new URL(adress_Http+"&"+dataStr);
+                    conn = (HttpURLConnection) url.openConnection();
+                    conn.setDoOutput(true);
+                    conn.setDoInput(true);
+                    conn.setRequestMethod("POST");
+                    conn.setUseCaches(false);
+                    conn.setInstanceFollowRedirects(true);
+                    conn.setRequestProperty("Content-Type", "application/octet-stream");
+                    conn.setRequestProperty("Content-Type",
+                            "multipart/form-data;boundary=" + boundary);
+                    //conn.connect();
+                    DataOutputStream out = new DataOutputStream(conn
+                            .getOutputStream());
+
+
+                    for(int i=0;i<files.size();i++){
+                        String name=files.get(i);
+                        String path=name.substring(name.lastIndexOf("/") + 1);
+                        out.writeBytes(twoHyphens + boundary + end);
+                        out.writeBytes("Content-Disposition: form-data; name=\"file"+i+"\"; filename=\""
+                                + path + "\"" + end);
+                        out.writeBytes(end);
+                        FileInputStream fis = new FileInputStream(name);
+
+                        byte[] buffer = new byte[1024]; // 8k
+                        int length = -1;
+                        while ((length = fis.read(buffer)) != -1) {
+                            out.write(buffer, 0, length);
+                        }
+                        out.writeBytes(end);
+                        fis.close();
+
+                    }
+
+                    out.writeBytes(twoHyphens + boundary + twoHyphens + end);
+                    out.flush();
+                    responseCode=conn.getResponseCode();
+                    if (responseCode == 200) {
+                        reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+                        String line = "";
+                        while ((line = reader.readLine()) != null) {
+                            // line = new String(line.getBytes(), "utf-8");
+                            returnLine += line;
+                        }
+
+                        httpCallBack.onSuccess(adress_Http,
+                                returnLine);
+
+                    } else {
+                        httpCallBack.onFailure(responseCode, REQUEST_FAIL,
+                                "请求失败！");
+                    }
+
+                } catch (MalformedURLException e) {
+                    httpCallBack.onFailure(responseCode, URL_Exception,
+                            e.getMessage());
+                    MyLog.i(TAG, e.toString());
+                } catch (IOException e) {
+                    httpCallBack.onFailure(responseCode, IO_Exception,
+                            e.getMessage());
+                    MyLog.i(TAG, e.toString());
+                } finally {
+                    try {
+                        if (null != reader)
+                            reader.close();
+                    } catch (IOException ex) {
+                        MyLog.i(TAG, ex.toString());
+                    }
+                    try {
+                        if (null != outtStream)
+                        {
+                            outtStream.flush();
+                            outtStream.close();
+                        }
+                    } catch (IOException ex) {
+                        MyLog.i(TAG, ex.toString());
+                    }
+                }
+
+                if (null != conn)
+                    conn.disconnect();
+            }
+        };
+    }
+
 
     /**
      * 获取网络图片资源

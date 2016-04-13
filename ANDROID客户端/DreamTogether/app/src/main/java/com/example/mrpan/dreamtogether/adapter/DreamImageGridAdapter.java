@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.example.mrpan.dreamtogether.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,10 +18,10 @@ import java.util.List;
  */
 public class DreamImageGridAdapter extends BaseAdapter {
 
-    private List<HashMap<String,Object>> datas;
+    private List<HashMap<String,String>> datas;
     private Context context;
 
-    public DreamImageGridAdapter(Context context,List<HashMap<String,Object>> datas){
+    public DreamImageGridAdapter(Context context,List<HashMap<String,String>> datas){
         this.datas=datas;
         this.context=context;
     }
@@ -53,8 +54,9 @@ public class DreamImageGridAdapter extends BaseAdapter {
         } else {
             viewHolder = (GridViewHolder) convertView.getTag();
         }
-        String url = datas.get(position).get("url").toString();
-        //ImageLoader.getInstance().displayImage(url, viewHolder.dream_img);
+        String url = datas.get(position).get("url");
+        System.out.print("url:"+url);
+        ImageLoader.getInstance().displayImage(url, viewHolder.dream_img);
         return convertView;
     }
 

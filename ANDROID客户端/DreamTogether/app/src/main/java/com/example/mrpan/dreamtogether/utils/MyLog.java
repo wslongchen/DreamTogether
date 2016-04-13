@@ -9,8 +9,10 @@ public class MyLog {
     private static final String TAG = "Ann";
 
     public static void i(String tag, String msg) {
+        if(Config.IS_DEBUG){
+            Log.i(TAG, "[" + tag + "]" + msg);
+        }
 
-        Log.i(TAG, "[" + tag + "]" + msg);
     }
 
 }

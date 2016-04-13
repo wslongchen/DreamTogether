@@ -11,13 +11,14 @@ public class Dream extends BaseEntity{
     private String post_date;
     private String post_content;
     private String post_titile;
+    private String post_imgs;
     private String post_status;
     private String post_password;
     private String post_guid;
     private String post_type;
     private String post_comment_status;
     private String post_comment_count;
-    private List<Meta> metas;
+    //private List<Meta> metas;
 
 
     public int getID() {
@@ -108,11 +109,19 @@ public class Dream extends BaseEntity{
         this.post_comment_count = post_comment_count;
     }
 
-    public List<Meta> getMetas() {
-        return metas;
+    public String getPost_imgs() {
+        return post_imgs;
     }
 
-    public void setMetas(List<Meta> metas) {
-        this.metas = metas;
+    public void setPost_imgs(String post_imgs) {
+        this.post_imgs = post_imgs;
     }
+
+//    public List<Meta> getMetas() {
+//        return metas;
+//    }
+//
+//    public void setMetas(List<Meta> metas) {
+//        this.metas = metas;
+//    }
 }
