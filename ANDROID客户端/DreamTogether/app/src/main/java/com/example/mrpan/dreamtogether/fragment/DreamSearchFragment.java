@@ -17,6 +17,7 @@ import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.view.DeletableEditText;
 import com.example.mrpan.dreamtogether.view.KeywordsFlow;
+import com.example.mrpan.dreamtogether.view.TitleBar;
 
 import java.util.Random;
 
@@ -34,6 +35,8 @@ public class DreamSearchFragment extends Fragment implements View.OnClickListene
     private View currentView;
     private Context context;
 
+    private TitleBar titleBar;
+
     int STATE=1;
 
     @Nullable
@@ -50,6 +53,8 @@ public class DreamSearchFragment extends Fragment implements View.OnClickListene
     }
 
     private void initView() {
+        titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
+        titleBar.showCenterTitle("搜索");
         keywordsFlow = (KeywordsFlow) currentView.findViewById(R.id.keywordsflow);
         keywordsFlow.setDuration(1000l);
         keywordsFlow.setOnItemClickListener(this);

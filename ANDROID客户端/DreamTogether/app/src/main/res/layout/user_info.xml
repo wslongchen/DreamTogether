@@ -17,7 +17,9 @@
     <include layout="@layout/user_info_header"
         android:id="@+id/include"
         />
+    <!--style="@style/TextSettingItem"-->
     <ListView
+
         android:id="@+id/user_info_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

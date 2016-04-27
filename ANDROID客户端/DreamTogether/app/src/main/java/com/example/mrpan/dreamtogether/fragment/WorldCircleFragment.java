@@ -197,9 +197,7 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.titleBarRightImage:
-                AnimationDrawable animationDrawable=(AnimationDrawable) rfAnimView.getDrawable();
-                animationDrawable.start();
-                Toast.makeText(context,"ddd",Toast.LENGTH_LONG).show();
+
                 break;
             default:
                 break;

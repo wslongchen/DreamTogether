@@ -60,7 +60,7 @@
                 </FrameLayout>
 
                 <FrameLayout
-                    android:id="@+id/menu_message"
+                    android:id="@+id/menu_search"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
@@ -69,7 +69,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <ImageView
-                            android:id="@+id/image_message"
+                            android:id="@+id/image_search"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:layout_gravity="top|center"
@@ -84,7 +84,7 @@
                             android:id="@+id/auth_tips_newmessage"
                             android:src="@mipmap/tips_newmessage"
                             android:layout_alignParentTop="true"
-                            android:layout_toEndOf="@+id/image_message" />
+                            android:layout_toEndOf="@+id/image_search" />
                     </RelativeLayout>
 
                 </FrameLayout>

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.SettingInjectorService;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -34,6 +35,7 @@ import com.example.mrpan.dreamtogether.fragment.DreamSearchFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamerInfoFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamerLoginFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamerRegisterFragment;
+import com.example.mrpan.dreamtogether.fragment.SystemSettingsFragment;
 import com.example.mrpan.dreamtogether.fragment.WorldCircleFragment;
 import com.example.mrpan.dreamtogether.http.HttpHelper;
 import com.example.mrpan.dreamtogether.utils.Config;
@@ -52,14 +54,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private DreamerInfoFragment dreamerInfoFragment=null;
     //private DreamerRegisterFragment dreamerRegisterFragment=null;
     private DreamSearchFragment dreamSearchFragment=null;
+    private SystemSettingsFragment systemSettingsFragment=null;
 
 
 
     private FragmentTransaction transaction=null;
     private PopupWindow popWindow;
     private DisplayMetrics dm;
-    ImageView home_iv,auth_iv,message_iv,more_iv;
-    FrameLayout menuHome,menuAuth,menuMessage,menuMore;
+    ImageView home_iv,auth_iv,search_iv,more_iv;
+    FrameLayout menuHome,menuAuth,menuSearch,menuMore;
 
     private void initView(){
         fragmentHashMap=new HashMap<>();
@@ -73,6 +76,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         //fragmentHashMap.put(DreamerRegisterFragment.TAG,dreamerRegisterFragment);
         dreamSearchFragment=new DreamSearchFragment();
         fragmentHashMap.put(DreamSearchFragment.TAG, dreamSearchFragment);
+        systemSettingsFragment=new SystemSettingsFragment();
+        fragmentHashMap.put(SystemSettingsFragment.TAG,systemSettingsFragment);
+
 
 
 
@@ -83,10 +89,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         menuHome.setOnClickListener(this);
         menuMore=(FrameLayout)findViewById(R.id.menu_more);
         menuMore.setOnClickListener(this);
-        menuMessage=(FrameLayout)findViewById(R.id.menu_message);
-        menuMessage.setOnClickListener(this);
+        menuSearch=(FrameLayout)findViewById(R.id.menu_search);
+        menuSearch.setOnClickListener(this);
         home_iv=(ImageView)findViewById(R.id.image_home);
-        message_iv=(ImageView)findViewById(R.id.image_message);
+        search_iv=(ImageView)findViewById(R.id.image_search);
         auth_iv=(ImageView)findViewById(R.id.image_auth);
         more_iv=(ImageView)findViewById(R.id.image_more);
 
@@ -142,8 +148,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         menuHome.setSelected(true);
         auth_iv.setSelected(false);
         menuAuth.setSelected(false);
-        message_iv.setSelected(false);
-        menuMessage.setSelected(false);
+        search_iv.setSelected(false);
+        menuSearch.setSelected(false);
         more_iv.setSelected(false);
         menuMore.setSelected(false);
 
@@ -161,8 +167,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         menuHome.setSelected(false);
         auth_iv.setSelected(true);
         menuAuth.setSelected(true);
-        message_iv.setSelected(false);
-        menuMessage.setSelected(false);
+        search_iv.setSelected(false);
+        menuSearch.setSelected(false);
         more_iv.setSelected(false);
         menuMore.setSelected(false);
 
@@ -178,15 +184,19 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         transaction.commit();
     }
 
-    private void message_click(){
+    private void search_click(){
         home_iv.setSelected(false);
         menuHome.setSelected(false);
         auth_iv.setSelected(false);
         menuAuth.setSelected(false);
-        message_iv.setSelected(true);
-        menuMessage.setSelected(true);
+        search_iv.setSelected(true);
+        menuSearch.setSelected(true);
         more_iv.setSelected(false);
         menuMore.setSelected(false);
+        transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_content, fragmentHashMap.get(DreamSearchFragment.TAG));
+        //transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private void more_click(){
@@ -194,10 +204,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         menuHome.setSelected(false);
         auth_iv.setSelected(false);
         menuAuth.setSelected(false);
-        message_iv.setSelected(false);
-        menuMessage.setSelected(false);
+        search_iv.setSelected(false);
+        menuSearch.setSelected(false);
         more_iv.setSelected(true);
         menuMore.setSelected(true);
+        transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_content, fragmentHashMap.get(SystemSettingsFragment.TAG));
+        //transaction.addToBackStack(null);
+        transaction.commit();
     }
 
 
@@ -213,8 +227,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case R.id.menu_more:
                 more_click();
                 break;
-            case R.id.menu_message:
-                message_click();
+            case R.id.menu_search:
+                search_click();
             default:
 
                 break;

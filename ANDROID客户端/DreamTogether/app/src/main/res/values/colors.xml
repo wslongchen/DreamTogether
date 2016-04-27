@@ -10,6 +10,7 @@
     <color name="dreamBlack">#000000</color>
     <color name="dreamYellow">#ff7300</color>
     <color name="dreamWhite">#ffffff</color>
+    <color name="dreamWeekWhite">#dfdbdb</color>
     <color name="dramGrey">#C1CDCD</color>
     <color name="dream_bg">#E5E5E5</color>
     <color name="dreamDarkGery">#999999</color>
@@ -18,4 +19,7 @@
     <color name="dreamTransparent2">#8000</color><!-- 透明 -->
     <color name="dreamqianlan">#7888a9</color>
     <color name="dreamRed">#f70019</color>
+    <color name="dreamSettings_entry">#ff59493f</color>
+    <color name="Dreamsettings_attribute">#ff4d0c14</color>
+    <color name="list_bg_color">#ffeeeade</color>
 </resources>

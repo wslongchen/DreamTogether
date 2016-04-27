@@ -3,16 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/bg_search" >
+    <com.example.mrpan.dreamtogether.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/top_bar"/>
     <LinearLayout
         android:id="@+id/search_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="15dp"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:layout_below="@+id/top_bar">
 
         <com.example.mrpan.dreamtogether.view.DeletableEditText
             android:id="@+id/search_view"
@@ -28,6 +33,7 @@
             android:paddingRight="8dp"
             android:paddingTop="7dp"
             android:singleLine="true"
+            android:textColorHint="@color/dreamWeekWhite"
             android:textColor="@color/dreamWhite"
             android:textCursorDrawable="@null"
             android:textSize="16dp" />
