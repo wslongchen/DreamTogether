@@ -6,10 +6,10 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:id="@+id/top_bar"/>
-<android.support.v7.widget.RecyclerView
+<com.example.mrpan.dreamtogether.view.AnimRecycleView.view.AnimRefreshRecyclerView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/dream_list">
 
-</android.support.v7.widget.RecyclerView>
+</com.example.mrpan.dreamtogether.view.AnimRecycleView.view.AnimRefreshRecyclerView>
 </LinearLayout>

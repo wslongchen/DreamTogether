@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/photo_view"
     android:background="@color/dreamTransparent">
 
     <android.support.v4.view.ViewPager
@@ -18,12 +19,13 @@
         android:layout_alignParentBottom="true" >
 
         <TextView
-            android:id="@+id/photo_bt_del"
+            android:id="@+id/photo_count"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerInParent="true"
-            android:background="@color/dreamBlue"
             android:textSize="24dp"
+            android:gravity="center"
+            android:textColor="@color/dreamWhite"
             android:text="2/2"/>
 
     </RelativeLayout>

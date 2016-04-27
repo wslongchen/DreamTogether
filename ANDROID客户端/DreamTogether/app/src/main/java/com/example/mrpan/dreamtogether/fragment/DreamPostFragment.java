@@ -144,7 +144,7 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==0&&s.equals("")){
+                if(s.length()==0 && s.equals("")){
                     titleBar.setRightStrEnable(false);
                 }
                 else
@@ -216,7 +216,7 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                     .findViewById(R.id.dream_post_img_popup);
             ll_popup.startAnimation(AnimationUtils.loadAnimation(mContext,
                     R.anim.push_bottom_in_2));
-            setOutsideTouchable(true);
+            //setOutsideTouchable(true);
             setContentView(view);
             setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
             setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -366,7 +366,10 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                     User user=new User();
                     user.setID(UserID);
                     dream.setPost_author(user);
+                    dream.setPost_titile("none");
                     dream.setPost_content(content);
+                    dream.setPost_password("null");
+                    dream.setPost_guid("null");
                     dream.setPost_date(DateUtils.getCurrentTimeStr());
                     dream.setPost_comment_count("0");
                     dream.setPost_comment_status("0");
@@ -459,6 +462,27 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                 case Config.HTTP_REQUEST_SUCCESS:
                     switch (msg.arg2){
                         case 1:
+                            if(msg.obj!=null){
+                                int ret=0;
+                                try {
+                                    JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF\uFEFF\uFEFF", ""));
+                                    ret = jsonObject.getInt("ret");
+                                    if (ret == Config.RESULT_RET_SUCCESS) {
+                                        Toast.makeText(context,"发表成功！",Toast.LENGTH_LONG).show();
+                                        //Intent intent = new Intent(context, WorldCircleFragment.class);
+                                        //startActivityForResult(intent, Config.RESULT_RET_SUCCESS);
+                                        getActivity().finish();
+                                        // Toast.makeText(context, "Publish successed!", Toast.LENGTH_LONG).show();
+                                    } else
+                                    {
+                                        Toast.makeText(context, "发表失败！", Toast.LENGTH_LONG).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            break;
+                        case 2:
                             if(msg.obj!=null){
                                 int ret=0;
                                 try {

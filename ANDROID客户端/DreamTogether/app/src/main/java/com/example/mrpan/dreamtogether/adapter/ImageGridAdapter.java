@@ -112,7 +112,7 @@ public class ImageGridAdapter extends BaseAdapter {
 		cache.displayBmp(holder.iv, item.thumbnailPath, item.imagePath,
 				callback);
 		if (item.isSelected) {
-			holder.selected.setImageResource(R.drawable.icon_data_select);
+			holder.selected.setImageResource(R.drawable.icon_data_selected);
 			holder.text.setBackgroundResource(R.drawable.bgd_relatly_line);
 		} else {
 			holder.selected.setImageResource(0);
@@ -128,7 +128,7 @@ public class ImageGridAdapter extends BaseAdapter {
 					item.isSelected = !item.isSelected;
 					if (item.isSelected) {
 						holder.selected
-								.setImageResource(R.drawable.icon_data_select);
+								.setImageResource(R.drawable.icon_data_selected);
 						holder.text.setBackgroundResource(R.drawable.bgd_relatly_line);
 						selectTotal++;
 						//int count=selectTotal+BitmapUtils.drr.size();

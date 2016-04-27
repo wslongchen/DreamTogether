@@ -11,8 +11,8 @@
     android:background="@drawable/layout_selector">
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:id="@+id/userImg"
         android:src="@mipmap/ic_launcher"
         android:layout_alignParentTop="true"
@@ -49,7 +49,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/qrImg"
-        android:src="@mipmap/ic_launcher"
+        android:src="@mipmap/fbb"
         android:layout_alignBottom="@+id/linearLayout"
         android:layout_centerVertical="true"
         android:layout_marginRight="20dp"

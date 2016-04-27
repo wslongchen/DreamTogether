@@ -2,7 +2,6 @@ package com.example.mrpan.dreamtogether.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,18 +17,14 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mrpan.dreamtogether.MainActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.User;
-import com.example.mrpan.dreamtogether.entity.UserPosts;
 import com.example.mrpan.dreamtogether.http.HttpHelper;
 import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DateUtils;
 import com.example.mrpan.dreamtogether.utils.DialogUtils;
-import com.example.mrpan.dreamtogether.utils.GsonUtils;
 import com.example.mrpan.dreamtogether.utils.Md5Utils;
-import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.utils.OtherUtils;
 import com.example.mrpan.dreamtogether.utils.RegexUtils;
 import com.example.mrpan.dreamtogether.view.DeletableEditText;
@@ -37,8 +32,6 @@ import com.example.mrpan.dreamtogether.view.TitleBar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 /**
  * Created by mrpan on 16/3/21.
@@ -81,7 +74,7 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
     private void init(){
         transaction=getFragmentManager().beginTransaction();
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
-        titleBar.showLeft("新用户注册",getResources().getDrawable(R.drawable.btn_back),this);
+        titleBar.showLeft("新用户注册",getResources().getDrawable(R.drawable.btn_backed),this);
         name=(DeletableEditText)currentView.findViewById(R.id.register_loginName);
         nickname=(DeletableEditText)currentView.findViewById(R.id.register_nickname);
         password=(DeletableEditText)currentView.findViewById(R.id.register_password);

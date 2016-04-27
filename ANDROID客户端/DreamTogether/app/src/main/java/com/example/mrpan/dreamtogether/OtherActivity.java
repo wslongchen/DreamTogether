@@ -5,6 +5,7 @@ import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.view.MotionEvent;
 
 import com.example.mrpan.dreamtogether.fragment.DreamPostFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamerRegisterFragment;
@@ -14,7 +15,9 @@ import com.example.mrpan.dreamtogether.fragment.SelectImageGridFragment;
 import com.example.mrpan.dreamtogether.fragment.UserDreamListFragment;
 import com.example.mrpan.dreamtogether.fragment.WorldCircleFragment;
 import com.example.mrpan.dreamtogether.utils.Config;
+import com.example.mrpan.dreamtogether.utils.MyLog;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -65,6 +68,15 @@ public class OtherActivity extends FragmentActivity {
                 //transaction.addToBackStack(null);
                 transaction.commit();
                 break;
+            case Config.PHOTO_TYPE:
+                ID=bundle.getInt("ID");
+                transaction = getSupportFragmentManager().beginTransaction();
+                ((PhotoFragment)fragmentHashMap.get(PhotoFragment.TAG)).setArguments(bundle);
+                //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
+                transaction.replace(R.id.other_layout, fragmentHashMap.get(PhotoFragment.TAG));
+                //transaction.addToBackStack(null);
+                transaction.commit();
+                break;
             default:
                 break;
         }
@@ -87,4 +99,5 @@ public class OtherActivity extends FragmentActivity {
         fragmentHashMap.put(SelectImageGridFragment.TAG,selectImageGridFragment);
 
     }
+
 }

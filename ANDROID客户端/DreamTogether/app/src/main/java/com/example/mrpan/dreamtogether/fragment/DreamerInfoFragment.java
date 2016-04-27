@@ -2,6 +2,7 @@ package com.example.mrpan.dreamtogether.fragment;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.adapter.UserInfoAdapter;
 import com.example.mrpan.dreamtogether.utils.MySharePreference;
+import com.example.mrpan.dreamtogether.view.CustomDialog;
 import com.example.mrpan.dreamtogether.view.TitleBar;
 
 import java.util.ArrayList;
@@ -133,19 +135,38 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
                 Intent intent=new Intent();
                 Bundle bundle=new Bundle();
                 bundle.putInt("type", Config.TIMELINE_TYPE);
-                bundle.putInt("data",user.getID());
+                bundle.putInt("data", user.getID());
                 intent.putExtras(bundle);
                 intent.setClass(context, OtherActivity.class);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
                 break;
             case "menuExit":
-                MySharePreference mySharePreference=new MySharePreference(context);
-                mySharePreference.commitBoolean("isLogin",false);
-                android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame_content,MainActivity.fragmentHashMap.get(DreamerLoginFragment.TAG));
-                //transaction.addToBackStack(null);
-                transaction.commit();
+                CustomDialog.Builder builder = new CustomDialog.Builder(context);
+                builder.setMessage("这个就是自定义的提示框");
+                builder.setTitle("提示");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        MySharePreference mySharePreference = new MySharePreference(context);
+                        mySharePreference.commitBoolean("isLogin", false);
+                        android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.frame_content, MainActivity.fragmentHashMap.get(DreamerLoginFragment.TAG));
+                        //transaction.addToBackStack(null);
+                        transaction.commit();
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.setNegativeButton("取消",
+                        new android.content.DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                builder.create().show();
+
                 break;
             default:
                 break;
@@ -163,6 +184,7 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
                 Intent intent=new Intent();
                 Bundle bundle=new Bundle();
                 bundle.putInt("type", Config.POST_TYPE);
+                bundle.putInt("data", user.getID());
                 intent.putExtras(bundle);
                 intent.setClass(context, OtherActivity.class);
                 startActivity(intent);

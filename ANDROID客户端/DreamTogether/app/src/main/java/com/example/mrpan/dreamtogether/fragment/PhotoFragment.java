@@ -8,20 +8,26 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.utils.BitmapUtils;
+import com.example.mrpan.dreamtogether.utils.MyLog;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhotoFragment extends Fragment implements View.OnClickListener{
+public class PhotoFragment extends Fragment{
 
 	public static final String TAG="PhotoFragment";
 
@@ -39,7 +45,11 @@ public class PhotoFragment extends Fragment implements View.OnClickListener{
 
 	private View currentView;
 
+	private TextView count_str;
+
 	private Context context;
+
+	private boolean isIndex=false;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,14 +62,30 @@ public class PhotoFragment extends Fragment implements View.OnClickListener{
 
 		photo_relativeLayout = (RelativeLayout) currentView.findViewById(R.id.photo_relativeLayout);
 		photo_relativeLayout.setBackgroundColor(0x70000000);
+		count_str=(TextView)currentView.findViewById(R.id.photo_count);
+		Bundle bundle = getArguments();
+		String[] imgs=bundle.getStringArray("imgs");
+		if(imgs!=null){
+			isIndex=true;
+			if(imgs.length>0){
+				for(int i=0;i<imgs.length;i++){
+					Bitmap bitmap=ImageLoader.getInstance().loadImageSync("http://"+imgs[i]);
+					if(bitmap!=null)
+						bmp.add(bitmap);
+					System.out.println(imgs[i]);
+				}
+			}
+		}else{
+			for (int i = 0; i < BitmapUtils.bmp.size(); i++) {
+				bmp.add(BitmapUtils.bmp.get(i));
+			}
+			for (int i = 0; i < BitmapUtils.drr.size(); i++) {
+				drr.add(BitmapUtils.drr.get(i));
+			}
+			max = BitmapUtils.max;
+		}
 
-		for (int i = 0; i < BitmapUtils.bmp.size(); i++) {
-			bmp.add(BitmapUtils.bmp.get(i));
-		}
-		for (int i = 0; i < BitmapUtils.drr.size(); i++) {
-			drr.add(BitmapUtils.drr.get(i));
-		}
-		max = BitmapUtils.max;
+
 
 //		Button photo_bt_exit = (Button) currentView.findViewById(R.id.photo_bt_exit);
 //		photo_bt_exit.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +134,6 @@ public class PhotoFragment extends Fragment implements View.OnClickListener{
 //		});
 
 		pager = (ViewPager) currentView.findViewById(R.id.viewpager);
-		pager.setOnClickListener(this);
 		pager.setOnPageChangeListener(pageChangeListener);
 		for (int i = 0; i < bmp.size(); i++) {
 			initListViews(bmp.get(i));//
@@ -118,10 +143,11 @@ public class PhotoFragment extends Fragment implements View.OnClickListener{
 
 		adapter = new MyPageAdapter(listViews);// 构造adapter
 		pager.setAdapter(adapter);// 设置适配器
-		Bundle bundle = getArguments();
+
 		int id = bundle.getInt("ID", 0);
 		pager.setCurrentItem(id);
-
+		String state = (id+1)+"/"+bmp.size();
+		count_str.setText(state);
 		return currentView;
 	}
 
@@ -133,13 +159,24 @@ public class PhotoFragment extends Fragment implements View.OnClickListener{
 		img.setImageBitmap(bm);
 		img.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT));
+		img.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(isIndex){
+					getActivity().finish();
+				}else{
+					getFragmentManager().popBackStack();
+				}
+			}
+		});
 		listViews.add(img);// 添加view
 	}
 
 	private OnPageChangeListener pageChangeListener = new OnPageChangeListener() {
 
 		public void onPageSelected(int arg0) {// 页面选择响应函数
-			count = arg0;
+			String state = (arg0+1)+"/"+bmp.size();
+			count_str.setText(state);
 		}
 
 		public void onPageScrolled(int arg0, float arg1, int arg2) {// 滑动中。。。
@@ -151,16 +188,6 @@ public class PhotoFragment extends Fragment implements View.OnClickListener{
 		}
 	};
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()){
-			case R.id.viewpager:
-				getFragmentManager().popBackStack();
-				break;
-			default:
-				break;
-		}
-	}
 
 	class MyPageAdapter extends PagerAdapter {
 
@@ -208,4 +235,6 @@ public class PhotoFragment extends Fragment implements View.OnClickListener{
 		}
 
 	}
+
+
 }

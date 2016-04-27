@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dip"
             android:text="火星"
-            android:textColor="#7888a9"
+            android:textColor="@color/dreamqianlan"
             android:textSize="14.0sp" />
 
         <FrameLayout

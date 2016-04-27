@@ -1,6 +1,8 @@
 package com.example.mrpan.dreamtogether.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +12,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.entity.User;
+import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.view.NoScrollGridView;
 
 import java.util.ArrayList;
@@ -55,27 +59,37 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
         else{
 
         }
-        if(p.getPost_comment_count()==null || p.getPost_comment_count().equals("")||p.getPost_comment_count().equals("0")){
-            viewHolder.dream_comments_layout.setVisibility(View.GONE);
-        }
-        if(p.getPost_imgs().length()>0 && !p.getPost_imgs().trim().isEmpty() && !p.getPost_imgs().equals("")){
-            String[] imgs=p.getPost_imgs().split(",");
-            List<HashMap<String,String>> lists=new ArrayList<>();
-            for(int j=0;j<imgs.length;j++){
-                HashMap<String,String> map=new HashMap<>();
-                map.put("url","http://"+imgs[j]);
-                lists.add(map);
+//        if(p.getPost_comment_count()==null || p.getPost_comment_count().equals("")||p.getPost_comment_count().equals("0")){
+//            viewHolder.dream_comments_layout.setVisibility(View.GONE);
+//        }
+        final String[] imgs;
+        if(p.getPost_imgs()!=null && !p.getPost_imgs().equals("")) {
+            if (p.getPost_imgs().length() > 0 && !p.getPost_imgs().trim().isEmpty() && !p.getPost_imgs().equals("")) {
+                imgs = p.getPost_imgs().split(",");
+                List<HashMap<String, String>> lists = new ArrayList<>();
+                for (int j = 0; j < imgs.length; j++) {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("url", "http://" + imgs[j]);
+                    lists.add(map);
+                }
+                viewHolder.dream_img_gridView.setVisibility(View.VISIBLE);
+                viewHolder.dream_img_gridView.setAdapter(new DreamImageGridAdapter(mContext, lists));
+                viewHolder.dream_img_gridView
+                        .setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent,
+                                                    View view, int position, long id) {
+                                Intent intent=new Intent();
+                                Bundle bundle=new Bundle();
+                                bundle.putInt("type", Config.PHOTO_TYPE);
+                                bundle.putStringArray("imgs", imgs);
+                                bundle.putInt("ID",position);
+                                intent.putExtras(bundle);
+                                intent.setClass(mContext, OtherActivity.class);
+                                mContext.startActivity(intent);
+                            }
+                        });
             }
-            viewHolder.dream_img_gridView.setVisibility(View.VISIBLE);
-            viewHolder.dream_img_gridView.setAdapter(new DreamImageGridAdapter(mContext,lists));
-            viewHolder.dream_img_gridView
-                    .setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent,
-                                                View view, int position, long id) {
-                            // imageBrower(position,bean.urls);
-                        }
-                    });
         }
 //        List<Meta> metas=dreams.get(i).getMetas();
 //        List<HashMap<String,Object>> datas=new ArrayList<>();
@@ -115,25 +129,25 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
 
         public NoScrollGridView dream_img_gridView;
 
-        public TextView dream_place;
+        //public TextView dream_place;
 
         public TextView dream_date;
 
-        public TextView dream_comments_names;
+        //public TextView dream_comments_names;
 
-        public RelativeLayout dream_comments_layout;
+        //public RelativeLayout dream_comments_layout;
 
         public ViewHolder( View v )
         {
             super(v);
             dream_author = (TextView) v.findViewById(R.id.dream_author);
             dream_content = (TextView) v.findViewById(R.id.dream_content);
-            dream_place = (TextView) v.findViewById(R.id.dream_place);
+           //dream_place = (TextView) v.findViewById(R.id.dream_place);
             dream_date = (TextView) v.findViewById(R.id.dream_date);
-            dream_comments_names = (TextView) v.findViewById(R.id.dream_comments_names);
+            //dream_comments_names = (TextView) v.findViewById(R.id.dream_comments_names);
             dream_img_gridView=(NoScrollGridView)v.findViewById(R.id.dream_img_gridView);
             author_img = (ImageView) v.findViewById(R.id.dream_author_img);
-            dream_comments_layout=(RelativeLayout)v.findViewById(R.id.dream_comments_layout);
+            //dream_comments_layout=(RelativeLayout)v.findViewById(R.id.dream_comments_layout);
         }
     }
 }

@@ -92,7 +92,7 @@ public class ImageBucketAdapter extends BaseAdapter {
 			holder = (Holder) arg1.getTag();
 		}
 		ImageBucket item = dataList.get(arg0);
-		holder.count.setText("" + item.count);
+		holder.count.setText("(" + item.count+")");
 		holder.name.setText(item.bucketName);
 		holder.selected.setVisibility(View.GONE);
 		if (item.imageList != null && item.imageList.size() > 0) {

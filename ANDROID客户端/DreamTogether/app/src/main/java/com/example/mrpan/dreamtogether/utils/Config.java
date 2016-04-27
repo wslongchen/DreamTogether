@@ -70,6 +70,7 @@ public class Config {
     public static final int REGISTER_TYPE=1010;
     public static final int TIMELINE_TYPE=1011;
     public static final int POST_TYPE=1012;
+    public static final int PHOTO_TYPE=1013;
 
 
     public static final int REQUEST_CODE_PERMISSIONS=123;

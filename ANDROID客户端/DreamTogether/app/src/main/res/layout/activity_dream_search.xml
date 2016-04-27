@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/bg_search" >
-
     <LinearLayout
         android:id="@+id/search_layout"
         android:layout_width="match_parent"
@@ -12,7 +11,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:orientation="vertical" >
 
         <com.example.mrpan.dreamtogether.view.DeletableEditText
@@ -23,7 +22,7 @@
             android:drawableLeft="@mipmap/ic_edittext_search"
             android:drawablePadding="6dp"
             android:drawableRight="@mipmap/ic_edittext_delete"
-            android:hint="请输入您要搜索的影片..."
+            android:hint="请输入您要搜索的梦想..."
             android:paddingBottom="7dp"
             android:paddingLeft="9dp"
             android:paddingRight="8dp"
