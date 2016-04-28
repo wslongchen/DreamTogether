@@ -31,6 +31,35 @@ class DreamModel {
 		}
 	}
 	
+	function postMeta($meta){
+		$sql="INSERT INTO `dreamdb`.`dream_posts_meta` (`dpmeta_id`, `post_id`, `meta_key`, `meta_value`) VALUES (NULL, '".$meta[post_id]."', '".$meta[key]."', '".$meta[value]."');";
+		if(!empty($dream) && $this -> dao -> query($sql)){
+			$json_out["ret"]=0;
+			$json_out["post"]="post successed";
+			return $json_out;
+		}
+		else{
+			$json_out["ret"]=1;
+			$json_out["post"]="post failed!";
+			return $json_out;
+		}
+	}
+	
+	function updateMeta($meta){
+		$sql="UPDATE`dreamdb`.`dream_posts_meta`SET`meta_value`='".$meta[value]."' WHERE`dream_posts_meta`.`post_id`='".$meta[post_id]."' and `dream_posts_meta`.`meta_key`='".$meta[key]."'";
+		if(!empty($dream) && $this -> dao -> query($sql)){
+			$json_out["ret"]=0;
+			$json_out["post"]="post successed";
+			return $json_out;
+		}
+		else{
+			$json_out["ret"]=1;
+			$json_out["post"]="post failed!";
+			return $json_out;
+		}
+	}
+	
+	
 	function postDreamImg($dream,$imgs) {//插入一条新梦想
 $sql = "INSERT INTO `dream_posts` (`post_author`, `post_date`, `post_content`, `post_titile`, `post_imgs`, `post_status`, `post_password`, `post_guid`, `post_type`, `post_comment_status`, `post_comment_count`) VALUES('" . $dream[author] . "','" . $dream[date] . "','" . $dream[content] . "','" . $dream[title] . "','".$imgs."','" . $dream[status] . "','" . $dream[password] . "','" . $dream[guid] . "','" . $dream[type] . "','" . $dream[commentstatus] . "','" . $dream[commentcount] . "')";		//调试时用echo输出一下看看是否正确是一种常用的调试技巧
 		if(!empty($dream) && $this -> dao -> query($sql)){
@@ -43,6 +72,26 @@ $sql = "INSERT INTO `dream_posts` (`post_author`, `post_date`, `post_content`, `
 			$json_out["post"]="post failed!";
 			return $json_out;
 		}
+	}
+	
+	function getRandomDream($page,$count){
+		$index=($page-1)*$count;
+		$sql=" select * from table_name order by rand() limit ".$index.",".$count."";
+		$this->dao->query($sql);
+		$dreams=array();
+		$author=array();
+		$user=new UserModel($this->dao);
+		while($dream=$this->dao->getResult()){
+			
+			$userInfo=$user->getUserInfo($dream["post_author"]);
+			$dream["post_author"]=$userInfo;
+			$dream["metas"]=$this->getDreamMetaByID($dream["ID"]);
+			//var_dump($dream["post_author"]);
+			array_push($dreams,$dream);
+		}
+		$json_output["ret"]=0;
+		$json_output["post"]=$dreams;
+		return $json_output;
 	}
 	
 	function getDreamWithAuthor($page,$count){

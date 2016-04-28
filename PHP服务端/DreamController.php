@@ -30,8 +30,23 @@ class DreamController{
 		echo json_encode($json_output);
 	}
 	
+	function insertMeta($meta){
+		$json_out=$this->model->postMeta($meta);
+		echo json_encode($json_out);
+	}
+	
+	function updateMeta($meta){
+		$json_out=$this->model->updateMeta($meta);
+		echo json_encode($json_out);
+	}
+	
 	function listDreamByID($id){
 		$json_out=$this->model->getDreamByID($id);
+		echo json_encode($json_out);
+	}
+	
+	function listRandomDreams($page,$count){
+		$json_out=$this->model->getRandomDream($page,$count);
 		echo json_encode($json_out);
 	}
 	
