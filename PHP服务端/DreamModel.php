@@ -46,7 +46,8 @@ $sql = "INSERT INTO `dream_posts` (`post_author`, `post_date`, `post_content`, `
 	}
 	
 	function getDreamWithAuthor($page,$count){
-		$sql="select * from dream_posts where post_type='0' order by post_date DESC";
+		$index=($page-1)*$count;
+		$sql="select * from dream_posts where post_type='0' order by post_date DESC limit ".$index.",".$count."";
 		$this->dao->query($sql);
 		$dreams=array();
 		$author=array();
@@ -55,12 +56,23 @@ $sql = "INSERT INTO `dream_posts` (`post_author`, `post_date`, `post_content`, `
 			
 			$userInfo=$user->getUserInfo($dream["post_author"]);
 			$dream["post_author"]=$userInfo;
+			$dream["metas"]=$this->getDreamMetaByID($dream["ID"]);
 			//var_dump($dream["post_author"]);
 			array_push($dreams,$dream);
 		}
 		$json_output["ret"]=0;
 		$json_output["post"]=$dreams;
 		return $json_output;
+	}
+	
+	function getDreamMetaByID($id){
+		$sql="SELECT * FROM dream_posts_meta where post_id='".$id."'";
+		$this->dao->fetch($sql);
+		$metas=array();
+		while($meta=$this->dao->getRow()){
+			array_push($metas,$meta);
+		}
+		return $metas;
 	}
 	
 	function getDreamByAuthor($id){
@@ -72,6 +84,26 @@ $sql = "INSERT INTO `dream_posts` (`post_author`, `post_date`, `post_content`, `
 			
 			$userInfo=$user->getUserInfo($dream["post_author"]);
 			$dream["post_author"]=$userInfo;
+			$dream["metas"]=$this->getDreamMetaByID($dream["ID"]);
+			//var_dump($dream["post_author"]);
+			array_push($dreams,$dream);
+		}
+		$json_output["ret"]=0;
+		$json_output["post"]=$dreams;
+		return $json_output;
+	}
+	
+	function getDreamByID($id){
+		$sql="select * from dream_posts where ID='".$id."'";
+		$this->dao->query($sql);
+		$dreams=array();
+		$author=array();
+		$user=new UserModel($this->dao);
+		while($dream=$this->dao->getResult()){
+			
+			$userInfo=$user->getUserInfo($dream["post_author"]);
+			$dream["post_author"]=$userInfo;
+			$dream["metas"]=$this->getDreamMetaByID($dream["ID"]);
 			//var_dump($dream["post_author"]);
 			array_push($dreams,$dream);
 		}

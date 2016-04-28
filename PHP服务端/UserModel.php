@@ -48,8 +48,8 @@ if(!empty($user) && $this->dao->query($sql)){
 		}
 	}
 	
-	function getUserMeta($id){
-		$sql="SELECT * FROM dream_users_meta where user_id='".$id."'";
+	function getUserMeta(){
+		$sql="SELECT * FROM dream_users_meta";
 		$this->dao->query($sql);
 		if($meta=$this->dao->getResult()){
 			return $meta;
@@ -58,6 +58,16 @@ if(!empty($user) && $this->dao->query($sql)){
 			return false;
 		}
 		
+	}
+	
+	function getUserMetaByUser($id){
+		$sql="SELECT * FROM dream_users_meta where user_id='".$id."'";
+		$this->dao->query($sql);
+		$metas=array();
+		while($meta=$this->dao->getResult()){
+			array_push($metas,$meta);
+		}
+		return $metas;
 	}
 	
 	function getUserInfo($id){
@@ -78,7 +88,9 @@ if(!empty($user) && $this->dao->query($sql)){
 		if($user=$this->dao->getRow()){
 			$json_out["ret"]=0;
 			array_push($users,$user);
+			$metas=$this->getUserMetaByUser($user['ID']);
 			$json_out["post"]=$users;
+			$json_out["meta"]=$metas;
 			return $json_out;
 		}
 		else{
@@ -94,12 +106,10 @@ if(!empty($user) && $this->dao->query($sql)){
 			if($user=$this -> dao -> getRow()){
 				$json_out["ret"]=0;
 				$users=array();
-				$metas=array();
+				$metas=$this->getUserMetaByUser($user['ID']);
 				array_push($users,$user);
 				$json_out["post"]=$users;
-				while($meta=$this->getUserMeta()){
-					array_push($metas,$meta);
-				}
+				
 				$json_out["meta"]=$metas;
 				return $json_out;
 			}else{
@@ -107,19 +117,6 @@ if(!empty($user) && $this->dao->query($sql)){
 				$json_out["post"]="login failed!";
 				return $json_out;
 			}
-	}
-	
-	function updateUserImg($file){
-		$sql="update dream_users set user_img='".$file."'";
-		if($this->dao->query($sql)){
-			$json_out["ret"]=0;
-			$json_out["post"]="post successed";
-			return $json_out;
-		}else{
-			$json_out["ret"]=1;
-			$json_out["post"]="post failed!";
-			return $json_out;
-		}
 	}
 	
 	function insertUserMeta($meta){

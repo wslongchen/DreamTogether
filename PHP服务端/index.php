@@ -30,7 +30,7 @@ switch ($action) {
 		}
 		if ($_GET["type"] === "dream") {
 			$controller = new DreamController($dao);
-			$controller -> listDreamWithAuthor();
+			$controller -> listDreamWithAuthor($_GET['page'],10);
 		}
 		if ($_GET["type"] === "loginUser") {
 			$controller = new UserController($dao);
@@ -40,6 +40,10 @@ switch ($action) {
 			$controller = new UserController($dao);
 			$controller -> getUserByID($_GET['id']);
 		}
+		if($_GET["type"] === "getDreamByID") {
+					$controller = new DreamController($dao);
+					$controller -> listDreamByID($_GET['id']);
+				}
 		if ($_GET["type"] === "getDreamByAuthor") {
 			$controller = new DreamController($dao);
 			$controller -> listDreamByAuthor($_GET['id']);

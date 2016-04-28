@@ -30,6 +30,11 @@ class DreamController{
 		echo json_encode($json_output);
 	}
 	
+	function listDreamByID($id){
+		$json_out=$this->model->getDreamByID($id);
+		echo json_encode($json_out);
+	}
+	
 	function listDreamWithAuthor($page,$count){
 		$json_out=$this->model->getDreamWithAuthor($page,$count);
 		echo json_encode($json_out);
