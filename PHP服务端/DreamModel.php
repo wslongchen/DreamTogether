@@ -61,7 +61,7 @@ class DreamModel {
 	
 	
 	function postDreamImg($dream,$imgs) {//插入一条新梦想
-$sql = "INSERT INTO `dream_posts` (`post_author`, `post_date`, `post_content`, `post_titile`, `post_imgs`, `post_status`, `post_password`, `post_guid`, `post_type`, `post_comment_status`, `post_comment_count`) VALUES('" . $dream[author] . "','" . $dream[date] . "','" . $dream[content] . "','" . $dream[title] . "','".$imgs."','" . $dream[status] . "','" . $dream[password] . "','" . $dream[guid] . "','" . $dream[type] . "','" . $dream[commentstatus] . "','" . $dream[commentcount] . "')";		//调试时用echo输出一下看看是否正确是一种常用的调试技巧
+		$sql = "INSERT INTO `dream_posts` (`post_author`, `post_date`, `post_content`, `post_titile`, `post_imgs`, `post_status`, `post_password`, `post_guid`, `post_type`, `post_comment_status`, `post_comment_count`) VALUES('" . $dream[author] . "','" . $dream[date] . "','" . $dream[content] . "','" . $dream[title] . "','".$imgs."','" . $dream[status] . "','" . $dream[password] . "','" . $dream[guid] . "','" . $dream[type] . "','" . $dream[commentstatus] . "','" . $dream[commentcount] . "')";		//调试时用echo输出一下看看是否正确是一种常用的调试技巧
 		if(!empty($dream) && $this -> dao -> query($sql)){
 			$json_out["ret"]=0;
 			$json_out["post"]="post successed";
