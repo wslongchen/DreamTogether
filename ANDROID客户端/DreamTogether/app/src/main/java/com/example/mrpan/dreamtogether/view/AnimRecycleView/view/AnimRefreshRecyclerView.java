@@ -386,9 +386,13 @@ public class AnimRefreshRecyclerView extends RecyclerView implements Runnable{
                 if (mFootViews.size() > 0) {
                     mFootViews.get(0).setVisibility(VISIBLE);
                 }
-                // 加载更多
-                isLoadingData = true;
-                mLoadDataListener.onLoadMore();
+                if(state==RecyclerView.SCROLL_STATE_DRAGGING)
+                {
+                    // 加载更多
+                    //isLoadingData = true;
+                   // mLoadDataListener.onLoadMore();
+                }
+
             }
         }
     }
@@ -413,13 +417,15 @@ public class AnimRefreshRecyclerView extends RecyclerView implements Runnable{
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_OUTSIDE:
                 isTouching = false;
-                if (headerImage.getLayoutParams().height > headerImageHeight) {
-                    if (headerImage.getLayoutParams().height >= headerImageMaxHeight
-                            && mLoadDataListener != null && !isLoadingData) {
-                        refresh();
+                if(headerImage!=null) {
+                    if (headerImage.getLayoutParams().height > headerImageHeight) {
+                        if (headerImage.getLayoutParams().height >= headerImageMaxHeight
+                                && mLoadDataListener != null && !isLoadingData) {
+                            refresh();
+                        }
+                        headerImageHint();
+                        return true;
                     }
-                    headerImageHint();
-                    return true;
                 }
                 break;
         }

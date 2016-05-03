@@ -22,7 +22,6 @@ card_view:cardCornerRadius="5dp">
             android:layout_height="60dp"
             android:layout_marginLeft="10dip"
             android:layout_marginTop="5dip"
-            android:background="@mipmap/app_icon"
             android:scaleType="fitXY"
             android:id="@+id/dream_author_img" />
         <TextView
@@ -75,7 +74,7 @@ card_view:cardCornerRadius="5dp">
 
         <com.example.mrpan.dreamtogether.view.NoScrollGridView
             android:id="@+id/dream_img_gridView"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:horizontalSpacing="1dp"

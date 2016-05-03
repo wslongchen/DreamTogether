@@ -18,7 +18,7 @@ public class Dream extends BaseEntity{
     private String post_type;
     private String post_comment_status;
     private String post_comment_count;
-    //private List<Meta> metas;
+    private List<Meta> metas;
 
 
     public int getID() {
@@ -117,11 +117,11 @@ public class Dream extends BaseEntity{
         this.post_imgs = post_imgs;
     }
 
-//    public List<Meta> getMetas() {
-//        return metas;
-//    }
-//
-//    public void setMetas(List<Meta> metas) {
-//        this.metas = metas;
-//    }
+    public List<Meta> getMetas() {
+        return metas;
+    }
+
+    public void setMetas(List<Meta> metas) {
+        this.metas = metas;
+    }
 }

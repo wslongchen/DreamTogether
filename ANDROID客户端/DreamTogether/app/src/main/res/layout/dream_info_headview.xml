@@ -2,5 +2,167 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ScrollView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:id="@+id/view">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical"
+            android:paddingTop="5dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginTop="5dip"
+                    android:scaleType="fitXY"
+                    android:id="@+id/user_img" />
+                <TextView
+                    android:id="@+id/dream_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="风吹QQ两边甩"
+                    android:layout_marginLeft="10dip"
+                    android:textColor="@color/dreamBlack"
+                    android:textSize="20.0sp"
+                    android:layout_marginTop="5dp"
+                    android:layout_alignTop="@+id/user_img"
+                    android:layout_toEndOf="@+id/user_img" />
+                <TextView
+                    android:id="@+id/dream_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="今天15:22 张家界市武陵源区"
+                    android:textColor="@color/dreamDarkGery"
+                    android:textSize="16.0sp"
+                    android:layout_below="@+id/dream_author"
+                    android:layout_alignStart="@+id/dream_author" />
 
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:layout_marginLeft="15dip"
+                android:layout_marginRight="10dip"
+                android:orientation="vertical"
+                >
+
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip" >
+
+                    <TextView
+                        android:id="@+id/content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="哟，输完了。"
+                        android:textColor="#404040"
+                        android:textSize="22.0sp" />
+                </RelativeLayout>
+
+                <com.example.mrpan.dreamtogether.view.NoScrollGridView
+                    android:id="@+id/gridView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:horizontalSpacing="1dp"
+                    android:numColumns="3"
+                    android:stretchMode="columnWidth"
+                    android:verticalSpacing="1dp"
+                    android:visibility="gone" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:gravity="left">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/dream_icon_ios"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dip"
+                        android:id="@+id/dream_deviceinfo"
+                        android:text="iPone6 Plus"
+                        android:textColor="@color/dreamqianlan"
+                        android:textSize="18.0sp" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dip" >
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" >
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="10dip"
+                            android:background="@mipmap/dream_icon_comment"
+                            android:scaleType="fitXY"
+                            android:id="@+id/imageView3" />
+                        <ImageView
+                            android:id="@+id/dream_comments"
+                            android:layout_width="17dp"
+                            android:layout_height="17dp"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginRight="10dip"
+                            android:background="@mipmap/like"
+                            android:scaleType="fitXY"
+                            android:layout_alignParentTop="true"
+                            android:layout_toStartOf="@+id/imageView3" />
+                    </RelativeLayout>
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dip" >
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" >
+
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginRight="10dip"
+                            android:background="@mipmap/like_one"
+                            android:scaleType="fitXY"
+                            android:id="@+id/imageView2" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2k"
+                            android:textSize="18dp"
+                            android:textColor="@color/dramGrey"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@+id/imageView2" />
+                    </RelativeLayout>
+                </FrameLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/dramGrey" >
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

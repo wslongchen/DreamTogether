@@ -3,6 +3,7 @@ package com.example.mrpan.dreamtogether.utils;
 import android.text.TextUtils;
 
 import com.example.mrpan.dreamtogether.entity.BaseEntity;
+import com.example.mrpan.dreamtogether.fragment.SystemSettingsFragment;
 import com.google.gson.Gson;
 
 /**
@@ -16,9 +17,8 @@ public class GsonUtils {
             return null;
 
         Gson gson = new Gson();
-
         try {
-            BaseEntity baseEntity = (BaseEntity) gson.fromJson(content.replace("\uFEFF\uFEFF\uFEFF", ""), clazz);
+            BaseEntity baseEntity = (BaseEntity) gson.fromJson(content.replace("\uFEFF", "").trim(), clazz);
 
             return baseEntity;
         } catch (Exception e) {

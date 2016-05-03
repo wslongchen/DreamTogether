@@ -116,7 +116,7 @@ public class DreamerLoginFragment extends Fragment implements View.OnClickListen
                             message.arg1=Config.HTTP_REQUEST_SUCCESS;
                             message.obj=result;
                             myHander.sendMessage(message);
-
+                            MyLog.i("result:",result);
                         }
 
                         @Override

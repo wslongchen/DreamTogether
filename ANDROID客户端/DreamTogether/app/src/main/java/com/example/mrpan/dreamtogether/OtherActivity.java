@@ -7,7 +7,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MotionEvent;
 
+import com.example.mrpan.dreamtogether.entity.Dream;
+import com.example.mrpan.dreamtogether.fragment.CardDreamFragment;
+import com.example.mrpan.dreamtogether.fragment.DreamDetailFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamPostFragment;
+import com.example.mrpan.dreamtogether.fragment.DreamRadomFragment;
+import com.example.mrpan.dreamtogether.fragment.DreamXiuXiuFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamerRegisterFragment;
 import com.example.mrpan.dreamtogether.fragment.PhotoFragment;
 import com.example.mrpan.dreamtogether.fragment.PicSelectFragment;
@@ -33,6 +38,10 @@ public class OtherActivity extends FragmentActivity {
     private PhotoFragment photoFragment;
     private PicSelectFragment picSelectFragment;
     private SelectImageGridFragment selectImageGridFragment;
+    private CardDreamFragment cardDreamFragment=null;
+    private DreamRadomFragment dreamRadomFragment=null;
+    private DreamXiuXiuFragment dreamXiuXiuFragment=null;
+    private DreamDetailFragment dreamDetailFragment=null;
 
 
     @Override
@@ -77,6 +86,26 @@ public class OtherActivity extends FragmentActivity {
                 //transaction.addToBackStack(null);
                 transaction.commit();
                 break;
+            case Config.XIUXIU_TYPE:
+                System.out.println("xiuxiu");
+                transaction = getSupportFragmentManager().beginTransaction();
+                //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
+                transaction.replace(R.id.other_layout, fragmentHashMap.get(DreamXiuXiuFragment.TAG));
+                //transaction.addToBackStack(null);
+                transaction.commit();
+                break;
+            case Config.DREAM_DETAILS_TYPE:
+                System.out.println("type"+type);
+                Dream dream= (Dream) bundle.getSerializable("data");
+                transaction = getSupportFragmentManager().beginTransaction();
+                //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
+                if(dream!=null){
+                    ((DreamDetailFragment)fragmentHashMap.get(DreamDetailFragment.TAG)).setDream(dream);
+                }
+                transaction.replace(R.id.other_layout, fragmentHashMap.get(DreamDetailFragment.TAG));
+                //transaction.addToBackStack(null);
+                transaction.commit();
+                break;
             default:
                 break;
         }
@@ -90,6 +119,11 @@ public class OtherActivity extends FragmentActivity {
         photoFragment=new PhotoFragment();
         picSelectFragment=new PicSelectFragment();
         selectImageGridFragment=new SelectImageGridFragment();
+        cardDreamFragment=new CardDreamFragment();
+        dreamRadomFragment=new DreamRadomFragment();
+        dreamXiuXiuFragment=new DreamXiuXiuFragment();
+        dreamDetailFragment=new DreamDetailFragment();
+
 
         fragmentHashMap.put(DreamerRegisterFragment.TAG, dreamerRegisterFragment);
         fragmentHashMap.put(UserDreamListFragment.TAG,userDreamListFragment);
@@ -97,6 +131,10 @@ public class OtherActivity extends FragmentActivity {
         fragmentHashMap.put(PhotoFragment.TAG,photoFragment);
         fragmentHashMap.put(PicSelectFragment.TAG,picSelectFragment);
         fragmentHashMap.put(SelectImageGridFragment.TAG,selectImageGridFragment);
+        fragmentHashMap.put(CardDreamFragment.TAG,cardDreamFragment);
+        fragmentHashMap.put(DreamRadomFragment.TAG,dreamRadomFragment);
+        fragmentHashMap.put(DreamXiuXiuFragment.TAG,dreamXiuXiuFragment);
+        fragmentHashMap.put(DreamDetailFragment.TAG,dreamDetailFragment);
 
     }
 

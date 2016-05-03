@@ -1,5 +1,6 @@
 package com.example.mrpan.dreamtogether.fragment;
 
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -76,7 +77,7 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
 
     private void initView(){
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
-        titleBar.showRight("我的梦想",R.mipmap.ic_launcher,this);
+        titleBar.showRight("我的梦想",R.drawable.btn_post,this);
         userInfoList=(ListView)currentView.findViewById(R.id.user_info_list);
         userNickname=(TextView)currentView.findViewById(R.id.user_nickname);
         userImg=(ImageView)currentView.findViewById(R.id.userImg);
@@ -142,8 +143,8 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
                 getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
                 break;
             case "menuExit":
-                CustomDialog.Builder builder = new CustomDialog.Builder(context);
-                builder.setMessage("这个就是自定义的提示框");
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("是否退出登陆?");
                 builder.setTitle("提示");
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

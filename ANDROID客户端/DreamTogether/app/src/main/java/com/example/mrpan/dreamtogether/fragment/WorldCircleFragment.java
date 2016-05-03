@@ -1,50 +1,34 @@
 package com.example.mrpan.dreamtogether.fragment;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.AnimationDrawable;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
+import com.example.mrpan.dreamtogether.adapter.WorldCircleListAdapter;
 import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.entity.DreamPosts;
-import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.http.HttpHelper;
 import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
 import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
-import com.example.mrpan.dreamtogether.utils.DateUtils;
 import com.example.mrpan.dreamtogether.utils.GsonUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
-import com.example.mrpan.dreamtogether.adapter.WorldCircleListAdapter;
-import com.example.mrpan.dreamtogether.utils.OtherUtils;
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.AnimRefreshRecyclerView;
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.decoration.DividerItemDecoration;
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.manage.AnimRefreshLinearLayoutManager;
 import com.example.mrpan.dreamtogether.view.TitleBar;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by mrpan on 16/3/17.
@@ -65,11 +49,7 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
     private TitleBar titleBar;
 
     private Context context;
-
-    private View headerView;
-    private View footerView;
-    ImageView rfAnimView;
-
+    private  WorldCircleListAdapter worldCircleListAdapter;
 
     @Nullable
     @Override
@@ -80,12 +60,14 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
             viewGroup.removeView(currentView);
         }
         initView();
+
+
         return currentView;
     }
 
     void initView(){
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
-        titleBar.showRight("梦想圈",R.mipmap.ic_launcher,this);
+        titleBar.showRight("梦想圈",R.mipmap.xiuxiu,this);
         context=getActivity();
         //recyclerView=(AnimRefreshRecyclerView)currentView.findViewById(R.id.dream_list);
         //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -98,9 +80,9 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
 
         recyclerView=(AnimRefreshRecyclerView)currentView.findViewById(R.id.dream_list);
 
-        headerView = LayoutInflater.from(getActivity()).inflate(R.layout.recyle_header_view, null);
+        //headerView = LayoutInflater.from(getActivity()).inflate(R.layout.recyle_header_view, null);
         // 脚部
-        footerView = LayoutInflater.from(getActivity()).inflate(R.layout.recyle_footer_view, null);
+        //footerView = LayoutInflater.from(getActivity()).inflate(R.layout.recyle_footer_view, null);
         // 使用重写后的线性布局管理器
         AnimRefreshLinearLayoutManager manager = new AnimRefreshLinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);
@@ -113,43 +95,65 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
 //              recyclerView.setHeaderImage((ImageView) headerView.findViewById(R.id.iv_hander));
 //            recyclerView.addFootView(footerView);
         // 设置刷新动画的颜色
-        recyclerView.setColor(Color.RED, Color.BLUE);
+        //recyclerView.setColor(Color.RED, Color.BLUE);
         // 设置头部恢复动画的执行时间，默认500毫秒
-        recyclerView.setHeaderImageDurationMillis(300);
+        recyclerView.setHeaderImageDurationMillis(500);
         // 设置拉伸到最高时头部的透明度，默认0.5f
         recyclerView.setHeaderImageMinAlpha(0.6f);
 
-        // 设置刷新和加载更多数据的监听，分别在onRefresh()和onLoadMore()方法中执行刷新和加载更多操作
-        recyclerView.setLoadDataListener(new AnimRefreshRecyclerView.LoadDataListener() {
-            @Override
-            public void onRefresh() {
-                new Thread(new MyRunnable(true)).start();
-
-            }
-
-            @Override
-            public void onLoadMore() {
-                new Thread(new MyRunnable(false)).start();
-            }
-        });
-
-        // 刷新
-//        recyclerView.setRefresh(true);
-        DreamPosts cache= (DreamPosts) CacheUtils.readHttpCache(Config.DIR_CACHE_PATH,"all_dream");
+        DreamPosts cache= (DreamPosts) CacheUtils.readHttpCache(Config.DIR_CACHE_PATH, "all_dream");
         if(cache!=null)
         {
             dreams=cache;
 //            if(cache.getPost().size()>0)
 //                dreams=cache;
-            showData();
+
+            showData(cache);
+            //     List<Dream> ps=cache.getPost();
+            //    MyLog.i("world","not null"+ps.size());
         }
+
+        // 设置刷新和加载更多数据的监听，分别在onRefresh()和onLoadMore()方法中执行刷新和加载更多操作
+        recyclerView.setLoadDataListener(new AnimRefreshRecyclerView.LoadDataListener() {
+            @Override
+            public void onRefresh() {
+                //new Thread(new MyRunnable(true)).start();
+                newData();
+            }
+
+            @Override
+            public void onLoadMore() {
+                new Thread(new MyRunnable(false)).start();
+               //addData();
+            }
+        });
+
+
+        recyclerView.setRefresh(true);
+
 
     }
 
-    private void showData(){
-        if(dreams!=null&&dreams.getPost().size()>0){
-            WorldCircleListAdapter worldCircleListAdapter=new WorldCircleListAdapter(getActivity(),dreams.getPost());
+    private void showData(final DreamPosts dreamPosts){
+        if(dreamPosts!=null&&dreamPosts.getPost().size()>0){
+            worldCircleListAdapter=new WorldCircleListAdapter(getActivity(),dreamPosts.getPost());
+            worldCircleListAdapter.setOnItemClickListener(new WorldCircleListAdapter.MyItemClickListener() {
+                @Override
+                public void onItemClick(View view, int postion) {
+                    Intent intent=new Intent();
+                    Bundle bundle=new Bundle();
+                    bundle.putInt("type", Config.DREAM_DETAILS_TYPE);
+                    Dream dream=dreams.getPost().get(postion-1);
+                    bundle.putSerializable("data",dream);
+                    //Toast.makeText(context,""+dream.getPost_content(),Toast.LENGTH_LONG).show();
+                  intent.putExtras(bundle);
+                  intent.setClass(context, OtherActivity.class);
+                  startActivity(intent);
+                  getActivity().overridePendingTransition(R.anim.top_in, R.anim.top_out);
+                }
+            });
             recyclerView.setAdapter(worldCircleListAdapter);
+            recyclerView.getAdapter().notifyDataSetChanged();
         }
     }
 
@@ -176,7 +180,21 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                                 dreams=(DreamPosts) GsonUtils.getEntity(msg.obj.toString().trim(), DreamPosts.class);
                                 //List<Dream> dreamList=dreams.getPost();
                                 CacheUtils.saveHttpCache(Config.DIR_CACHE_PATH, "all_dream", dreams);
-                                showData();
+                                showData(dreams);
+                                //refreshComplate();
+                                // 刷新完成后调用，必须在UI线程中
+                                //recyclerView.refreshComplate();
+                                break;
+                            case Config.SHOW_NEXT:
+                                DreamPosts dreamNewLists=(DreamPosts) GsonUtils.getEntity(msg.obj.toString().trim(), DreamPosts.class);
+                                if(dreamNewLists!=null){
+                                    dreams.getPost().addAll(dreamNewLists.getPost());
+                                    CacheUtils.saveHttpCache(Config.DIR_CACHE_PATH, "all_dream", dreams);
+                                }
+                                showData(dreams);
+                                loadMoreComplate();
+                                // 加载更多完成后调用，必须在UI线程中
+                                recyclerView.loadMoreComplate();
                                 break;
                             default:
                                 break;
@@ -185,6 +203,10 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                     break;
                 case Config.HTTP_REQUEST_ERROR:
                     Toast.makeText(context, "联网失败！", Toast.LENGTH_LONG).show();
+
+                    //recyclerView.setRefresh(false);
+                    recyclerView.refreshComplate();
+                    recyclerView.loadMoreComplate();
                     break;
                 default:
                     break;
@@ -197,7 +219,23 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.titleBarRightImage:
-
+                //clickcount++;
+                Intent intent=new Intent();
+                Bundle bundle=new Bundle();
+                bundle.putInt("type", Config.XIUXIU_TYPE);
+                intent.putExtras(bundle);
+                intent.setClass(context, OtherActivity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.top_in, R.anim.top_out);
+//                List<Integer> it=new ArrayList<>();
+//                for(int i=0;i<100;i++){
+//                    it.add(i);
+//                }
+//                List<Integer> integers=getRand(it,1);
+//                if(integers.get(0)==0){
+//                    Toast.makeText(context,"你点击了"+clickcount+"次，才摇到"+integers.get(0),Toast.LENGTH_LONG).show();
+//                    clickcount=0;
+//                }
                 break;
             default:
                 break;
@@ -225,7 +263,6 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                     } else {
                         addData();
                         loadMoreComplate();
-                        // 加载更多完成后调用，必须在UI线程中
                         recyclerView.loadMoreComplate();
                     }
                 }
@@ -245,16 +282,11 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
      * 添加数据
      */
     private void addData() {
-//        for (int i = 0; i < 13; i++) {
-//            datas.add("条目  " + (datas.size() + 1));
-//        }
+        httpHelper.asyHttpGetRequest(Config.GetNextDream(dreams.getPost().size()), new DreamHttpResponseCallBack(Config.SHOW_NEXT));
     }
 
     public void newData() {
-//        datas.clear();
-//        for (int i = 0; i < 13; i++) {
-//            datas.add("刷新后条目  " + (datas.size() + 1));
-//        }
+        httpHelper.asyHttpGetRequest(Config.REQUEST_ALL_DREAM, new DreamHttpResponseCallBack(Config.ALL_DREAM));
     }
 
     class DreamHttpResponseCallBack implements HttpResponseCallBack {
@@ -273,6 +305,7 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
             message.arg1 = Config.HTTP_REQUEST_SUCCESS;
             message.arg2=position;
             message.obj = result;
+            MyLog.i("HHH",result);
             handler.sendMessage(message);
         }
 

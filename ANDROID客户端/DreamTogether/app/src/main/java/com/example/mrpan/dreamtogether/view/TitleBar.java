@@ -89,16 +89,16 @@ public class TitleBar extends RelativeLayout {
      * @param title
      * @param leftImages
      * @param rightImages
-     * @param leftClicki
+     * @param leftClick
      * @param rightClick
      */
-    public void showLeftAndRight(String title,Drawable leftImages,Drawable rightImages,OnClickListener leftClicki,OnClickListener rightClick){
+    public void showLeftAndRight(String title,int leftImages,int rightImages,OnClickListener leftClick,OnClickListener rightClick){
         centerTitle.setText(title);
         centerTitle.setVisibility(View.VISIBLE);
-        leftImage.setImageDrawable(leftImages);
+        leftImage.setImageResource(leftImages);
         leftImage.setVisibility(View.VISIBLE);
-        leftImage.setOnClickListener(leftClicki);
-        rightImage.setImageDrawable(rightImages);
+        leftImage.setOnClickListener(leftClick);
+        rightImage.setImageResource(rightImages);
         rightImage.setVisibility(View.VISIBLE);
         rightImage.setOnClickListener(rightClick);
     }

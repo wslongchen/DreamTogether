@@ -31,6 +31,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.example.mrpan.dreamtogether.fragment.CardDreamFragment;
+import com.example.mrpan.dreamtogether.fragment.DreamRadomFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamSearchFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamerInfoFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamerLoginFragment;
@@ -55,6 +57,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     //private DreamerRegisterFragment dreamerRegisterFragment=null;
     private DreamSearchFragment dreamSearchFragment=null;
     private SystemSettingsFragment systemSettingsFragment=null;
+
+
 
 
 

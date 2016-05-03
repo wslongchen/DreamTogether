@@ -3,6 +3,7 @@ package com.example.mrpan.dreamtogether.utils;
 import android.content.Entity;
 import android.widget.NumberPicker;
 
+import com.example.mrpan.dreamtogether.entity.Comment;
 import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.entity.User;
 
@@ -65,8 +66,19 @@ public class OtherUtils {
         map.put("guid", dream.getPost_guid().toString());
         map.put("type", dream.getPost_type().toString());
         map.put("commentstatus", dream.getPost_comment_status().toString());
-        map.put("commentcount",dream.getPost_comment_count().toString());
+        map.put("commentcount", dream.getPost_comment_count().toString());
         return map;
+    }
+
+    public static List<NameValuePair> CommentToMap(Comment comment){
+        List<NameValuePair> nameValuePairs=new ArrayList<>();
+        int ID=comment.getComment_user_id().getID();
+        nameValuePairs.add(new BasicNameValuePair("author",String.valueOf(ID)));
+        nameValuePairs.add(new BasicNameValuePair("userid", String.valueOf(ID)));
+        nameValuePairs.add(new BasicNameValuePair("dreamid", comment.getPost_id()));
+        nameValuePairs.add(new BasicNameValuePair("content", comment.getComment_detail()));
+        nameValuePairs.add(new BasicNameValuePair("time", comment.getComment_time()));
+        return nameValuePairs;
     }
 
 }

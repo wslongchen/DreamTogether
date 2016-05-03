@@ -36,7 +36,7 @@ public class DreamFragment extends Fragment implements View.OnClickListener {
 
     private void initView(){
         topbar=(TitleBar)currentView.findViewById(R.id.top_bar);
-        topbar.showLeftAndRight("梦想",null,null,this,this);
+        topbar.showCenterTitle("梦想");
     }
 
     @Override

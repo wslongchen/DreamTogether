@@ -5,164 +5,57 @@
     android:background="@color/dream_bg">
     <com.example.mrpan.dreamtogether.view.TitleBar
         android:layout_width="match_parent"
-        android:layout_height="48dp"/>
-    <com.example.mrpan.dreamtogether.view.OverScrollWarpLayout
-        android:layout_height="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/top_bar"/>
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp">
+        android:layout_height="match_parent">
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/comments_list"
+            android:divider="@null"
+            android:layout_above="@+id/linearLayout2">
+        </ListView>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:descendantFocusability="blocksDescendants"
-            android:orientation="vertical"
-            android:paddingTop="5dp">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:id="@+id/linearLayout2">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginLeft="10dip"
-                    android:layout_marginTop="5dip"
-                    android:background="@mipmap/app_icon"
-                    android:scaleType="fitXY"
-                    android:id="@+id/imageView" />
-                <TextView
-                    android:id="@+id/dream_author"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="风吹QQ两边甩"
-                    android:layout_marginLeft="10dip"
-                    android:textColor="@color/dreamBlack"
-                    android:textSize="20.0sp"
-                    android:layout_marginTop="5dp"
-                    android:layout_alignTop="@+id/imageView"
-                    android:layout_toEndOf="@+id/imageView" />
-                <TextView
-                    android:id="@+id/dream_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="今天15:22 张家界市武陵源区"
-                    android:textColor="@color/dreamDarkGery"
-                    android:textSize="16.0sp"
-                    android:layout_below="@+id/dream_author"
-                    android:layout_alignStart="@+id/dream_author" />
-
-            </RelativeLayout>
-
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip"
-                android:layout_marginLeft="15dip"
-                android:layout_marginRight="10dip"
-                android:orientation="vertical"
-                >
-
-
-                <RelativeLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dip" >
-
-                    <TextView
-                        android:id="@+id/content"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="哟，输完了。"
-                        android:textColor="#404040"
-                        android:textSize="22.0sp" />
-                </RelativeLayout>
-
-                <com.example.mrpan.dreamtogether.view.NoScrollGridView
-                    android:id="@+id/gridView"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:horizontalSpacing="1dp"
-                    android:numColumns="3"
-                    android:stretchMode="columnWidth"
-                    android:verticalSpacing="1dp"
-                    android:visibility="gone" />
-                <LinearLayout
+                android:layout_height="match_parent">
+                <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_height="40dp"
+                    android:background="@color/dreamWhite"
+                    android:drawablePadding="6dp"
+                    android:hint="评论"
+                    android:textColorHint="@color/dramGrey"
+                    android:textColor="@color/dreamBlack"
+                    android:textCursorDrawable="@null"
+                    android:textSize="14dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
-                    android:gravity="left">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/dream_icon_ios"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="2dip"
-
-                        android:text="iPone6 Plus"
-                        android:textColor="@color/dreamqianlan"
-                        android:textSize="18.0sp" />
-                </LinearLayout>
-
-                <FrameLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dip" >
-
-                    <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" >
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="25dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="10dip"
-                            android:background="@mipmap/dream_icon_comment"
-                            android:scaleType="fitXY"
-                            android:id="@+id/imageView3" />
-                        <ImageView
-                            android:id="@+id/dream_comments"
-                            android:layout_width="17dp"
-                            android:layout_height="17dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="10dip"
-                            android:background="@mipmap/like"
-                            android:scaleType="fitXY"
-                            android:layout_alignParentTop="true"
-                            android:layout_toStartOf="@+id/imageView3" />
-                    </RelativeLayout>
-                </FrameLayout>
-                <FrameLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dip" >
-
-                    <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" >
-
-                        <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:layout_alignParentLeft="true"
-                            android:layout_marginRight="10dip"
-                            android:background="@mipmap/like_one"
-                            android:scaleType="fitXY"
-                            android:id="@+id/imageView2" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="2k"
-                            android:textSize="18dp"
-                            android:textColor="@color/dramGrey"
-                            android:layout_centerVertical="true"
-                            android:layout_toEndOf="@+id/imageView2" />
-                    </RelativeLayout>
-                </FrameLayout>
-            </LinearLayout>
+                    android:id="@+id/comment_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/comments_btn" />
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:background="@color/dreamWhite"
+                    android:text="send"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/comments_btn" />
+            </RelativeLayout>
         </LinearLayout>
-    </com.example.mrpan.dreamtogether.view.OverScrollWarpLayout>
+    </RelativeLayout>
 
 </LinearLayout>
