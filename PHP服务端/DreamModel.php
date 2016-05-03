@@ -76,7 +76,7 @@ class DreamModel {
 	
 	function getRandomDream($page,$count){
 		$index=($page-1)*$count;
-		$sql=" select * from table_name order by rand() limit ".$index.",".$count."";
+		$sql=" select * from dream_posts order by rand() limit ".$index.",".$count."";
 		$this->dao->query($sql);
 		$dreams=array();
 		$author=array();
