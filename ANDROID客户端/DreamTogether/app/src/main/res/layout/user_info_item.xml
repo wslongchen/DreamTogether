@@ -26,6 +26,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/menuTitle"
+        android:textColor="@color/dreamBlack"
         android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/menuImg" />

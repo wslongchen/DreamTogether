@@ -79,10 +79,10 @@ public class DreamSearchFragment extends Fragment implements View.OnClickListene
             }
         };
     };
-    private static String[] keywords = new String[] { "娘要嫁人", "球爱酒吧", "使徒行者",
-            "亮剑", "完美搭档", "致青春", "非常完美", "一生一世", "穿越火线", "天龙八部", "匹诺曹", "让子弹飞",
-            "穿越火线", "情定三生", "心术", "马向阳下乡记", "人在囧途", " 高达", " 刀剑神域", "泡芙小姐",
-            "尖刀出鞘", "甄嬛传", "兵出潼关", "电锯惊魂3D", "古剑奇谭", "同桌的你" };
+    private static String[] keywords = new String[] { "小安安", "梦想自留地", "www.mrpann.com",
+            "小男人", "穿越去唐朝", "潘安", "程序员", "PHP大法好", "C艹", "Python", "石江凯", "找女朋友",
+            "小灰灰", "陈固", "心术", "石江凯找女朋友", "去月球", " 买吉他", " 中五百万", "拍电影",
+            "做模特", "考一百分", "变帅", "吃鲍鱼", "买买卖", "看电影" };
 
 
 

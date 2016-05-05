@@ -1,10 +1,4 @@
-/**
- * @file XListViewHeader.java
- * @create Apr 18, 2012 5:22:27 PM
- * @author Maxwin
- * @description XListView's header
- */
-package com.example.mrpan.dreamtogether.view;
+package com.example.mrpan.dreamtogether.view.WaterRefreshView;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -31,7 +25,7 @@ public class WaterDropListViewHeader extends FrameLayout {
 
     private int stretchHeight;
     private  int readyHeight;
-    private static final int DISTANCE_BETWEEN_STRETCH_READY = 250;
+    private static final int DISTANCE_BETWEEN_STRETCH_READY = 200;
 
     public enum STATE {
         normal,//正常
@@ -176,7 +170,7 @@ public class WaterDropListViewHeader extends FrameLayout {
             if(pullOffset < 0 || pullOffset >1){
                 throw new IllegalArgumentException("pullOffset should between 0 and 1!"+mState+" "+height);
             }
-            Log.e("pullOffset", "pullOffset:" + pullOffset);
+            //Log.e("pullOffset", "pullOffset:" + pullOffset);
             mWaterDropView.updateComleteState(pullOffset);
         }
 

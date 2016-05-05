@@ -74,7 +74,7 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
     private void init(){
         transaction=getFragmentManager().beginTransaction();
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
-        titleBar.showLeft("新用户注册",getResources().getDrawable(R.drawable.btn_backed),this);
+        titleBar.showLeft("新用户注册",R.drawable.btn_backed,this);
         name=(DeletableEditText)currentView.findViewById(R.id.register_loginName);
         nickname=(DeletableEditText)currentView.findViewById(R.id.register_nickname);
         password=(DeletableEditText)currentView.findViewById(R.id.register_password);
@@ -189,7 +189,7 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
                     if(msg.obj!=null){
                         int ret=0;
                         try {
-                            JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF\uFEFF\uFEFF", ""));
+                            JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF", ""));
                             ret = jsonObject.getInt("ret");
                             if (ret == Config.RESULT_RET_SUCCESS) {
                                 Toast.makeText(context,"注册成功！",Toast.LENGTH_LONG).show();

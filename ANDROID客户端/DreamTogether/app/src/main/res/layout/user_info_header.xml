@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="昵称"
+        android:textColor="@color/dreamBlack"
         android:id="@+id/user_nickname"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/userImg" />
@@ -40,6 +41,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="湖南 长沙"
+        android:textColor="@color/dreamBlack"
         android:id="@+id/user_infos"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/userImg" />

@@ -1,10 +1,4 @@
-/**
- * @file XFooterView.java
- * @create Mar 31, 2012 9:33:43 PM
- * @author Maxwin
- * @description XListView's footer
- */
-package com.example.mrpan.dreamtogether.view;
+package com.example.mrpan.dreamtogether.view.WaterRefreshView;
 
 
 import android.content.Context;
@@ -49,14 +43,14 @@ public class WaterDropListViewFooter extends LinearLayout {
          layout_progress.setVisibility(View.INVISIBLE);
 		if (state == STATE.ready) {
 			mHintView.setVisibility(View.VISIBLE);
-			mHintView.setText("more");
+			mHintView.setText("下拉刷新");
 		} else if (state == STATE.loading) {
 			mProgressBar.setVisibility(View.VISIBLE);
              layout_progress.setVisibility(View.VISIBLE);
              txt_progresstext.setVisibility(View.VISIBLE);
 		} else {
 			mHintView.setVisibility(View.VISIBLE);
-			mHintView.setText("normal");
+			mHintView.setText("查看更多");
 		}
 	}
 	

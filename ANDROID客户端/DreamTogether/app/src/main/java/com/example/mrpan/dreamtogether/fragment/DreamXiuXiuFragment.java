@@ -1,6 +1,8 @@
 package com.example.mrpan.dreamtogether.fragment;
 
 import android.content.Context;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -53,6 +55,8 @@ public class DreamXiuXiuFragment extends Fragment implements View.OnClickListene
     private TextView xiuxiutext;
     int clickcount=0;
 
+    private SoundPool sp;//声明一个SoundPool
+    private int[] music=new int[2];//定义一个整型用load（）；来设置suondID
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         currentView=inflater.inflate(R.layout.dream_xiuxiu_fragment,container,false);
@@ -83,8 +87,7 @@ public class DreamXiuXiuFragment extends Fragment implements View.OnClickListene
             @Override
             public void onXiu(View v) {
                 List<Integer> item = getRand(RandData, 2);
-                System.out.println("1:" + item.get(0) + ",2:" + item.get(1));
-
+                sp.play(music[0], 1, 1, 0, 0, 1);
                 if (item.get(0) == 1) {
 
                     xiuxiutext.setText(texts[clickcount]);
@@ -92,7 +95,7 @@ public class DreamXiuXiuFragment extends Fragment implements View.OnClickListene
                     if(clickcount>=texts.length)
                         clickcount=0;
                     if(item.get(1) == 2) {
-                        Toast.makeText(context, "卧槽，你居然咻到了!", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(context, "卧槽，你居然咻到了!", Toast.LENGTH_LONG).show();
                         HttpHelper.getInstance().asyHttpGetRequest(Config.REQUEST_RADOM_DREAM,new XiuxiuHttpListener(Config.XIUXIU_TYPE));
                         dreamXiu.setEnabled(false);
                         clickcount=0;
@@ -100,6 +103,9 @@ public class DreamXiuXiuFragment extends Fragment implements View.OnClickListene
                 }
             }
         });
+        sp= new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);//第一个参数为同时播放数据流的最大个数，第二数据流类型，第三为声音质量
+        music[0] = sp.load(getActivity(), R.raw.xiuxiu, 1); //把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级
+        music[1] = sp.load(getActivity(), R.raw.ding, 1);
     }
 
     private List<Integer> RandData=new ArrayList<>();
@@ -147,7 +153,6 @@ public class DreamXiuXiuFragment extends Fragment implements View.OnClickListene
             message.arg1= Config.HTTP_REQUEST_SUCCESS;
             message.arg2=flag;
             message.obj=result;
-            System.out.println(result.toString()+",url:"+url);
             myHander.sendMessage(message);
         }
 
@@ -171,7 +176,9 @@ public class DreamXiuXiuFragment extends Fragment implements View.OnClickListene
                                 try {
                                     JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF", ""));
                                     ret = jsonObject.getInt("ret");
+
                                     if (ret == Config.RESULT_RET_SUCCESS) {
+                                        sp.play(music[1], 1, 1, 0, 0, 1);
                                         DreamPosts dreamPosts = (DreamPosts) GsonUtils.getEntity(msg.obj.toString(), DreamPosts.class);
                                         List<Dream> dreams = dreamPosts.getPost();
                                         transaction = getFragmentManager().beginTransaction();

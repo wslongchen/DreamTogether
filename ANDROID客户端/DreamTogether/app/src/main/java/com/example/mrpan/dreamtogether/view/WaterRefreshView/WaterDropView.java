@@ -1,4 +1,4 @@
-package com.example.mrpan.dreamtogether.view;
+package com.example.mrpan.dreamtogether.view.WaterRefreshView;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
@@ -19,19 +19,20 @@ import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.Circle;
 import com.example.mrpan.dreamtogether.utils.BitmapUtils;
 
-
-public class WaterDropView extends View {
-
+/**
+ * Created by mrpan on 16/5/3.
+ */
+public class WaterDropView extends View{
     private Circle topCircle;
     private Circle bottomCircle;
 
     private Paint mPaint;
     private Path mPath;
-    private float mMaxCircleRadius;//Բ�뾶���ֵ
-    private float mMinCircleRaidus;//Բ�뾶��Сֵ
-    private Bitmap arrowBitmap;//��ͷ
+    private float mMaxCircleRadius;
+    private float mMinCircleRaidus;
+    private Bitmap arrowBitmap;
     private final static int BACK_ANIM_DURATION = 180;
-    private final static float STROKE_WIDTH = 2;//���߿��
+    private final static float STROKE_WIDTH = 2;
 
     public WaterDropView(Context context) {
         super(context);
@@ -65,7 +66,7 @@ public class WaterDropView extends View {
                     bottomCircle.setY(a.getDimensionPixelSize(R.styleable.WaterDropView_topcircle_y, 0));
                 }*/
                 if(a.hasValue(R.styleable.WaterDropView_waterdrop_color)){
-                   int waterDropColor =  a.getColor(R.styleable.WaterDropView_waterdrop_color, Color.GRAY);
+                    int waterDropColor =  a.getColor(R.styleable.WaterDropView_waterdrop_color, Color.GRAY);
                     mPaint.setColor(waterDropColor);
                 }
                 if (a.hasValue(R.styleable.WaterDropView_max_circle_radius)) {
@@ -104,16 +105,14 @@ public class WaterDropView extends View {
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mPaint.setStrokeWidth(STROKE_WIDTH);
         Drawable drawable = getResources().getDrawable(R.drawable.refresh_arrow);
-        arrowBitmap = BitmapUtils.drawableToBitmapTwo(drawable);
+        arrowBitmap = BitmapUtils.drawableToBitmap(drawable);
         parseAttrs(context, attrs);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        //��ȣ���Բ����Բ�����ֱ��
         int width = (int) ((mMaxCircleRadius + STROKE_WIDTH) * 2);
-        //�߶ȣ���Բ�뾶 + Բ�ľ� + ��Բ�뾶
         int height = (int) Math.ceil(bottomCircle.getY()+bottomCircle.getRadius() + STROKE_WIDTH * 2);
         setMeasuredDimension(width, height);
     }
@@ -131,14 +130,12 @@ public class WaterDropView extends View {
         canvas.drawCircle(bottomCircle.getX(), bottomCircle.getY(), bottomCircle.getRadius(), mPaint);
 //        canvas.drawBitmap(arrowBitmap, topCircle.getX() - topCircle.getRadius(), topCircle.getY() - topCircle.getRadius(), mPaint);
         RectF bitmapArea = new RectF(topCircle.getX()-0.5f*topCircle.getRadius(),topCircle.getY()-0.5f*topCircle.getRadius(),topCircle.getX()+ 0.5f*topCircle.getRadius(),topCircle.getY()+0.5f*topCircle.getRadius());
-        canvas.drawBitmap(arrowBitmap,null,bitmapArea,mPaint);
+        canvas.drawBitmap(arrowBitmap, null, bitmapArea, mPaint);
         super.onDraw(canvas);
     }
 
-
     private void makeBezierPath() {
         mPath.reset();
-        //��ȡ��Բ�����������γɵ��ĸ��е�
         double angle = getAngle();
         float top_x1 = (float) (topCircle.getX() - topCircle.getRadius() * Math.cos(angle));
         float top_y1 = (float) (topCircle.getY() + topCircle.getRadius() * Math.sin(angle));
@@ -171,11 +168,6 @@ public class WaterDropView extends View {
         mPath.close();
     }
 
-    /**
-     * �������Բ������Բ�����ߵļн�
-     *
-     * @return
-     */
     private double getAngle() {
         if (bottomCircle.getRadius() > topCircle.getRadius()) {
             throw new IllegalStateException("bottomCircle's radius must be less than the topCircle's");
@@ -183,14 +175,6 @@ public class WaterDropView extends View {
         return Math.asin((topCircle.getRadius() - bottomCircle.getRadius()) / (bottomCircle.getY() - topCircle.getY()));
     }
 
-    /**
-     * �����ص�����
-     * ��Բ�뾶���ٻָ������뾶
-     * ��Բ�뾶���ٻָ������뾶
-     * Բ�ľ���ٴ����ֵ����0(��ԲY�ӵ�ǰλ���ƶ�����ԲY)��
-     *
-     * @return
-     */
     public Animator createAnimator() {
         ValueAnimator valueAnimator = ValueAnimator.ofFloat(1, 0).setDuration(BACK_ANIM_DURATION);
         valueAnimator.setInterpolator(new DecelerateInterpolator());
@@ -203,11 +187,6 @@ public class WaterDropView extends View {
         return valueAnimator;
     }
 
-    /**
-     * ��ɵİٷֱ�
-     *
-     * @param percent between[0,1]
-     */
     public void updateComleteState(float percent) {
         if (percent < 0 || percent > 1) {
             throw new IllegalStateException("completion percent should between 0 and 1!");
@@ -237,4 +216,6 @@ public class WaterDropView extends View {
     public int getIndicatorColor() {
         return mPaint.getColor();
     }
+
+
 }

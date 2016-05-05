@@ -28,6 +28,7 @@ import com.example.mrpan.dreamtogether.utils.GsonUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.adapter.StatusExpandAdapter;
 import com.example.mrpan.dreamtogether.adapter.TimeLineAdapter;
+import com.example.mrpan.dreamtogether.view.TitleBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ import java.util.List;
 /**
  * Created by mrpan on 16/3/26.
  */
-public class UserDreamListFragment extends Fragment{
+public class UserDreamListFragment extends Fragment implements View.OnClickListener{
     
     public static final String TAG="UserDreamList";
     
@@ -52,6 +53,7 @@ public class UserDreamListFragment extends Fragment{
     private TextView dream_count,dream_user;
 
     private int AuthorID=0;
+    private TitleBar titleBar;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,6 +73,8 @@ public class UserDreamListFragment extends Fragment{
     }
 
     private void init(){
+        titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
+        titleBar.showLeft("梦想",R.drawable.btn_back,this);
         dream_recent_list=(ListView)currentView.findViewById(R.id.dream_recent_list);
         dream_user=(TextView)currentView.findViewById(R.id.dream_recent_user);
         dream_count=(TextView)currentView.findViewById(R.id.dream_recent_count);
@@ -187,6 +191,17 @@ public class UserDreamListFragment extends Fragment{
         Log.i(TAG, "二级状态：" + oneList.get(0).getTwoList().get(0).getStatusName());
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.titleBarLeftImage:
+                getActivity().finish();
+                break;
+            default:
+                break;
+        }
+    }
+
     class RecentListHttpResponse implements HttpResponseCallBack {
 
         private int position;
@@ -225,7 +240,7 @@ public class UserDreamListFragment extends Fragment{
 
                                     if (dreams.getRet() == Config.RESULT_RET_SUCCESS) {
                                         dreamList = dreams.getPost();
-                                        dream_user.setText("");
+                                        dream_user.setText(dreams.getPost().get(0).getPost_author().getUser_nickname());
                                         dream_count.setText("一共发表了"+dreams.getPost().size()+"个梦想");
                                         showData();
                                     } else {

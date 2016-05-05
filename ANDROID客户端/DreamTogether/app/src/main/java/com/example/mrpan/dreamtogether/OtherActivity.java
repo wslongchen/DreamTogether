@@ -1,13 +1,16 @@
 package com.example.mrpan.dreamtogether;
 
 import android.os.Bundle;
+import android.provider.Browser;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MotionEvent;
+import android.view.WindowManager;
 
 import com.example.mrpan.dreamtogether.entity.Dream;
+import com.example.mrpan.dreamtogether.fragment.BrowserFragment;
 import com.example.mrpan.dreamtogether.fragment.CardDreamFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamDetailFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamPostFragment;
@@ -38,15 +41,19 @@ public class OtherActivity extends FragmentActivity {
     private PhotoFragment photoFragment;
     private PicSelectFragment picSelectFragment;
     private SelectImageGridFragment selectImageGridFragment;
-    private CardDreamFragment cardDreamFragment=null;
     private DreamRadomFragment dreamRadomFragment=null;
     private DreamXiuXiuFragment dreamXiuXiuFragment=null;
     private DreamDetailFragment dreamDetailFragment=null;
+    private BrowserFragment browserFragment=null;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         setContentView(R.layout.activity_other);
         initView();
         Bundle bundle=getIntent().getExtras();
@@ -95,7 +102,6 @@ public class OtherActivity extends FragmentActivity {
                 transaction.commit();
                 break;
             case Config.DREAM_DETAILS_TYPE:
-                System.out.println("type"+type);
                 Dream dream= (Dream) bundle.getSerializable("data");
                 transaction = getSupportFragmentManager().beginTransaction();
                 //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
@@ -103,6 +109,13 @@ public class OtherActivity extends FragmentActivity {
                     ((DreamDetailFragment)fragmentHashMap.get(DreamDetailFragment.TAG)).setDream(dream);
                 }
                 transaction.replace(R.id.other_layout, fragmentHashMap.get(DreamDetailFragment.TAG));
+                //transaction.addToBackStack(null);
+                transaction.commit();
+                break;
+            case Config.BROWSER_TYPE:
+                transaction = getSupportFragmentManager().beginTransaction();
+                //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
+                transaction.replace(R.id.other_layout, fragmentHashMap.get(BrowserFragment.TAG));
                 //transaction.addToBackStack(null);
                 transaction.commit();
                 break;
@@ -119,11 +132,10 @@ public class OtherActivity extends FragmentActivity {
         photoFragment=new PhotoFragment();
         picSelectFragment=new PicSelectFragment();
         selectImageGridFragment=new SelectImageGridFragment();
-        cardDreamFragment=new CardDreamFragment();
         dreamRadomFragment=new DreamRadomFragment();
         dreamXiuXiuFragment=new DreamXiuXiuFragment();
         dreamDetailFragment=new DreamDetailFragment();
-
+        browserFragment=new BrowserFragment();
 
         fragmentHashMap.put(DreamerRegisterFragment.TAG, dreamerRegisterFragment);
         fragmentHashMap.put(UserDreamListFragment.TAG,userDreamListFragment);
@@ -131,11 +143,10 @@ public class OtherActivity extends FragmentActivity {
         fragmentHashMap.put(PhotoFragment.TAG,photoFragment);
         fragmentHashMap.put(PicSelectFragment.TAG,picSelectFragment);
         fragmentHashMap.put(SelectImageGridFragment.TAG,selectImageGridFragment);
-        fragmentHashMap.put(CardDreamFragment.TAG,cardDreamFragment);
         fragmentHashMap.put(DreamRadomFragment.TAG,dreamRadomFragment);
         fragmentHashMap.put(DreamXiuXiuFragment.TAG,dreamXiuXiuFragment);
         fragmentHashMap.put(DreamDetailFragment.TAG,dreamDetailFragment);
-
+        fragmentHashMap.put(BrowserFragment.TAG,browserFragment);
     }
 
 }

@@ -5,7 +5,7 @@
     android:background="@drawable/card_bg" >
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/dream_random_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
@@ -22,7 +22,7 @@
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:id="@+id/imageView4"
+            android:id="@+id/dream_random_author_img"
             android:layout_marginLeft="10dp"
             android:src="@mipmap/ic_launcher"
             android:layout_alignParentTop="true"
@@ -33,16 +33,17 @@
             android:layout_marginLeft="10dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="风吹菊花屁屁凉"
-            android:id="@+id/textView4"
+            android:id="@+id/dream_random_author"
             android:textColor="@color/dreamBlack"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/imageView4" />
+            android:layout_toEndOf="@+id/dream_random_author_img" />
 
         <ImageView
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:id="@+id/imageView5"
+            android:id="@+id/dream_random_share"
             android:src="@mipmap/card_share"
+            android:alpha="255"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true" />
     </RelativeLayout>
@@ -52,11 +53,12 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="也许未来你会找到比我更好的人。"
-        android:id="@+id/textView5"
+        android:id="@+id/dream_random_content"
         android:layout_above="@+id/relativeLayout2"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="20dp"
+        android:background="@color/dreamTransparent"
         android:textColor="@color/dreamWhite"
         android:layout_alignParentStart="true" />
     <RelativeLayout

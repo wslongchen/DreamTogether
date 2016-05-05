@@ -94,6 +94,7 @@ public class DreamerLoginFragment extends Fragment implements View.OnClickListen
         newUserRegister=(RelativeLayout)currentView.findViewById(R.id.newUserRegister);
         newUserRegister.setOnClickListener(this);
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
+        titleBar.setBgColor(R.color.dreamBlack);
         titleBar.showCenterTitle("个人中心");
     }
 
@@ -116,7 +117,6 @@ public class DreamerLoginFragment extends Fragment implements View.OnClickListen
                             message.arg1=Config.HTTP_REQUEST_SUCCESS;
                             message.obj=result;
                             myHander.sendMessage(message);
-                            MyLog.i("result:",result);
                         }
 
                         @Override
@@ -170,7 +170,7 @@ public class DreamerLoginFragment extends Fragment implements View.OnClickListen
                     if(msg.obj!=null) {
                         int ret = 0;
                         try {
-                            JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF\uFEFF\uFEFF", ""));
+                            JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF", ""));
                             ret = jsonObject.getInt("ret");
                             if (ret == Config.RESULT_RET_SUCCESS) {
                                 MyLog.i("dd", msg.obj.toString());

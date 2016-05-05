@@ -1,6 +1,7 @@
 package com.example.mrpan.dreamtogether.adapter;
 
 import com.example.mrpan.dreamtogether.MainActivity;
+import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.fragment.CardDreamFragment;
 import com.example.mrpan.dreamtogether.utils.Config;
@@ -23,12 +24,15 @@ public class TestFragPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public Fragment getItem(int arg0) {
-		Bundle bundle = new Bundle();
-		bundle.putInt(Config.KEY, Config.images[arg0%getCount()]);
-		CardDreamFragment frag = (CardDreamFragment) MainActivity.fragmentHashMap.get(CardDreamFragment.TAG);
-		if(frag!=null) {
-			frag.setDream(dreams.get(arg0%getCount()));
-		}
+		//Bundle bundle = new Bundle();
+		//bundle.putInt(Config.KEY, Config.images[arg0 % getCount()]);
+		Fragment frag =null;
+//		frag=OtherActivity.fragmentHashMap.get(CardDreamFragment.TAG);
+//		if(frag!=null) {
+//			((CardDreamFragment)frag).setDream(dreams.get(arg0%getCount()));
+//		}
+		frag=new CardDreamFragment();
+		((CardDreamFragment)frag).setDream(dreams.get(arg0%getCount()));
 		//frag.setArguments(bundle);
 		return frag;
 	}

@@ -23,10 +23,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.mrpan.dreamtogether.R;
+import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.listener.OverScrollListener;
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.manage.AnimRefreshGridLayoutManager;
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.manage.AnimRefreshLinearLayoutManager;
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.manage.AnimRefreshStaggeredGridLayoutManager;
+import com.example.mrpan.dreamtogether.view.OverScrollView;
 
 import java.util.ArrayList;
 
@@ -71,11 +73,12 @@ public class AnimRefreshRecyclerView extends RecyclerView implements Runnable{
         @Override
         public void overScrollBy(int dy) {
             // dy为拉伸过度时每毫秒拉伸的距离，正数表示向上拉伸多度，负数表示向下拉伸过度
-            if (isEnable && !isLoadingData && isTouching
+            if (isEnable && !isLoadingData
                     && ((dy < 0 && headerImage.getLayoutParams().height < headerImageMaxHeight)
                     || (dy > 0 && headerImage.getLayoutParams().height > headerImageHeight))) {
                 mHandler.obtainMessage(0, dy, 0, null).sendToTarget();
                 onScrollChanged(0, 0, 0, 0);
+                MyLog.i("result:",String.valueOf(dy));
             }
         }
     };
@@ -366,6 +369,7 @@ public class AnimRefreshRecyclerView extends RecyclerView implements Runnable{
     @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
+        //MyLog.i("onScrollStateChanged","state:"+state);
         // 当前不滚动，且不是正在刷新或加载数据
         if (state == RecyclerView.SCROLL_STATE_IDLE && mLoadDataListener != null && !isLoadingData) {
             LayoutManager layoutManager = getLayoutManager();
@@ -386,12 +390,12 @@ public class AnimRefreshRecyclerView extends RecyclerView implements Runnable{
                 if (mFootViews.size() > 0) {
                     mFootViews.get(0).setVisibility(VISIBLE);
                 }
-                if(state==RecyclerView.SCROLL_STATE_DRAGGING)
-                {
+                //if(state==RecyclerView.SCROLL_STATE_DRAGGING)
+                //{
                     // 加载更多
-                    //isLoadingData = true;
-                   // mLoadDataListener.onLoadMore();
-                }
+                    isLoadingData = true;
+                    mLoadDataListener.onLoadMore();
+                //}
 
             }
         }
@@ -406,6 +410,8 @@ public class AnimRefreshRecyclerView extends RecyclerView implements Runnable{
         }
         return max;
     }
+
+
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
@@ -432,6 +438,7 @@ public class AnimRefreshRecyclerView extends RecyclerView implements Runnable{
 
         return super.onTouchEvent(ev);
     }
+
 
     /**
      * 设置是否执行刷新
@@ -477,8 +484,9 @@ public class AnimRefreshRecyclerView extends RecyclerView implements Runnable{
                     AnimView.dip2px(mContext, 33), AnimView.dip2px(mContext, 50));
             params.addRule(RelativeLayout.CENTER_HORIZONTAL);
             params.setMargins(0, AnimView.dip2px(mContext, 5), 0, 0);
-            ((ViewGroup) mHeaderViews.get(0)).addView(rfAnimView, params);
-
+            if(mHeaderViews.size()>0) {
+                ((ViewGroup) mHeaderViews.get(0)).addView(rfAnimView, params);
+            }
         } else {
             rfAnimView.setVisibility(VISIBLE);
         }

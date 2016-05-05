@@ -62,10 +62,10 @@ public class TitleBar extends RelativeLayout {
      * @param leftImages
      * @param onclick
      */
-    public void showLeft(String title,Drawable leftImages,OnClickListener onclick){
+    public void showLeft(String title,int leftImages,OnClickListener onclick){
         centerTitle.setText(title);
         centerTitle.setVisibility(View.VISIBLE);
-        leftImage.setImageDrawable(leftImages);
+        leftImage.setImageResource(leftImages);
         leftImage.setVisibility(View.VISIBLE);
         leftImage.setOnClickListener(onclick);
     }
@@ -155,6 +155,11 @@ public class TitleBar extends RelativeLayout {
 
     }
 
+    public void setFondColor(int color){
+        leftStr.setTextColor(color);
+        rightStr.setTextColor(color);
+        centerTitle.setTextColor(color);
+    }
 
 
     /**

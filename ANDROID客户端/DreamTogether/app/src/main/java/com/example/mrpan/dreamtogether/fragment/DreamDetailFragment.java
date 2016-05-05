@@ -39,6 +39,7 @@ import com.example.mrpan.dreamtogether.utils.OtherUtils;
 import com.example.mrpan.dreamtogether.view.LXiuXiu;
 import com.example.mrpan.dreamtogether.view.NoScrollGridView;
 import com.example.mrpan.dreamtogether.view.TitleBar;
+import com.example.mrpan.dreamtogether.view.WaterRefreshView.WaterDropListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
@@ -48,11 +49,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by mrpan on 16/4/30.
  */
-public class DreamDetailFragment extends Fragment implements View.OnClickListener{
+public class DreamDetailFragment extends Fragment implements View.OnClickListener, WaterDropListView.IWaterDropListViewListener{
     public final static String TAG="DreamDetail";
 
     private Context context;
@@ -65,7 +68,8 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
 
     private FragmentTransaction transaction;
 
-    private ListView commentsList;
+    //private ListView commentsList;
+    private WaterDropListView commentsList;
 
     private TextView dream_author,dream_date,dream_content,dream_deviceinfo;
 
@@ -95,9 +99,10 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
         comment=(Button)currentView.findViewById(R.id.comments_btn);
         commentText=(EditText)currentView.findViewById(R.id.comment_content);
         httpHelper=HttpHelper.getInstance();
-        commentsList=(ListView)currentView.findViewById(R.id.comments_list);
+        commentsList=(WaterDropListView)currentView.findViewById(R.id.comments_list);
         View headerview=View.inflate(context,R.layout.dream_info_headview,(ViewGroup)currentView.getParent());
         commentsList.addHeaderView(headerview);
+
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
         titleBar.showLeftAndRight("详情",R.drawable.btn_back,R.drawable.btn_more,this,this);
         dream_author=(TextView)currentView.findViewById(R.id.dream_author);
@@ -132,7 +137,9 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
         DreamCommentsAdapter dreamCommentsAdapter=new DreamCommentsAdapter(comments,context);
         dreamCommentsAdapter.setAuthorID(5);
         commentsList.setAdapter(dreamCommentsAdapter);
-        httpHelper.asyHttpGetRequest(Config.GetCommentByID(dream.getID()),new DetailHttpListener(1));
+        commentsList.setWaterDropListViewListener(this);
+        commentsList.setPullLoadEnable(true);
+        //httpHelper.asyHttpGetRequest(Config.GetCommentByID(dream.getID()),new DetailHttpListener(1));
 
     }
 
@@ -199,11 +206,47 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
                 comment.setComment_detail(commentText.getText().toString().trim());
                 comment.setPost_id(String.valueOf(dream.getID()));
                 comment.setComment_user_id(user);
-                httpHelper.asyHttpPostRequest(Config.CREATE_COMMENT, OtherUtils.CommentToMap(comment),new DetailHttpListener(2));
+                httpHelper.asyHttpPostRequest(Config.CREATE_COMMENT, OtherUtils.CommentToMap(comment), new DetailHttpListener(2));
                 break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                    Message message=new Message();
+                    message.arg1=1;
+                    myHander.sendMessage(message);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onLoadMore() {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                    Message message=new Message();
+                    message.arg1=2;
+                    myHander.sendMessage(message);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     class DetailHttpListener implements HttpResponseCallBack {
@@ -241,7 +284,7 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
                             if(msg.obj!=null) {
                                 int ret = 0;
                                 try {
-                                    JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF\uFEFF\uFEFF", ""));
+                                    JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF", ""));
                                     ret = jsonObject.getInt("ret");
                                     if (ret == Config.RESULT_RET_SUCCESS) {
                                         CommentPosts commentPosts = (CommentPosts) GsonUtils.getEntity(msg.obj.toString(), CommentPosts.class);
@@ -263,7 +306,7 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
                             if(msg.obj!=null) {
                                 int ret = 0;
                                 try {
-                                    JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF\uFEFF\uFEFF", ""));
+                                    JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF", ""));
                                     ret = jsonObject.getInt("ret");
                                     if (ret == Config.RESULT_RET_SUCCESS) {
                                         Toast.makeText(context, "评论成功！", Toast.LENGTH_LONG).show();
@@ -284,6 +327,12 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
                     break;
                 case Config.HTTP_REQUEST_ERROR:
                     Toast.makeText(context,"联网失败！",Toast.LENGTH_LONG).show();
+                    break;
+                case 1:
+                    commentsList.stopRefresh();
+                    break;
+                case 2:
+                    commentsList.stopLoadMore();
                     break;
                 default:
                     break;

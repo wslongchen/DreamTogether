@@ -22,4 +22,6 @@
     <color name="dreamSettings_entry">#ff59493f</color>
     <color name="Dreamsettings_attribute">#ff4d0c14</color>
     <color name="list_bg_color">#ffeeeade</color>
+    <color name="top_bg_color">#0000</color>
+    <color name="dreamDarkBlack2">#363636</color>
 </resources>

@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -53,6 +54,8 @@ public class PhotoFragment extends Fragment{
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		getActivity().getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
+				WindowManager.LayoutParams. FLAG_FULLSCREEN);
 		currentView = inflater.inflate(R.layout.activity_photo, container, false);
 		ViewGroup viewGroup = (ViewGroup) currentView.getParent();
 		if (viewGroup != null) {

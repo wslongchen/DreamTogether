@@ -77,6 +77,7 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
 
     private void initView(){
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
+       // titleBar.setBgColor(R.color.dreamBlack);
         titleBar.showRight("我的梦想",R.drawable.btn_post,this);
         userInfoList=(ListView)currentView.findViewById(R.id.user_info_list);
         userNickname=(TextView)currentView.findViewById(R.id.user_nickname);

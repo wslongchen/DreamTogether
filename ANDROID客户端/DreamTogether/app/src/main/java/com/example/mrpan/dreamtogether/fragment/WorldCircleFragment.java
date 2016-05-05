@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.mrpan.dreamtogether.OtherActivity;
@@ -50,6 +51,7 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
 
     private Context context;
     private  WorldCircleListAdapter worldCircleListAdapter;
+    private boolean isFresh=false;
 
     @Nullable
     @Override
@@ -67,6 +69,7 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
 
     void initView(){
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
+        titleBar.setBgColor(getResources().getColor(R.color.dreamBlack));
         titleBar.showRight("梦想圈",R.mipmap.xiuxiu,this);
         context=getActivity();
         //recyclerView=(AnimRefreshRecyclerView)currentView.findViewById(R.id.dream_list);
@@ -117,8 +120,8 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
         recyclerView.setLoadDataListener(new AnimRefreshRecyclerView.LoadDataListener() {
             @Override
             public void onRefresh() {
-                //new Thread(new MyRunnable(true)).start();
-                newData();
+                new Thread(new MyRunnable(true)).start();
+                //newData();
             }
 
             @Override
@@ -130,6 +133,7 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
 
 
         recyclerView.setRefresh(true);
+        isFresh=true;
 
 
     }
@@ -180,10 +184,14 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                                 dreams=(DreamPosts) GsonUtils.getEntity(msg.obj.toString().trim(), DreamPosts.class);
                                 //List<Dream> dreamList=dreams.getPost();
                                 CacheUtils.saveHttpCache(Config.DIR_CACHE_PATH, "all_dream", dreams);
+                                if(isFresh) {
+                                    if(recyclerView!=null) {
+                                        refreshComplate();
+                                    }
+                                    // 刷新完成后调用，必须在UI线程中
+                                    recyclerView.refreshComplate();
+                                }
                                 showData(dreams);
-                                //refreshComplate();
-                                // 刷新完成后调用，必须在UI线程中
-                                //recyclerView.refreshComplate();
                                 break;
                             case Config.SHOW_NEXT:
                                 DreamPosts dreamNewLists=(DreamPosts) GsonUtils.getEntity(msg.obj.toString().trim(), DreamPosts.class);
@@ -203,9 +211,11 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                     break;
                 case Config.HTTP_REQUEST_ERROR:
                     Toast.makeText(context, "联网失败！", Toast.LENGTH_LONG).show();
-
+                    if(isFresh){
+                        recyclerView.refreshComplate();
+                    }
                     //recyclerView.setRefresh(false);
-                    recyclerView.refreshComplate();
+
                     recyclerView.loadMoreComplate();
                     break;
                 default:
@@ -286,6 +296,7 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
     }
 
     public void newData() {
+        isFresh=true;
         httpHelper.asyHttpGetRequest(Config.REQUEST_ALL_DREAM, new DreamHttpResponseCallBack(Config.ALL_DREAM));
     }
 

@@ -6,8 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/dreamBackground"
-    tools:context="com.example.mrpan.dreamtogether.MainActivity">
+    android:background="@color/dream_bg"
+    tools:context="com.example.mrpan.dreamtogether.MainActivity"
+    >
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"

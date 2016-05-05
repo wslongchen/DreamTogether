@@ -88,6 +88,7 @@ public class Config {
     public static final int PHOTO_TYPE=1013;
     public static final int XIUXIU_TYPE=1014;
     public static final int DREAM_DETAILS_TYPE=1015;
+    public static final int BROWSER_TYPE=1016;
 
 
     public static final int REQUEST_CODE_PERMISSIONS=123;

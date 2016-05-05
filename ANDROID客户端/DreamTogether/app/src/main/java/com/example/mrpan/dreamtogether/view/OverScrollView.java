@@ -381,7 +381,7 @@ public class OverScrollView extends ScrollView {
 		inertanceY = 50 * velocityY / 5000;
 		super.fling(velocityY);
 	}
-	
+
 
 	public interface OverScrollListener {
 

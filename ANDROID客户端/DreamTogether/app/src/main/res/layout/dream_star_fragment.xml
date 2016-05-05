@@ -1,13 +1,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#363636"
+    android:background="@mipmap/bg_search"
     >
+    <com.example.mrpan.dreamtogether.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/top_bar"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:layout_below="@id/top_bar"
+        android:id="@+id/random_tips_text"
+        android:textColor="@color/dreamWhite"
+        android:layout_marginTop="30dp"
+        android:layout_alignTop="@+id/myViewPager1"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
 
     <com.example.mrpan.dreamtogether.view.MrpanViewPager
         android:id="@+id/myViewPager1"
+        android:layout_below="@id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="10dp"
         >
 
     </com.example.mrpan.dreamtogether.view.MrpanViewPager>
