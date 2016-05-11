@@ -13,7 +13,7 @@ class CommentModel {
 	}
 
 	function postComment($comment) {//插入一条新梦想
-		$sql = "INSERT INTO `dream_comments` (`post_id`, `comment_user_id`, `comment_detail`, `comment_time`) VALUES('" . $comment[dreamid] . "','" . $comment[userid] . "','" . $comment[content] . "','" . $comment[time] . "')";
+		$sql = "INSERT INTO `dream_comments` (`post_id`, `comment_user_id`, `comment_content`, `comment_time`) VALUES('" . $comment[dreamid] . "','" . $comment[userid] . "','" . $comment[content] . "','" . $comment[time] . "')";
 		//调试时用echo输出一下看看是否正确是一种常用的调试技巧
 		if(!empty($comment) && $this -> dao -> query($sql)){
 			$json_out["ret"]=0;
@@ -35,9 +35,8 @@ class CommentModel {
 		
 		$user=new UserModel($this->dao);
 		while($comment=$this->dao->getResult()){
-			
 			$userInfo=$user->getUserInfo($comment["comment_user_id"]);
-			$dream["comment_user_id"]=$userInfo;
+			$comment["comment_user_id"]=$userInfo;
 			//var_dump($dream["post_author"]);
 			array_push($comments,$comment);
 		}

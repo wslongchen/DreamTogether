@@ -77,6 +77,7 @@ class DreamModel {
 	function getRandomDream($page,$count){
 		$index=($page-1)*$count;
 		$sql=" select * from dream_posts order by rand() limit ".$index.",".$count."";
+		echo $sql;
 		$this->dao->query($sql);
 		$dreams=array();
 		$author=array();
@@ -102,7 +103,6 @@ class DreamModel {
 		$author=array();
 		$user=new UserModel($this->dao);
 		while($dream=$this->dao->getResult()){
-			
 			$userInfo=$user->getUserInfo($dream["post_author"]);
 			$dream["post_author"]=$userInfo;
 			$dream["metas"]=$this->getDreamMetaByID($dream["ID"]);
