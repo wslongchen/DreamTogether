@@ -179,6 +179,8 @@ public class DreamerLoginFragment extends Fragment implements View.OnClickListen
                                 Toast.makeText(context, "登录成功！", Toast.LENGTH_LONG).show();
                                 MySharePreference mySharePreference = new MySharePreference(context);
                                 mySharePreference.commitBoolean("isLogin", true);
+                                mySharePreference.commitString("username",loginName.getText().toString());
+                                mySharePreference.commitString("userpassword",loginPassword.getText().toString());
                                 CacheUtils.saveHttpCache(Config.DIR_CACHE_PATH, "user_info", users.get(0));
                                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                                 Bundle bundle = new Bundle();

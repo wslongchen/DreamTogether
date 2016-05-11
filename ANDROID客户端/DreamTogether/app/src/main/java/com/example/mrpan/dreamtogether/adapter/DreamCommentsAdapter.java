@@ -1,6 +1,7 @@
 package com.example.mrpan.dreamtogether.adapter;
 
 import android.content.Context;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.BaseEntity;
 import com.example.mrpan.dreamtogether.entity.Comment;
 import com.example.mrpan.dreamtogether.entity.User;
+import com.example.mrpan.dreamtogether.utils.ExpressionUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.w3c.dom.Text;
@@ -77,14 +79,16 @@ public class DreamCommentsAdapter extends BaseAdapter {
             viewHolder.commentsView.setVisibility(View.GONE);
             viewHolder.authorCommentsView.setVisibility(View.VISIBLE);
             viewHolder.auhtorCommentDate.setText(comment.getComment_time());
-            viewHolder.authorCommentContent.setText(comment.getComment_detail());
+            SpannableStringBuilder sb = ExpressionUtils.prase(context, viewHolder.authorCommentContent, comment.getComment_content());// 对内容做处理
+            viewHolder.authorCommentContent.setText(sb);
         }
         else
         {
 
             viewHolder.authorCommentsView.setVisibility(View.GONE);
             viewHolder.commentsView.setVisibility(View.VISIBLE);
-            viewHolder.commentsContent.setText(comment.getComment_detail());
+            SpannableStringBuilder sb = ExpressionUtils.prase(context, viewHolder.commentsContent, comment.getComment_content());// 对内容做处理
+            viewHolder.commentsContent.setText(sb);
             viewHolder.commentsDate.setText(comment.getComment_time());
             viewHolder.userName.setText(user.getUser_nickname());
             if(user.getUser_img()!=null){

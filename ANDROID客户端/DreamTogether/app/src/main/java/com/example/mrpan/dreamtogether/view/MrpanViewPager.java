@@ -300,8 +300,10 @@ public class MrpanViewPager extends ViewPager {
                     }
                 }
             } else if (springId.equals(mScaleSpring.getId())) {
-                ViewHelper.setScaleX(currentView,value);
-                ViewHelper.setScaleY(currentView,value);
+                if(currentView!=null){
+                    ViewHelper.setScaleX(currentView,value);
+                    ViewHelper.setScaleY(currentView,value);
+                }
             } else if (springId.equals(rotateSpring.getId())) {
                 ViewHelper.setRotation(currentView,value);
             }

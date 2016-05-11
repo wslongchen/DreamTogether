@@ -7,7 +7,7 @@ public class Comment extends BaseEntity{
     private int ID;
     private String post_id;
     private User comment_user_id;
-    private String comment_detail;
+    private String comment_content;
     private String comment_time;
 
     public int getID() {
@@ -34,12 +34,12 @@ public class Comment extends BaseEntity{
         this.comment_user_id = comment_user_id;
     }
 
-    public String getComment_detail() {
-        return comment_detail;
+    public String getComment_content() {
+        return comment_content;
     }
 
-    public void setComment_detail(String comment_detail) {
-        this.comment_detail = comment_detail;
+    public void setComment_content(String comment_content) {
+        this.comment_content = comment_content;
     }
 
     public String getComment_time() {

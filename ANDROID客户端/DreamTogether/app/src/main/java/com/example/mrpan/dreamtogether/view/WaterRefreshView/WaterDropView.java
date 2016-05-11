@@ -189,7 +189,7 @@ public class WaterDropView extends View{
 
     public void updateComleteState(float percent) {
         if (percent < 0 || percent > 1) {
-            throw new IllegalStateException("completion percent should between 0 and 1!");
+//            throw new IllegalStateException("completion percent should between 0 and 1!");
         }
         float top_r = (float) (mMaxCircleRadius - 0.25 * percent * mMaxCircleRadius);
         float bottom_r = (mMinCircleRaidus - mMaxCircleRadius) * percent + mMaxCircleRadius;

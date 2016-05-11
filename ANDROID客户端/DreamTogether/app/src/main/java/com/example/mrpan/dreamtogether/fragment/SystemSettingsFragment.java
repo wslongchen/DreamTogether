@@ -1,6 +1,7 @@
 package com.example.mrpan.dreamtogether.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.utils.CacheUtils;
@@ -29,6 +31,8 @@ public class SystemSettingsFragment extends Fragment implements View.OnClickList
     private Context context;
 
     private TitleBar titleBar=null;
+
+    private TextView about=null;
 
     @Nullable
     @Override
@@ -49,10 +53,24 @@ public class SystemSettingsFragment extends Fragment implements View.OnClickList
     private void initView(){
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
         titleBar.showCenterTitle("系统设置");
+        about=(TextView)currentView.findViewById(R.id.item_about);
+        about.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()){
+            case R.id.item_about:
+                Intent intent=new Intent();
+                Bundle bundle=new Bundle();
+                bundle.putInt("type", Config.BROWSER_TYPE);
+                intent.putExtras(bundle);
+                intent.setClass(context, OtherActivity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.top_in, R.anim.top_out);
+                break;
+            default:
+                break;
+        }
     }
 }

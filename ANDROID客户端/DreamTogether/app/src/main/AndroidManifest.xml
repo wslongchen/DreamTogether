@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:name=".MyApplication"
@@ -31,6 +32,7 @@
         </activity>
         <activity android:name=".OtherActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <service android:name=".xmpp.MySystemService"/>
     </application>
 
 </manifest>

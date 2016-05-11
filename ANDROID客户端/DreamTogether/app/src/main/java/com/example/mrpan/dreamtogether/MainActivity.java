@@ -4,8 +4,10 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.SettingInjectorService;
@@ -47,6 +49,7 @@ import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.utils.MySharePreference;
 import com.example.mrpan.dreamtogether.utils.SystemStatusManager;
 import com.example.mrpan.dreamtogether.view.loadview.Load2Dialog;
+import com.example.mrpan.dreamtogether.xmpp.MySystemService;
 
 import java.util.HashMap;
 
@@ -118,8 +121,39 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         initPermission();
 
         initView();
+        initReceiver();
+        Intent intent = new Intent(this, MySystemService.class);
+        startService(intent);
     }
-
+    private BroadcastReceiver receiver;
+    private void initReceiver() {
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getAction().equals(Config.ACTION_IS_LOGIN_SUCCESS)){
+                    boolean isLoginSuccess=intent.getBooleanExtra("isLoginSuccess", false);
+                    if(isLoginSuccess){//登录成功
+                        //默认开启声音和震动提醒
+                        if(MyApplication.xmppConnection!=null){
+                            Toast.makeText(context,"登录成功,"+MyApplication.xmppConnection.getUser(),Toast.LENGTH_LONG).show();
+                        }
+                        Toast.makeText(context,"登录成功",Toast.LENGTH_LONG).show();
+                        //PreferencesUtils.putSharePre(LoginActivity.this, Const.MSG_IS_VOICE, true);
+                        //PreferencesUtils.putSharePre(LoginActivity.this, Const.MSG_IS_VIBRATE, true);
+//                        Intent intent2=new Intent(mcontext,MainActivity.class);
+//                        startActivity(intent2);
+//                        finish();
+                    }else{
+                        //ToastUtil.showShortToast(mContext, "登录失败，请检您的网络是否正常以及用户名和密码是否正确");
+                    }
+                }
+            }
+        };
+        //注册广播接收者
+        IntentFilter mFilter = new IntentFilter();
+        mFilter.addAction(Config.ACTION_IS_LOGIN_SUCCESS);
+        registerReceiver(receiver, mFilter);
+    }
 
     private void initPermission(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -265,6 +299,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                         Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();
             } else {
+                try{
+                    MySystemService.getInstance().stopSelf();
+                }catch(Exception e){
+
+                }
                 finish();
                 System.exit(0);
             }

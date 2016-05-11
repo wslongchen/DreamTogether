@@ -98,5 +98,29 @@ public class Config {
     public static int [] images = {R.mipmap.bg_search,R.mipmap.refresh2,R.mipmap.refresh3,R.mipmap.refresh4};
 
 
+    public static final String XMPP_HOST = "114.215.113.48";
+    public static final int XMPP_PORT = 5222;
+    /**
+     * 登录状态广播
+     */
+    public static final String ACTION_IS_LOGIN_SUCCESS = "com.android.qq.is_login_success";
+    /**
+     *好友在线状态更新广播
+     */
+    public static final String ACTION_FRIENDS_ONLINE_STATUS_CHANGE= "com.android.qq.friends_online_status_change";
+    /**
+     * 消息记录操作广播
+     */
+    public static final String ACTION_MSG_OPER= "com.android.qq.msgoper";
+    /**
+     * 新消息广播
+     */
+    public static final String ACTION_NEW_MSG= "com.android.qq.newmsg";
+    public static final int NOTIFY_ID=0x90;
+    public static final String MSG_TYPE_TEXT="msg_type_text";//文本消息
+    public static final String MSG_TYPE_IMG="msg_type_img";//图片
+    public static final String MSG_TYPE_VOICE="msg_type_voice";//语音
+    public static final String MSG_TYPE_LOCATION="msg_type_location";//位置
+    public static final String SPLIT="卍";
 
 }

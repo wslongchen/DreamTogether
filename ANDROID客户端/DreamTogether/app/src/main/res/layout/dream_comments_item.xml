@@ -22,7 +22,7 @@
             />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_centerVertical="true"
@@ -53,22 +53,15 @@
                     android:layout_toEndOf="@+id/userImg" />
             </LinearLayout>
 
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/timeline_content"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_vertical"
-                    android:id="@+id/comments_content"
-                    android:text="恩。这个和随机有所差别。"/>
-            </LinearLayout>
+                android:gravity="center"
+                android:background="@drawable/messages_left"
+                android:id="@+id/comments_content"
+                android:paddingLeft="30dp"
+                android:paddingRight="10dp"
+                android:text="yo。"/>
         </LinearLayout>
 
 
@@ -92,7 +85,7 @@
             />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="right"
@@ -123,22 +116,14 @@
                      />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/timeline_content"
-               >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:id="@+id/author_comment_conent"
-                    android:layout_marginRight="2dp"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_vertical"
-                    android:text="恩。这个和随机有所差别。"/>
-            </LinearLayout>
+                android:id="@+id/author_comment_conent"
+                android:gravity="center_vertical"
+                android:paddingLeft="30dp"
+                android:background="@drawable/messages_right"
+                android:text="good"/>
         </LinearLayout>
 
 

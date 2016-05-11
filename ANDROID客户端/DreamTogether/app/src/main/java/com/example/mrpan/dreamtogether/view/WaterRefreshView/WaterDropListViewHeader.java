@@ -168,7 +168,7 @@ public class WaterDropListViewHeader extends FrameLayout {
         if(mState == STATE.stretch){
             float pullOffset = (float) BitmapUtils.mapValueFromRangeToRange(height, stretchHeight, readyHeight, 0, 1);
             if(pullOffset < 0 || pullOffset >1){
-                throw new IllegalArgumentException("pullOffset should between 0 and 1!"+mState+" "+height);
+//                throw new IllegalArgumentException("pullOffset should between 0 and 1!"+mState+" "+height);
             }
             //Log.e("pullOffset", "pullOffset:" + pullOffset);
             mWaterDropView.updateComleteState(pullOffset);

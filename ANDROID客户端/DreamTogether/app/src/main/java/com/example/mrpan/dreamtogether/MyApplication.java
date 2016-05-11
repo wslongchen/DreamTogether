@@ -3,6 +3,7 @@ package com.example.mrpan.dreamtogether;
 import android.app.Application;
 
 import com.example.mrpan.dreamtogether.utils.Config;
+import com.example.mrpan.dreamtogether.xmpp.XmppConnectionManager;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -10,6 +11,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.L;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+
+import org.jivesoftware.smack.XMPPConnection;
 
 import java.io.File;
 
@@ -19,6 +22,8 @@ import java.io.File;
  */
 public class MyApplication extends Application {
     private static MyApplication instance;
+
+    public static XMPPConnection xmppConnection;
 
     public static MyApplication getInstance() {
         return instance;

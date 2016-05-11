@@ -148,7 +148,8 @@ public class DreamRadomFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.titleBarLeftStr:
-                getActivity().finish();
+//                getActivity().finish();
+                getFragmentManager().popBackStack();
                 break;
             default:
                 break;

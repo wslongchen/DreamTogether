@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.fragment.BrowserFragment;
 import com.example.mrpan.dreamtogether.fragment.CardDreamFragment;
+import com.example.mrpan.dreamtogether.fragment.ChatFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamDetailFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamPostFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamRadomFragment;
@@ -45,6 +46,7 @@ public class OtherActivity extends FragmentActivity {
     private DreamXiuXiuFragment dreamXiuXiuFragment=null;
     private DreamDetailFragment dreamDetailFragment=null;
     private BrowserFragment browserFragment=null;
+    private ChatFragment chatFragment=null;
 
 
     @Override
@@ -97,7 +99,7 @@ public class OtherActivity extends FragmentActivity {
                 System.out.println("xiuxiu");
                 transaction = getSupportFragmentManager().beginTransaction();
                 //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
-                transaction.replace(R.id.other_layout, fragmentHashMap.get(DreamXiuXiuFragment.TAG));
+                transaction.add(R.id.other_layout, fragmentHashMap.get(DreamXiuXiuFragment.TAG));
                 //transaction.addToBackStack(null);
                 transaction.commit();
                 break;
@@ -136,6 +138,7 @@ public class OtherActivity extends FragmentActivity {
         dreamXiuXiuFragment=new DreamXiuXiuFragment();
         dreamDetailFragment=new DreamDetailFragment();
         browserFragment=new BrowserFragment();
+        chatFragment=new ChatFragment();
 
         fragmentHashMap.put(DreamerRegisterFragment.TAG, dreamerRegisterFragment);
         fragmentHashMap.put(UserDreamListFragment.TAG,userDreamListFragment);
@@ -147,6 +150,7 @@ public class OtherActivity extends FragmentActivity {
         fragmentHashMap.put(DreamXiuXiuFragment.TAG,dreamXiuXiuFragment);
         fragmentHashMap.put(DreamDetailFragment.TAG,dreamDetailFragment);
         fragmentHashMap.put(BrowserFragment.TAG,browserFragment);
+        fragmentHashMap.put(ChatFragment.TAG,chatFragment);
     }
 
 }

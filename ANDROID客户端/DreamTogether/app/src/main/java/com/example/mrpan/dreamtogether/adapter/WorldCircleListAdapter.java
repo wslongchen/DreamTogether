@@ -51,7 +51,7 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
     }
 
     /**
-     * 设置Item点击监听
+     * 设置Item点击监听、、、、
      * @param listener
      */
     public void setOnItemClickListener(MyItemClickListener listener){

@@ -70,7 +70,7 @@ public class CardDreamFragment extends Fragment {
                 transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
                 ((DreamDetailFragment)OtherActivity.fragmentHashMap.get(DreamDetailFragment.TAG)).setDream(dream);
                 transaction.replace(R.id.other_layout, OtherActivity.fragmentHashMap.get(DreamDetailFragment.TAG));
-                //transaction.addToBackStack(null);
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         });

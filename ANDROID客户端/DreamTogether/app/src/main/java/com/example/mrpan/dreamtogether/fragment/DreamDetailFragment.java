@@ -1,5 +1,6 @@
 package com.example.mrpan.dreamtogether.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,13 +8,19 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,6 +30,7 @@ import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.adapter.DreamCommentsAdapter;
 import com.example.mrpan.dreamtogether.adapter.DreamImageGridAdapter;
+import com.example.mrpan.dreamtogether.adapter.FaceVPAdapter;
 import com.example.mrpan.dreamtogether.entity.Comment;
 import com.example.mrpan.dreamtogether.entity.CommentPosts;
 import com.example.mrpan.dreamtogether.entity.Dream;
@@ -34,12 +42,14 @@ import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
 import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DateUtils;
+import com.example.mrpan.dreamtogether.utils.ExpressionUtils;
 import com.example.mrpan.dreamtogether.utils.GsonUtils;
 import com.example.mrpan.dreamtogether.utils.OtherUtils;
 import com.example.mrpan.dreamtogether.view.LXiuXiu;
 import com.example.mrpan.dreamtogether.view.NoScrollGridView;
 import com.example.mrpan.dreamtogether.view.TitleBar;
 import com.example.mrpan.dreamtogether.view.WaterRefreshView.WaterDropListView;
+import com.example.mrpan.dreamtogether.view.WaterRefreshView.WaterDropListViewHeader;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
@@ -79,9 +89,23 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
 
     private NoScrollGridView gridView;
 
-    private Button comment;
+    private TextView comment;
 
     private EditText commentText;
+
+    private LinearLayout chat_face_container;
+    private ImageView image_face;//表情图标
+    //表情图标每页6列4行
+    private int columns = 6;
+    private int rows = 4;
+    //每页显示的表情view
+    private List<View> views = new ArrayList<View>();
+    //表情列表
+    private List<String> staticFacesList;
+
+    private LayoutInflater inflater;
+    private ViewPager mViewPager;
+    private LinearLayout mDotsLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,12 +116,24 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
         }
         context=getActivity();
         initView();
+        initViewPager();
         return currentView;
     }
 
     private void initView(){
-        comment=(Button)currentView.findViewById(R.id.comments_btn);
+        staticFacesList=ExpressionUtils.initStaticFaces(context);
+        comment=(TextView)currentView.findViewById(R.id.comments_btn);
+        inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+        comment.setOnClickListener(this);
+        mViewPager = (ViewPager) currentView.findViewById(R.id.face_viewpager);
+        mViewPager.setOnPageChangeListener(new PageChange());
+        //表情下小圆点
+        mDotsLayout = (LinearLayout) currentView.findViewById(R.id.face_dots_container);
+        image_face=(ImageView)  currentView.findViewById(R.id.image_face);
+        image_face.setOnClickListener(this);
+        chat_face_container=(LinearLayout) currentView.findViewById(R.id.chat_face_container);
         commentText=(EditText)currentView.findViewById(R.id.comment_content);
+        commentText.setOnClickListener(this);
         httpHelper=HttpHelper.getInstance();
         commentsList=(WaterDropListView)currentView.findViewById(R.id.comments_list);
         View headerview=View.inflate(context,R.layout.dream_info_headview,(ViewGroup)currentView.getParent());
@@ -117,7 +153,7 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
         user.setUser_nickname("傻叼");
         List<Comment> comments=new ArrayList<>();
         Comment comment=new Comment();
-        comment.setComment_detail("哟，不错哦～");
+        comment.setComment_content("哟，不错哦～");
         comment.setComment_time("2012-12-02 12:30");
         comment.setComment_user_id(user);
         comments.add(comment);
@@ -138,9 +174,17 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
         dreamCommentsAdapter.setAuthorID(5);
         commentsList.setAdapter(dreamCommentsAdapter);
         commentsList.setWaterDropListViewListener(this);
-        commentsList.setPullLoadEnable(true);
-        //httpHelper.asyHttpGetRequest(Config.GetCommentByID(dream.getID()),new DetailHttpListener(1));
+//        commentsList.setPullLoadEnable(true);
+        httpHelper.asyHttpGetRequest(Config.GetCommentByID(dream.getID()),new DetailHttpListener(1));
 
+    }
+
+    public void hideSoftInputView() {
+        InputMethodManager manager = ((InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE));
+        if (getActivity().getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
+            if (getActivity().getCurrentFocus() != null)
+                manager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
     void showData(){
@@ -195,20 +239,40 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.titleBarLeftImage:
+                //getFragmentManager().popBackStack();
                 getActivity().finish();
                 break;
             case R.id.titleBarRightImage:
                 break;
             case R.id.comments_btn:
+                String content=commentText.getText().toString();
+                if(TextUtils.isEmpty(content)){
+                    return;
+                }
                 Comment comment=new Comment();
                 User user=(User) CacheUtils.readHttpCache(Config.DIR_CACHE_PATH, "user_info");
                 comment.setComment_time(DateUtils.getCurrentTimeStr());
-                comment.setComment_detail(commentText.getText().toString().trim());
+                comment.setComment_content(commentText.getText().toString().trim());
                 comment.setPost_id(String.valueOf(dream.getID()));
                 comment.setComment_user_id(user);
                 httpHelper.asyHttpPostRequest(Config.CREATE_COMMENT, OtherUtils.CommentToMap(comment), new DetailHttpListener(2));
+                hideSoftInputView();
+                break;
+            case R.id.comment_content:
+                if(chat_face_container.getVisibility()==View.VISIBLE){
+                    chat_face_container.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.image_face:
+                hideSoftInputView();//隐藏软键盘
+                if(chat_face_container.getVisibility()==View.GONE){
+                    chat_face_container.setVisibility(View.VISIBLE);
+                }else{
+                    chat_face_container.setVisibility(View.GONE);
+                }
                 break;
             default:
+                hideSoftInputView();
                 break;
         }
     }
@@ -291,7 +355,14 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
                                         List<Comment> comments=commentPosts.getPost();
                                         DreamCommentsAdapter dreamCommentsAdapter=new DreamCommentsAdapter(comments,context);
                                         dreamCommentsAdapter.setAuthorID(dream.getPost_author().getID());
-                                        commentsList.setAdapter(dreamCommentsAdapter);
+                                       // if(comments.size()>0){
+                                            commentsList.setAdapter(dreamCommentsAdapter);
+                                        commentsList.notifyStateChanged(WaterDropListViewHeader.STATE.ready, WaterDropListViewHeader.STATE.end);
+                                            //commentsList.setAdapter(dreamCommentsAdapter);
+                                            // commentsList.setWaterDropListViewListener(g);
+                                            commentsList.setPullLoadEnable(true);
+                                        //}
+
                                     } else {
                                         //Toast.makeText(context, "再咻咻说不定能有！", Toast.LENGTH_LONG).show();
                                     }
@@ -311,8 +382,9 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
                                     if (ret == Config.RESULT_RET_SUCCESS) {
                                         Toast.makeText(context, "评论成功！", Toast.LENGTH_LONG).show();
                                         commentText.setText("");
+                                        httpHelper.asyHttpGetRequest(Config.GetCommentByID(dream.getID()), new DetailHttpListener(1));
                                     } else {
-                                        //Toast.makeText(context, "再咻咻说不定能有！", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(context, "评论失败！", Toast.LENGTH_LONG).show();
                                     }
                                 } catch (JSONException e) {
                                     // Toast.makeText(context, "再咻咻说不定能有！", Toast.LENGTH_LONG).show();
@@ -340,4 +412,53 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
             super.handleMessage(msg);
         }
     };
+
+
+    /**
+     * 初始化表情
+     */
+    private void initViewPager() {
+        int pagesize = ExpressionUtils.getPagerCount(staticFacesList.size(), columns, rows);
+        // 获取页数
+        for (int i = 0; i <pagesize; i++) {
+            views.add(ExpressionUtils.viewPagerItem(context, i, staticFacesList,columns, rows, commentText));
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(16, 16);
+            mDotsLayout.addView(dotsItem(i), params);
+        }
+        FaceVPAdapter mVpAdapter = new FaceVPAdapter(views);
+        mViewPager.setAdapter(mVpAdapter);
+        mDotsLayout.getChildAt(0).setSelected(true);
+    }
+
+    /**
+     * 表情页切换时，底部小圆点
+     * @param position
+     * @return
+     */
+    private ImageView dotsItem(int position) {
+        View layout = inflater.inflate(R.layout.dot_image, null);
+        ImageView iv = (ImageView) layout.findViewById(R.id.face_dot);
+        iv.setId(position);
+        return iv;
+    }
+
+    /**
+     * 表情页改变时，dots效果也要跟着改变
+     * */
+    class PageChange implements ViewPager.OnPageChangeListener {
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+        }
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+        }
+        @Override
+        public void onPageSelected(int arg0) {
+            for (int i = 0; i < mDotsLayout.getChildCount(); i++) {
+                mDotsLayout.getChildAt(i).setSelected(false);
+            }
+            mDotsLayout.getChildAt(arg0).setSelected(true);
+        }
+    }
+
 }

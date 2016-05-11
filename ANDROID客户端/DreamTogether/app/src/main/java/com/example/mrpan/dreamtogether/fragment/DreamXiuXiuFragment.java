@@ -23,6 +23,7 @@ import com.example.mrpan.dreamtogether.http.HttpHelper;
 import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.GsonUtils;
+import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.view.LXiuXiu;
 import com.example.mrpan.dreamtogether.view.TitleBar;
 
@@ -70,6 +71,7 @@ public class DreamXiuXiuFragment extends Fragment implements View.OnClickListene
     }
 
     private void initView(){
+        dreamXiu=new LXiuXiu(context);
         xiuxiutext=(TextView)currentView.findViewById(R.id.xiuxiu_text);
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
         titleBar.showLeftStrAndRightStr("咻一咻", "关闭", "", this, this);
@@ -94,11 +96,11 @@ public class DreamXiuXiuFragment extends Fragment implements View.OnClickListene
                     clickcount++;
                     if(clickcount>=texts.length)
                         clickcount=0;
-                    if(item.get(1) == 2) {
+                    if(item.get(0) == 1) {
                         //Toast.makeText(context, "卧槽，你居然咻到了!", Toast.LENGTH_LONG).show();
-                        HttpHelper.getInstance().asyHttpGetRequest(Config.REQUEST_RADOM_DREAM,new XiuxiuHttpListener(Config.XIUXIU_TYPE));
-                        dreamXiu.setEnabled(false);
-                        clickcount=0;
+                        HttpHelper.getInstance().asyHttpGetRequest(Config.REQUEST_RADOM_DREAM, new XiuxiuHttpListener(Config.XIUXIU_TYPE));
+                        //dreamXiu.setEnabled(false);
+                       // clickcount=0;
                     }
                 }
             }
@@ -184,10 +186,10 @@ public class DreamXiuXiuFragment extends Fragment implements View.OnClickListene
                                         transaction = getFragmentManager().beginTransaction();
                                         transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
                                         ((DreamRadomFragment)OtherActivity.fragmentHashMap.get(DreamRadomFragment.TAG)).setDreams(dreams);
-                                        transaction.replace(R.id.other_layout, OtherActivity.fragmentHashMap.get(DreamRadomFragment.TAG));
+                                        transaction.add(R.id.other_layout, OtherActivity.fragmentHashMap.get(DreamRadomFragment.TAG));
                                         transaction.addToBackStack(null);
                                         transaction.commit();
-                                        dreamXiu.setEnabled(true);
+                                        //dreamXiu.setEnabled(true);
                                     } else {
                                         Toast.makeText(context, "再咻咻说不定能有！", Toast.LENGTH_LONG).show();
                                     }
@@ -211,4 +213,11 @@ public class DreamXiuXiuFragment extends Fragment implements View.OnClickListene
             super.handleMessage(msg);
         }
     };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(dreamXiu.isShown()){
+        }
+    }
 }

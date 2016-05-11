@@ -5,15 +5,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.entity.DreamPosts;
@@ -23,6 +26,7 @@ import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.entity.UserPosts;
 import com.example.mrpan.dreamtogether.http.HttpHelper;
 import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
+import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.GsonUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
@@ -50,9 +54,12 @@ public class UserDreamListFragment extends Fragment implements View.OnClickListe
 
     private List<Dream> dreamList;
 
+    private Button contanct;
+
     private TextView dream_count,dream_user;
 
     private int AuthorID=0;
+    private User user;
     private TitleBar titleBar;
     
     @Override
@@ -78,12 +85,15 @@ public class UserDreamListFragment extends Fragment implements View.OnClickListe
         dream_recent_list=(ListView)currentView.findViewById(R.id.dream_recent_list);
         dream_user=(TextView)currentView.findViewById(R.id.dream_recent_user);
         dream_count=(TextView)currentView.findViewById(R.id.dream_recent_count);
+        contanct=(Button)currentView.findViewById(R.id.contanct_dreamer);
+        contanct.setOnClickListener(this);
         if(AuthorID==0){
 
         }else{
             HttpHelper.getInstance().asyHttpGetRequest(Config.GetDreamByAuthor(AuthorID), new RecentListHttpResponse(0));
-            HttpHelper.getInstance().asyHttpGetRequest(Config.GetUserByID(AuthorID), new RecentListHttpResponse(1));
+            //HttpHelper.getInstance().asyHttpGetRequest(Config.GetUserByID(AuthorID), new RecentListHttpResponse(1));
         }
+
 
 //        List<Dream> dreams=new ArrayList<>();
 //        Dream dream;
@@ -197,6 +207,14 @@ public class UserDreamListFragment extends Fragment implements View.OnClickListe
             case R.id.titleBarLeftImage:
                 getActivity().finish();
                 break;
+            case R.id.contanct_dreamer:
+                FragmentTransaction transaction=getFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
+                ((ChatFragment) OtherActivity.fragmentHashMap.get(ChatFragment.TAG)).setToUser(user);
+                transaction.add(R.id.other_layout, OtherActivity.fragmentHashMap.get(ChatFragment.TAG));
+                transaction.addToBackStack(null);
+                transaction.commit();
+                break;
             default:
                 break;
         }
@@ -240,6 +258,7 @@ public class UserDreamListFragment extends Fragment implements View.OnClickListe
 
                                     if (dreams.getRet() == Config.RESULT_RET_SUCCESS) {
                                         dreamList = dreams.getPost();
+                                        user=dreams.getPost().get(0).getPost_author();
                                         dream_user.setText(dreams.getPost().get(0).getPost_author().getUser_nickname());
                                         dream_count.setText("一共发表了"+dreams.getPost().size()+"个梦想");
                                         showData();
@@ -258,7 +277,7 @@ public class UserDreamListFragment extends Fragment implements View.OnClickListe
                                     UserPosts users = (UserPosts) GsonUtils.getEntity(msg.obj.toString(), UserPosts.class);
 
                                     if (users.getRet() == Config.RESULT_RET_SUCCESS) {
-                                        User user= users.getPost().get(0);
+                                        user= users.getPost().get(0);
                                         dream_user.setText(user.getUser_nickname());
                                     } else {
                                         Toast.makeText(context, "获取用户信息失败！", Toast.LENGTH_LONG).show();

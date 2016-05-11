@@ -76,7 +76,7 @@ public class OtherUtils {
         nameValuePairs.add(new BasicNameValuePair("author",String.valueOf(ID)));
         nameValuePairs.add(new BasicNameValuePair("userid", String.valueOf(ID)));
         nameValuePairs.add(new BasicNameValuePair("dreamid", comment.getPost_id()));
-        nameValuePairs.add(new BasicNameValuePair("content", comment.getComment_detail()));
+        nameValuePairs.add(new BasicNameValuePair("content", comment.getComment_content()));
         nameValuePairs.add(new BasicNameValuePair("time", comment.getComment_time()));
         return nameValuePairs;
     }

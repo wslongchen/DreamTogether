@@ -9,4 +9,23 @@
         <attr name="bottomcircle_x" format="dimension"/>
         <attr name="bottomcircle_y" format="dimension"/>
     </declare-styleable>
+    <declare-styleable name="CircleImageView">
+        <attr name="shape" format="integer">
+            <enum name="circle" value="1" />
+            <enum name="rectangle" value="2" />
+            <enum name="svg" value="3" />
+        </attr>
+        <attr name="svg_raw_resource" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="MsgListView">
+        <attr name="loadingMoreTextColor" format="color" />
+        <attr name="loadingMoreTextSize" format="dimension" />
+        <attr name="loadingMoreBKColor" format="reference|color" />
+        <attr name="refreshTextColor" format="color" />
+        <attr name="refreshTextSize" format="dimension" />
+        <attr name="refreshTimeColor" format="color" />
+        <attr name="refreshTimeSize" format="dimension" />
+        <attr name="refreshArrowUp" format="reference" />
+        <attr name="refreshArrowDown" format="reference" />
+    </declare-styleable>
 </resources>
