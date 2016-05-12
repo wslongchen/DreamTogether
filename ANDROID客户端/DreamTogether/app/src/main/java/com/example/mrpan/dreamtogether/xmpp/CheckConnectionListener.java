@@ -1,5 +1,7 @@
 package com.example.mrpan.dreamtogether.xmpp;
 
+import android.widget.Toast;
+
 import org.jivesoftware.smack.ConnectionListener;
 
 /**
@@ -22,7 +24,7 @@ public class CheckConnectionListener implements ConnectionListener {
     @Override
     public void connectionClosedOnError(Exception e) {
         if (e.getMessage().equals("stream:error (conflict)")) {
-            //ToastUtil.showLongToast(context, "您的账号在异地登录");
+            Toast.makeText(context, "您的账号在异地登录",Toast.LENGTH_LONG).show();
         }
     }
 

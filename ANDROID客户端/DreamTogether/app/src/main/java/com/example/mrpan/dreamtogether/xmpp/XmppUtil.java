@@ -1,12 +1,16 @@
 package com.example.mrpan.dreamtogether.xmpp;
 
 import android.content.Context;
+import android.media.Image;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mrpan.dreamtogether.R;
+import com.example.mrpan.dreamtogether.entity.Session;
+import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.utils.Config;
+import com.example.mrpan.dreamtogether.utils.MyLog;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
@@ -26,7 +30,12 @@ import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Registration;
 import org.jivesoftware.smack.util.StringUtils;
+import org.jivesoftware.smackx.Form;
+import org.jivesoftware.smackx.ReportedData;
+import org.jivesoftware.smackx.packet.VCard;
+import org.jivesoftware.smackx.search.UserSearchManager;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -71,36 +80,36 @@ public class XmppUtil {
         }  
     }  
     
-//    /**
-//     * 查询用户
-//     *
-//     * @param userName
-//     * @return
-//     * @throws XMPPException
-//     */
-//    public static List<Session> searchUsers(XMPPConnection mXMPPConnection,String userName) {
-//    	List<Session> listUser=new ArrayList<Session>();
-//        try{
-//			UserSearchManager search = new UserSearchManager(mXMPPConnection);
-//			//此处一定要加上 search.
-//			Form searchForm = search.getSearchForm("search."+mXMPPConnection.getServiceName());
-//			Form answerForm = searchForm.createAnswerForm();
-//			answerForm.setAnswer("Username", true);
-//			answerForm.setAnswer("search", userName);
-//			ReportedData data = search.getSearchResults(answerForm,"search."+mXMPPConnection.getServiceName());
-//			Iterator<Row> it = data.getRows();
-//			Row row=null;
-//			while(it.hasNext()){
-//				row=it.next();
-//				Session session=new Session();
-//				session.setFrom(row.getValues("Username").next().toString());
-//				listUser.add(session);
-//			}
-//		}catch(Exception e){
-//
-//		}
-//        return listUser;
-//    }
+    /**
+     * 查询用户
+     *
+     * @param userName
+     * @return
+     * @throws XMPPException
+     */
+    public static List<Session> searchUsers(XMPPConnection mXMPPConnection,String userName) {
+    	List<Session> listUser=new ArrayList<Session>();
+        try{
+			UserSearchManager search = new UserSearchManager(mXMPPConnection);
+			//此处一定要加上 search.
+			Form searchForm = search.getSearchForm("search."+mXMPPConnection.getServiceName());
+			Form answerForm = searchForm.createAnswerForm();
+			answerForm.setAnswer("Username", true);
+			answerForm.setAnswer("search", userName);
+			ReportedData data = search.getSearchResults(answerForm,"search."+mXMPPConnection.getServiceName());
+			Iterator<ReportedData.Row> it = data.getRows();
+			ReportedData.Row row=null;
+			while(it.hasNext()){
+				row=it.next();
+				Session session=new Session();
+				session.setFrom(row.getValues("Username").next().toString());
+				listUser.add(session);
+			}
+		}catch(Exception e){
+
+		}
+        return listUser;
+    }
     
 	 /** 
      * 更改用户状态 
@@ -117,7 +126,7 @@ public class XmppUtil {
             presence = new Presence(Presence.Type.available);  //设置Q我吧
             presence.setMode(Presence.Mode.chat);
             break;  
-        case 2:                                                                                      //隐身
+        case 2:                                             //隐身
             Roster roster = con.getRoster();
             Collection<RosterEntry> entries = roster.getEntries();
             for (RosterEntry entry : entries) {
@@ -257,11 +266,11 @@ public class XmppUtil {
 	public static boolean addUsers(Roster roster,String userName,String name,String groupName)
 	{
 		try {
-			roster.createEntry(userName, name,new String[]{ groupName});
+			roster.createEntry(userName, name, new String[]{groupName});
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			Log.e("jj", "添加好友异常："+e.getMessage());
+			Log.e("jj", "添加好友异常：" + e.getMessage());
 			return false;
 		}
 		
@@ -335,9 +344,46 @@ public class XmppUtil {
         presence.setStatus(content);  
         connection.sendPacket(presence);      
     }  
-    
-    
-    /**
+
+
+	/**
+	 * 获取用户的vcard信息
+	 * @param connection
+	 * @param user
+	 * @return
+	 * @throws XMPPException
+	 */
+	public static User getUserVCard(XMPPConnection connection, String user)
+	{
+		User u=null;
+		try {
+			VCard vcard = new VCard();
+			vcard.load(connection, user + "@" + Config.XMPP_HOSTNAME);
+			u=new User();
+			u.setUser_nickname(vcard.getNickName());
+			//u.setUser_phone(vcard.getPhoneHome());
+			String name=vcard.getTo().replace("@"+Config.XMPP_HOSTNAME,"").trim();
+			u.setUser_login(name);
+		} catch(Exception e){
+			u=new User();
+			u.setUser_login(user);
+		}
+
+
+		return u;
+	}
+
+	public static void updateUserVCard(XMPPConnection connection,User user) throws XMPPException{
+		VCard vCard=new VCard();
+		vCard.load(connection);
+		vCard.setNickName(user.getUser_nickname());
+		vCard.setEmailHome(user.getUser_email());
+		vCard.setPhoneHome(user.getUser_phone(), user.getUser_phone());
+		vCard.setLastName(String.valueOf(user.getID()));
+		vCard.save(connection);
+	}
+
+	/**
 	 * 发送消息
 	 * @param mXMPPConnection
 	 * @param content
@@ -349,10 +395,10 @@ public class XmppUtil {
 			throw new XMPPException();
 		}
 		ChatManager chatmanager = mXMPPConnection.getChatManager();
-		Chat chat =chatmanager.createChat(touser + "@" + Config.XMPP_HOST, null);
+		Chat chat =chatmanager.createChat(touser + "@" + Config.XMPP_HOSTNAME, null);
 		if (chat != null) {
 			chat.sendMessage(content);
-			Log.e("jj", "发送成功");
+			MyLog.i("jj", touser + "发送成功");
 		}
 	}
 	

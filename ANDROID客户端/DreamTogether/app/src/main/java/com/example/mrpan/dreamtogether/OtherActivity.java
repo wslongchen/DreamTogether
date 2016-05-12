@@ -18,6 +18,7 @@ import com.example.mrpan.dreamtogether.fragment.DreamPostFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamRadomFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamXiuXiuFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamerRegisterFragment;
+import com.example.mrpan.dreamtogether.fragment.MessegeFragment;
 import com.example.mrpan.dreamtogether.fragment.PhotoFragment;
 import com.example.mrpan.dreamtogether.fragment.PicSelectFragment;
 import com.example.mrpan.dreamtogether.fragment.SelectImageGridFragment;
@@ -47,6 +48,7 @@ public class OtherActivity extends FragmentActivity {
     private DreamDetailFragment dreamDetailFragment=null;
     private BrowserFragment browserFragment=null;
     private ChatFragment chatFragment=null;
+    private MessegeFragment messegeFragment=null;
 
 
     @Override
@@ -121,6 +123,13 @@ public class OtherActivity extends FragmentActivity {
                 //transaction.addToBackStack(null);
                 transaction.commit();
                 break;
+            case Config.MESSAGE_TYPE:
+                transaction = getSupportFragmentManager().beginTransaction();
+                //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
+                transaction.replace(R.id.other_layout, fragmentHashMap.get(MessegeFragment.TAG));
+                //transaction.addToBackStack(null);
+                transaction.commit();
+                break;
             default:
                 break;
         }
@@ -139,6 +148,7 @@ public class OtherActivity extends FragmentActivity {
         dreamDetailFragment=new DreamDetailFragment();
         browserFragment=new BrowserFragment();
         chatFragment=new ChatFragment();
+        messegeFragment=new MessegeFragment();
 
         fragmentHashMap.put(DreamerRegisterFragment.TAG, dreamerRegisterFragment);
         fragmentHashMap.put(UserDreamListFragment.TAG,userDreamListFragment);
@@ -151,6 +161,7 @@ public class OtherActivity extends FragmentActivity {
         fragmentHashMap.put(DreamDetailFragment.TAG,dreamDetailFragment);
         fragmentHashMap.put(BrowserFragment.TAG,browserFragment);
         fragmentHashMap.put(ChatFragment.TAG,chatFragment);
+        fragmentHashMap.put(MessegeFragment.TAG,messegeFragment);
     }
 
 }

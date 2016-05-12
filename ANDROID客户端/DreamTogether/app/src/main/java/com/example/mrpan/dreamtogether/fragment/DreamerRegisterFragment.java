@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mrpan.dreamtogether.MyApplication;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.http.HttpHelper;
@@ -29,7 +30,10 @@ import com.example.mrpan.dreamtogether.utils.OtherUtils;
 import com.example.mrpan.dreamtogether.utils.RegexUtils;
 import com.example.mrpan.dreamtogether.view.DeletableEditText;
 import com.example.mrpan.dreamtogether.view.TitleBar;
+import com.example.mrpan.dreamtogether.xmpp.XmppUtil;
 
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -151,25 +155,36 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
                     dialog = DialogUtils.getLoadDialog(getActivity());
                     dialog.show();
                     if (user != null) {
-                        httpHelper.asyHttpPostRequest(Config.CREATE_USER, OtherUtils.UserToNameValuePair(user), new HttpResponseCallBack() {
-                            @Override
-                            public void onSuccess(String url, String result) {
-                                dialog.dismiss();
-                                Message message = new Message();
-                                message.arg1 = Config.HTTP_REQUEST_SUCCESS;
-                                message.obj = result;
-                                myHander.sendMessage(message);
-                            }
+                        XMPPConnection xmppConnection= MyApplication.xmppConnection;
+                        if(xmppConnection!=null){
+                            if(XmppUtil.register(xmppConnection,user.getUser_login(),user.getUser_pass())==1){
+                                try {
+                                    XmppUtil.updateUserVCard(xmppConnection,user);
+                                } catch (XMPPException e) {
+                                    e.printStackTrace();
+                                }
+                                httpHelper.asyHttpPostRequest(Config.CREATE_USER, OtherUtils.UserToNameValuePair(user), new HttpResponseCallBack() {
+                                    @Override
+                                    public void onSuccess(String url, String result) {
+                                        dialog.dismiss();
+                                        Message message = new Message();
+                                        message.arg1 = Config.HTTP_REQUEST_SUCCESS;
+                                        message.obj = result;
+                                        myHander.sendMessage(message);
+                                    }
 
-                            @Override
-                            public void onFailure(int httpResponseCode, int errCode, String err) {
-                                if (dialog.isShowing())
-                                    dialog.dismiss();
-                                Message message = new Message();
-                                message.arg1 = Config.HTTP_REQUEST_ERROR;
-                                myHander.sendMessage(message);
+                                    @Override
+                                    public void onFailure(int httpResponseCode, int errCode, String err) {
+                                        if (dialog.isShowing())
+                                            dialog.dismiss();
+                                        Message message = new Message();
+                                        message.arg1 = Config.HTTP_REQUEST_ERROR;
+                                        myHander.sendMessage(message);
+                                    }
+                                });
                             }
-                        });
+                        }
+
                     }
                 }
                 break;

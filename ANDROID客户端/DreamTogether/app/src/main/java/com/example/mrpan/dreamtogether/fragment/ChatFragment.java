@@ -1,14 +1,20 @@
 package com.example.mrpan.dreamtogether.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.ClipboardManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -26,8 +32,12 @@ import com.example.mrpan.dreamtogether.MyApplication;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.adapter.ChatAdapter;
 import com.example.mrpan.dreamtogether.adapter.FaceVPAdapter;
+import com.example.mrpan.dreamtogether.db.ChatMsgDao;
+import com.example.mrpan.dreamtogether.db.SessionDao;
 import com.example.mrpan.dreamtogether.entity.Msg;
+import com.example.mrpan.dreamtogether.entity.Session;
 import com.example.mrpan.dreamtogether.entity.User;
+import com.example.mrpan.dreamtogether.utils.BitmapUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DateUtils;
 import com.example.mrpan.dreamtogether.utils.ExpressionUtils;
@@ -85,6 +95,12 @@ public class ChatFragment extends Fragment implements View.OnClickListener,Dropd
     private DropdownListView mListView;
     private ChatAdapter mLvAdapter;
 
+    private ChatMsgDao msgDao;
+    private SessionDao sessionDao;
+
+    private NewMsgReciver newMsgReciver;
+    private MsgOperReciver msgOperReciver;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,6 +115,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener,Dropd
         initView();
         initData();
         initViewPager();
+        updateMsgToReaded();
         return currentView;
     }
 
@@ -113,20 +130,28 @@ public class ChatFragment extends Fragment implements View.OnClickListener,Dropd
         }
         staticFacesList=ExpressionUtils.initStaticFaces(context);
         inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+        msgDao=new ChatMsgDao(context);
+        sessionDao=new SessionDao(context);
+        msgOperReciver=new MsgOperReciver();
+        newMsgReciver=new NewMsgReciver();
+        IntentFilter intentFilter=new IntentFilter(Config.ACTION_MSG_OPER);
+        context.registerReceiver(msgOperReciver, intentFilter);
+        intentFilter=new IntentFilter(Config.ACTION_NEW_MSG);
+        context.registerReceiver(newMsgReciver, intentFilter);
     }
 
     public void initData(){
         offset=0;
-        //listMsg=msgDao.queryMsg(YOU,I,offset);
-        listMsg=new ArrayList<>();
-        Msg msg=new Msg();
-        msg.setDate(DateUtils.getCurrentTimeStr());
-        msg.setContent("i love you");
-        msg.setFromUser("longchen2");
-        msg.setToUser("longchen");
-        msg.setType(Config.MSG_TYPE_TEXT);
-        msg.setIsComing(0);
-        listMsg.add(msg);
+        listMsg=msgDao.queryMsg(YOU,I,offset);
+//        listMsg=new ArrayList<>();
+//        Msg msg=new Msg();
+//        msg.setDate(DateUtils.getCurrentTimeStr());
+//        msg.setContent("i love you");
+//        msg.setFromUser("longchen");
+//        msg.setToUser("longchen2");
+//        msg.setType(Config.MSG_TYPE_TEXT);
+//        msg.setIsComing(0);
+//        listMsg.add(msg);
         offset=listMsg.size();
 
         mLvAdapter = new ChatAdapter(context, listMsg);
@@ -170,6 +195,31 @@ public class ChatFragment extends Fragment implements View.OnClickListener,Dropd
                 return false;
             }
         });
+    }
+    private void updateMsgToReaded() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                msgDao.updateAllMsgToRead(YOU,I);
+            }
+        }).start();
+    }
+
+    void updateSession(String type,String content){
+        Session session=new Session();
+        session.setFrom(YOU);
+        session.setTo(I);
+        session.setNotReadCount("");//未读消息数量
+        session.setContent(content);
+        session.setTime(DateUtils.getCurrentTimeStr());
+        session.setType(type);
+//        if(sessionDao.isContent(YOU, I)){
+//            sessionDao.updateSession(session);
+//        }else{
+//            sessionDao.insertSession(session);
+//        }
+//        Intent intent=new Intent(Config.ACTION_ADDFRIEND);//发送广播，通知消息界面更新
+//        context.sendBroadcast(intent);
     }
 
     @Override
@@ -249,7 +299,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener,Dropd
      */
     void sendMsgText(String content){
         Msg msg=getChatInfoTo(content, Config.MSG_TYPE_TEXT);
-        //msg.setMsgId(msgDao.insert(msg));
+        msg.setMsgId(msgDao.insert(msg));
         listMsg.add(msg);
         offset=listMsg.size();
         mLvAdapter.notifyDataSetChanged();
@@ -269,6 +319,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener,Dropd
                 }
             }
         }).start();
+        updateSession(Config.MSG_TYPE_TEXT, content);
     }
 
     /**
@@ -339,6 +390,112 @@ public class ChatFragment extends Fragment implements View.OnClickListener,Dropd
             }
             mDotsLayout.getChildAt(arg0).setSelected(true);
         }
+
+    }
+
+    /**
+     * 接收消息记录操作广播：删除复制
+     */
+    private class MsgOperReciver extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+            int type=intent.getIntExtra("type", 0);
+            final int position=intent.getIntExtra("position", 0);
+            if(listMsg.size()<=0){
+                return;
+            }
+            final Msg msg=listMsg.get(position);
+            switch (type) {
+                case 1://聊天记录操作
+                    AlertDialog.Builder bd = new AlertDialog.Builder(context);
+                    String[] items=null;
+                    if(msg.getType().equals(Config.MSG_TYPE_TEXT)){
+                        items =  new String[]{"删除记录","删除全部记录","复制文字"};
+                    }else{
+                        items =  new String[]{"删除记录","删除全部记录"};
+                    }
+                    bd.setItems(items, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            switch (arg1) {
+                                case 0://删除
+                                    listMsg.remove(position);
+                                    offset=listMsg.size();
+                                    mLvAdapter.notifyDataSetChanged();
+                                    msgDao.deleteMsgById(msg.getMsgId());
+                                    break;
+                                case 1://删除全部
+                                    listMsg.removeAll(listMsg);
+                                    offset=listMsg.size();
+                                    mLvAdapter.notifyDataSetChanged();
+                                    msgDao.deleteAllMsg(YOU, I);
+                                    break;
+                                case 2://复制
+                                    ClipboardManager cmb = (ClipboardManager) getActivity().getSystemService(getActivity().CLIPBOARD_SERVICE);
+                                    cmb.setText(msg.getContent());
+                                    Toast.makeText(context, "已复制到剪切板", Toast.LENGTH_SHORT).show();
+                                    break;
+                            }
+                        }
+                    });
+                    bd.show();
+                    break;
+            }
+
+        }
+    }
+
+    /**
+     * 接收消息广播
+     */
+    private class NewMsgReciver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle b=intent.getBundleExtra("msg");
+            Msg msg=(Msg) b.getSerializable("msg");
+            if(msg.getFromUser().equals(toUser.getUser_login())){
+                listMsg.add(msg);
+                offset=listMsg.size();
+                mLvAdapter.notifyDataSetChanged();
+            }
+
+        }
+    }
+
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if (isVisibleToUser) {
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    //让输入框获取焦点
+//                    input_sms.requestFocus();
+//                }
+//            }, 100);
+//        } else {
+//            context.unregisterReceiver(msgOperReciver);
+//            context.unregisterReceiver(newMsgReciver);
+//        }
+//    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //让输入框获取焦点
+                input_sms.requestFocus();
+            }
+        }, 100);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        context.unregisterReceiver(msgOperReciver);
+        context.unregisterReceiver(newMsgReciver);
     }
 
     public User getToUser() {

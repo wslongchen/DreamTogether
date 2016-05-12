@@ -174,7 +174,7 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
         dreamCommentsAdapter.setAuthorID(5);
         commentsList.setAdapter(dreamCommentsAdapter);
         commentsList.setWaterDropListViewListener(this);
-//        commentsList.setPullLoadEnable(true);
+        commentsList.setPullLoadEnable(false);
         httpHelper.asyHttpGetRequest(Config.GetCommentByID(dream.getID()),new DetailHttpListener(1));
 
     }
@@ -360,7 +360,6 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
                                         commentsList.notifyStateChanged(WaterDropListViewHeader.STATE.ready, WaterDropListViewHeader.STATE.end);
                                             //commentsList.setAdapter(dreamCommentsAdapter);
                                             // commentsList.setWaterDropListViewListener(g);
-                                            commentsList.setPullLoadEnable(true);
                                         //}
 
                                     } else {

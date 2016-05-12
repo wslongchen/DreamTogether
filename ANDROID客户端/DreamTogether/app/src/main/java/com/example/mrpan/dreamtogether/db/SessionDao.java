@@ -60,7 +60,7 @@ public class SessionDao {
 	// 返回全部列表
 	public List<Session> queryAllSessions(String user_id) {
 		List<Session> list = new ArrayList<Session>();
-		Cursor cursor = db.query(DBcolumns.TABLE_SESSION, new String[] { "*" }, DBcolumns.SESSION_TO + " = ? order by session_time desc", new String[] { user_id }, null, null, null);
+		Cursor cursor = db.query(DBcolumns.TABLE_SESSION, new String[] { "*" }, DBcolumns.SESSION_TO + " in (?,'all') order by session_time desc", new String[] { user_id }, null, null, null);
 		Session session = null;
 		while (cursor.moveToNext()) {
 			session = new Session();

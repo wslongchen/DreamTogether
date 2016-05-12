@@ -71,7 +71,7 @@ public class UserInfoAdapter extends BaseAdapter {
         {
             viewHolder.menu_line.setVisibility(View.GONE);
             viewHolder.menu_layout.setVisibility(View.VISIBLE);
-            viewHolder.menuImage.setImageResource(R.mipmap.ic_launcher);
+            viewHolder.menuImage.setImageResource(Integer.parseInt(menu.get("menuImg").toString()));
             viewHolder.menuTitle.setText(menu.get("menuText").toString());
         }
 

@@ -8,6 +8,7 @@ import android.os.IBinder;
 
 import com.example.mrpan.dreamtogether.MyApplication;
 import com.example.mrpan.dreamtogether.utils.Config;
+import com.example.mrpan.dreamtogether.utils.MySharePreference;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
@@ -36,6 +37,7 @@ public class MySystemService extends Service {
 
     private CheckConnectionListener checkConnectionListener;
    // private FriendsPacketListener friendsPacketListener;
+    private MySharePreference mySharePreference;
 
     private final IBinder binder = new MyBinder();
 
@@ -55,8 +57,9 @@ public class MySystemService extends Service {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-        mUserName = "longchen";
-        mPassword ="longchen";
+        mySharePreference=new MySharePreference(this);
+        mUserName = mySharePreference.getString("username","");
+        mPassword =mySharePreference.getString("userpassword","");
         try {
             ds = new DatagramSocket();
         } catch (SocketException e) {
@@ -94,7 +97,7 @@ public class MySystemService extends Service {
     void initXMPP() {
         mXMPPConnection = mXmppConnectionManager.init();						//初始化XMPPConnection
         try {
-            mPassword = "longchen";//PreferencesUtils.getSharePreStr(this, "pwd");
+            mPassword = mySharePreference.getString("userpassword","");//PreferencesUtils.getSharePreStr(this, "pwd");
             mXMPPConnection.connect();
             try{
                 if(checkConnectionListener!=null){
@@ -104,7 +107,7 @@ public class MySystemService extends Service {
             }catch(Exception e){
 
             }
-            mXMPPConnection.login("longchen", "longchen");
+            mXMPPConnection.login(mUserName, mPassword);
             if(mXMPPConnection.isAuthenticated()){                                     //登录成功
                 MyApplication.xmppConnection=mXMPPConnection;
                 sendLoginBroadcast(true);

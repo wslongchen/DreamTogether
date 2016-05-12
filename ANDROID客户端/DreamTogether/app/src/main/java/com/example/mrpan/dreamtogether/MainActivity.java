@@ -134,9 +134,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     boolean isLoginSuccess=intent.getBooleanExtra("isLoginSuccess", false);
                     if(isLoginSuccess){//登录成功
                         //默认开启声音和震动提醒
-                        if(MyApplication.xmppConnection!=null){
-                            Toast.makeText(context,"登录成功,"+MyApplication.xmppConnection.getUser(),Toast.LENGTH_LONG).show();
-                        }
+//                        if(MyApplication.xmppConnection!=null){
+//                            Toast.makeText(context,"登录成功,"+MyApplication.xmppConnection.getUser(),Toast.LENGTH_LONG).show();
+//                        }
                         Toast.makeText(context,"登录成功",Toast.LENGTH_LONG).show();
                         //PreferencesUtils.putSharePre(LoginActivity.this, Const.MSG_IS_VOICE, true);
                         //PreferencesUtils.putSharePre(LoginActivity.this, Const.MSG_IS_VIBRATE, true);
@@ -287,6 +287,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
     }
 
     @Override

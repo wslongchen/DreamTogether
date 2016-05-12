@@ -41,6 +41,11 @@ public class DateUtils {
         return mDate;
     }
 
+    public static String getCustomStr(Date date,String format){
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(date);
+    }
+
     /**
      * 字符串转换成日期
      * @param str

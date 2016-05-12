@@ -76,6 +76,7 @@ public class XmppConnectionManager {
 		connectionConfig.setReconnectionAllowed(true);
 		// 允许登陆成功后更新在线状态
 		connectionConfig.setSendPresence(true);
+		connectionConfig.setDebuggerEnabled(false);
 
 		// 收到好友邀请后manual表示需要经过同意,accept_all表示不经同意自动为好友
 		Roster.setDefaultSubscriptionMode(Roster.SubscriptionMode.accept_all);

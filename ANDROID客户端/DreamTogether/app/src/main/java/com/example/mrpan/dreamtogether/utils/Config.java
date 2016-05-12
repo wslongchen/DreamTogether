@@ -89,6 +89,7 @@ public class Config {
     public static final int XIUXIU_TYPE=1014;
     public static final int DREAM_DETAILS_TYPE=1015;
     public static final int BROWSER_TYPE=1016;
+    public static final int MESSAGE_TYPE=1017;
 
 
     public static final int REQUEST_CODE_PERMISSIONS=123;
@@ -99,6 +100,7 @@ public class Config {
 
 
     public static final String XMPP_HOST = "114.215.113.48";
+    public static final String XMPP_HOSTNAME="iz28dbl1lqiz";
     public static final int XMPP_PORT = 5222;
     /**
      * 登录状态广播
@@ -116,6 +118,13 @@ public class Config {
      * 新消息广播
      */
     public static final String ACTION_NEW_MSG= "com.android.qq.newmsg";
+    /**
+     * 添加好友请求广播
+     */
+    public static final String ACTION_ADDFRIEND= "com.android.qq.addfriend";
+    public static final String MSG_TYPE_ADD_FRIEND="msg_type_add_friend";//添加好友
+    public static final String MSG_TYPE_ADD_FRIEND_SUCCESS="msg_type_add_friend_success";//同意添加好友
+
     public static final int NOTIFY_ID=0x90;
     public static final String MSG_TYPE_TEXT="msg_type_text";//文本消息
     public static final String MSG_TYPE_IMG="msg_type_img";//图片

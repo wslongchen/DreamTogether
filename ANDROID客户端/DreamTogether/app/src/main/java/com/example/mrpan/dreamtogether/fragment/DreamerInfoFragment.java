@@ -102,8 +102,8 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
         datas.add(data);
         data=new HashMap<>();
         data.put("isNull", false);
-        data.put("menuImg", R.mipmap.ic_launcher);
-        data.put("menuText", "菜单二");
+        data.put("menuImg", R.mipmap.new_message);
+        data.put("menuText", "梦想消息");
         data.put("menu","menu2");
         datas.add(data);
         data=new HashMap<>();
@@ -132,14 +132,25 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
         HashMap<String, Object> map = (HashMap<String, Object>) listView.getItemAtPosition(position);
         if(map.get("isNull").equals(true))
             return;
+        Intent intent=null;
+        Bundle bundle=null;
         switch (map.get("menu").toString()){
             case "menu1":
-                Intent intent=new Intent();
-                Bundle bundle=new Bundle();
+                intent=new Intent();
+                bundle=new Bundle();
                 bundle.putInt("type", Config.TIMELINE_TYPE);
                 bundle.putInt("data", user.getID());
                 intent.putExtras(bundle);
                 intent.setClass(context, OtherActivity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                break;
+            case "menu2":
+                intent=new Intent();
+                bundle=new Bundle();
+                bundle.putInt("type", Config.MESSAGE_TYPE);
+                intent.setClass(context, OtherActivity.class);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
                 break;

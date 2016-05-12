@@ -10,8 +10,13 @@ import android.support.v7.app.NotificationCompat;
 import android.text.TextUtils;
 
 import com.example.mrpan.dreamtogether.R;
+import com.example.mrpan.dreamtogether.db.ChatMsgDao;
+import com.example.mrpan.dreamtogether.db.SessionDao;
 import com.example.mrpan.dreamtogether.entity.Msg;
+import com.example.mrpan.dreamtogether.entity.Session;
 import com.example.mrpan.dreamtogether.utils.Config;
+import com.example.mrpan.dreamtogether.utils.DateUtils;
+import com.example.mrpan.dreamtogether.utils.MyLog;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.MessageListener;
@@ -30,15 +35,15 @@ public class MsgListener implements MessageListener {
 	
 	private boolean isShowNotice=false;
 	
-	//private ChatMsgDao msgDao;
-	//private SessionDao sessionDao;
+	private ChatMsgDao msgDao;
+	private SessionDao sessionDao;
 	
 	public MsgListener(MySystemService context, NotificationManager mNotificationManager){
 		this.context=context;
 		this.mNotificationManager=mNotificationManager;
 		mKeyguardManager = (KeyguardManager) context.getSystemService(context.KEYGUARD_SERVICE);    
-	//	sessionDao=new SessionDao(context);
-	//	msgDao=new ChatMsgDao(context);
+		sessionDao=new SessionDao(context);
+		msgDao=new ChatMsgDao(context);
 	}
 	
 	@Override
@@ -47,25 +52,59 @@ public class MsgListener implements MessageListener {
 			String msgBody = message.getBody();
 			if (TextUtils.isEmpty(msgBody))
 				return;
-			//接收者卍发送者卍消息类型卍消息内容卍发送时间
-			String[] msgs=msgBody.split(Config.SPLIT);
-			String to=msgs[0];//接收者,当然是自己
-			String from=msgs[1];//发送者，谁给你发的消息
-			String msgtype=msgs[2];//消息类型
-			String msgcontent=msgs[3];//消息内容
-			String msgtime=msgs[4];//消息时间
-			if(msgtype.equals(Config.MSG_TYPE_TEXT)) {//文本类型
-				Msg msg = new Msg();
-				msg.setToUser(to);
-				msg.setFromUser(from);
-				msg.setIsComing(0);
-				msg.setContent(msgcontent);
-				msg.setDate(msgtime);
-				msg.setIsReaded("0");
-				msg.setType(msgtype);
-				sendNewMsg(msg);
+
+			//iz28dbl1lqiz
+			if(message.getFrom().equals(Config.XMPP_HOSTNAME)){
+				System.out.println(message.getFrom());
+				Session session=new Session();
+				session.setFrom(Config.XMPP_HOSTNAME);
+				session.setTo("all");
+				session.setNotReadCount("");//未读消息数量
+				session.setTime(DateUtils.getCurrentTimeStr());
+				session.setType(Config.MSG_TYPE_TEXT);
+				session.setContent(message.getBody());
+
+				if(sessionDao.isContent(Config.XMPP_HOSTNAME,"all")){//判断最近联系人列表是否已存在记录
+					sessionDao.updateSession(session);
+				}else{
+					sessionDao.insertSession(session);
+				}
+			}else {
+				//接收者卍发送者卍消息类型卍消息内容卍发送时间
+				String[] msgs = msgBody.split(Config.SPLIT);
+				String to = msgs[0];//接收者,当然是自己
+				String from = msgs[1];//发送者，谁给你发的消息
+				String msgtype = msgs[2];//消息类型
+				String msgcontent = msgs[3];//消息内容
+				String msgtime = msgs[4];//消息时间
+				Session session = new Session();
+				session.setFrom(from);
+				session.setTo(to);
+				session.setNotReadCount("");//未读消息数量
+				session.setTime(msgtime);
+				if (msgtype.equals(Config.MSG_TYPE_TEXT)) {//文本类型
+					Msg msg = new Msg();
+					msg.setToUser(to);
+					msg.setFromUser(from);
+					msg.setIsComing(0);
+					msg.setContent(msgcontent);
+					msg.setDate(msgtime);
+					msg.setIsReaded("0");
+					msg.setType(msgtype);
+					msgDao.insert(msg);
+					sendNewMsg(msg);
+					session.setType(Config.MSG_TYPE_TEXT);
+					session.setContent(msgcontent);
+					if (sessionDao.isContent(from, to)) {//判断最近联系人列表是否已存在记录
+						sessionDao.updateSession(session);
+					} else {
+						sessionDao.insertSession(session);
+					}
+				}
 			}
-		showNotice(msgcontent);
+			Intent intent=new Intent(Config.ACTION_ADDFRIEND);//发送广播，通知消息界面更新
+			context.sendBroadcast(intent);
+		//showNotice(msgcontent);
 		}catch (Exception e){
 			e.printStackTrace();
 		}
