@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
@@ -83,6 +84,12 @@ public class UserDreamListFragment extends Fragment implements View.OnClickListe
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
         titleBar.showLeft("梦想",R.drawable.btn_back,this);
         dream_recent_list=(ListView)currentView.findViewById(R.id.dream_recent_list);
+        dream_recent_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(context,"click",Toast.LENGTH_LONG).show();
+            }
+        });
         dream_user=(TextView)currentView.findViewById(R.id.dream_recent_user);
         dream_count=(TextView)currentView.findViewById(R.id.dream_recent_count);
         contanct=(Button)currentView.findViewById(R.id.contanct_dreamer);

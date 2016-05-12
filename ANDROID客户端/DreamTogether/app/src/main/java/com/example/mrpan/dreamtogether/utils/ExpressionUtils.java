@@ -33,38 +33,42 @@ import com.example.mrpan.dreamtogether.gif.AnimatedImageSpan;
 public class ExpressionUtils {
 	
 	public static SpannableStringBuilder prase(Context mContext,final TextView gifTextView,String content) {
-		SpannableStringBuilder sb = new SpannableStringBuilder(content);
-		String regex = "\\[[^\\]]+\\]";
-		Pattern p = Pattern.compile(regex);
-		Matcher m = p.matcher(content);
-		while (m.find()) {
-			String tempText = m.group();
-			try {
-				String num = tempText.substring("[p/_".length(), tempText.length()- ".png]".length());
-				String gif = "g/" + num + ".gif";
-				/**
-				 * 如果open这里不抛异常说明存在gif，则显示对应的gif
-				 * 否则说明gif找不到，则显示png\\[[^\\]]+\\]
-				 * */
-				InputStream is = mContext.getAssets().open(gif);
-				sb.setSpan(new AnimatedImageSpan(new AnimatedGifDrawable(is,new AnimatedGifDrawable.UpdateListener() {
-							@Override
-							public void update() {
-								gifTextView.postInvalidate();
-							}
-						})), m.start(), m.end(),
-						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				is.close();
-			} catch (Exception e) {
-				String png = tempText.substring("[".length(),tempText.length() - "]".length());
+		SpannableStringBuilder sb =null;
+		if(content!=null){
+			sb = new SpannableStringBuilder(content);
+			String regex = "\\[[^\\]]+\\]";
+			Pattern p = Pattern.compile(regex);
+			Matcher m = p.matcher(content);
+			while (m.find()) {
+				String tempText = m.group();
 				try {
-					sb.setSpan(new ImageSpan(mContext, BitmapFactory.decodeStream(mContext.getAssets().open(png))), m.start(), m.end(),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				} catch (IOException e1) {
-					e1.printStackTrace();
+					String num = tempText.substring("[p/_".length(), tempText.length()- ".png]".length());
+					String gif = "g/" + num + ".gif";
+					/**
+					 * 如果open这里不抛异常说明存在gif，则显示对应的gif
+					 * 否则说明gif找不到，则显示png\\[[^\\]]+\\]
+					 * */
+					InputStream is = mContext.getAssets().open(gif);
+					sb.setSpan(new AnimatedImageSpan(new AnimatedGifDrawable(is,new AnimatedGifDrawable.UpdateListener() {
+								@Override
+								public void update() {
+									gifTextView.postInvalidate();
+								}
+							})), m.start(), m.end(),
+							Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					is.close();
+				} catch (Exception e) {
+					String png = tempText.substring("[".length(),tempText.length() - "]".length());
+					try {
+						sb.setSpan(new ImageSpan(mContext, BitmapFactory.decodeStream(mContext.getAssets().open(png))), m.start(), m.end(),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					e.printStackTrace();
 				}
-				e.printStackTrace();
 			}
 		}
+
 		return sb;
 	}
 	

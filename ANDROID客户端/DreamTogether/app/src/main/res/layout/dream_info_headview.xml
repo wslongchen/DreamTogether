@@ -112,7 +112,7 @@
                         android:layout_marginRight="10dip"
                         android:background="@mipmap/dream_icon_comment"
                         android:scaleType="fitXY"
-                        android:id="@+id/imageView3" />
+                        android:id="@+id/comment_img" />
                     <ImageView
                         android:id="@+id/dream_comments"
                         android:layout_width="17dp"
@@ -122,7 +122,7 @@
                         android:background="@mipmap/like"
                         android:scaleType="fitXY"
                         android:layout_alignParentTop="true"
-                        android:layout_toStartOf="@+id/imageView3" />
+                        android:layout_toStartOf="@+id/comment_img" />
                 </RelativeLayout>
             </FrameLayout>
             <FrameLayout

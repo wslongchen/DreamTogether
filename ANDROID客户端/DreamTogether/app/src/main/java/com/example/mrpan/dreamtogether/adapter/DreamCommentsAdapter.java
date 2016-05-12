@@ -15,6 +15,7 @@ import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.BaseEntity;
 import com.example.mrpan.dreamtogether.entity.Comment;
 import com.example.mrpan.dreamtogether.entity.User;
+import com.example.mrpan.dreamtogether.utils.DateUtils;
 import com.example.mrpan.dreamtogether.utils.ExpressionUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -89,7 +90,7 @@ public class DreamCommentsAdapter extends BaseAdapter {
             viewHolder.commentsView.setVisibility(View.VISIBLE);
             SpannableStringBuilder sb = ExpressionUtils.prase(context, viewHolder.commentsContent, comment.getComment_content());// 对内容做处理
             viewHolder.commentsContent.setText(sb);
-            viewHolder.commentsDate.setText(comment.getComment_time());
+            viewHolder.commentsDate.setText(DateUtils.getAutoTimeStr(comment.getComment_time()));
             viewHolder.userName.setText(user.getUser_nickname());
             if(user.getUser_img()!=null){
                 ImageLoader.getInstance().displayImage("http://"+user.getUser_img(),viewHolder.userImg);

@@ -368,8 +368,6 @@ public class XmppUtil {
 			u=new User();
 			u.setUser_login(user);
 		}
-
-
 		return u;
 	}
 

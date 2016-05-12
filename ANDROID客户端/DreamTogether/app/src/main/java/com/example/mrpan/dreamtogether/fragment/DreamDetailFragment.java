@@ -1,6 +1,7 @@
 package com.example.mrpan.dreamtogether.fragment;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -85,7 +86,7 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
 
     private HttpHelper httpHelper;
 
-    private ImageView user_img;
+    private ImageView user_img,comment_img;
 
     private NoScrollGridView gridView;
 
@@ -125,6 +126,7 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
         comment=(TextView)currentView.findViewById(R.id.comments_btn);
         inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
         comment.setOnClickListener(this);
+
         mViewPager = (ViewPager) currentView.findViewById(R.id.face_viewpager);
         mViewPager.setOnPageChangeListener(new PageChange());
         //表情下小圆点
@@ -140,13 +142,15 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
         commentsList.addHeaderView(headerview);
 
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
-        titleBar.showLeftAndRight("详情",R.drawable.btn_back,R.drawable.btn_more,this,this);
+        titleBar.showLeftAndRight("详情", R.drawable.btn_back, R.drawable.btn_more, this, this);
         dream_author=(TextView)currentView.findViewById(R.id.dream_author);
         dream_date=(TextView)currentView.findViewById(R.id.dream_date);
         dream_content=(TextView)currentView.findViewById(R.id.content);
         dream_deviceinfo=(TextView)currentView.findViewById(R.id.dream_deviceinfo);
         user_img=(ImageView)currentView.findViewById(R.id.user_img);
         gridView=(NoScrollGridView)currentView.findViewById(R.id.gridView);
+        comment_img=(ImageView)currentView.findViewById(R.id.comment_img);
+        comment_img.setOnClickListener(this);
         showData();
         User user=new User();
         user.setID(1);
@@ -187,13 +191,25 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
         }
     }
 
+    /**
+     * 弹出输入法窗口
+     */
+    private void showSoftInputView(final View v) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ((InputMethodManager) v.getContext().getSystemService(Service.INPUT_METHOD_SERVICE)).toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }, 0);
+    }
+
     void showData(){
         if(dream!=null){
             User user=dream.getPost_author();
             dream_author.setText(user.getUser_nickname());
             ImageLoader.getInstance().displayImage("http://" + user.getUser_img(), user_img);
             dream_content.setText(dream.getPost_content());
-            dream_date.setText(dream.getPost_date());
+            dream_date.setText(DateUtils.getAutoTimeStr(dream.getPost_date()));
             //System.out.println("id:"+user.getID());
             final String[] imgs;
             if(dream.getPost_imgs()!=null && !dream.getPost_imgs().equals("")) {
@@ -270,6 +286,11 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
                 }else{
                     chat_face_container.setVisibility(View.GONE);
                 }
+                break;
+            case R.id.comment_img:
+                //让输入框获取焦点
+                commentText.requestFocus();
+                showSoftInputView(commentText);
                 break;
             default:
                 hideSoftInputView();

@@ -22,6 +22,7 @@ import com.example.mrpan.dreamtogether.http.HttpHelper;
 import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
 import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
+import com.example.mrpan.dreamtogether.utils.DateUtils;
 import com.example.mrpan.dreamtogether.utils.GsonUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.AnimRefreshRecyclerView;
@@ -62,7 +63,6 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
             viewGroup.removeView(currentView);
         }
         initView();
-
 
         return currentView;
     }

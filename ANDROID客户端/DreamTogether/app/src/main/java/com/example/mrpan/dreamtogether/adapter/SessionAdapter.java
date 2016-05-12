@@ -81,7 +81,7 @@ public class SessionAdapter extends BaseAdapter {
             }else{
                 holder.iv.setImageResource(R.mipmap.ic_launcher);
             }
-        }MyLog.i("ddd",session.getFrom());
+        }
         if(session.getFrom().equals(Config.XMPP_HOSTNAME)){
 
             holder.tv_name.setText("系统消息");
@@ -91,7 +91,7 @@ public class SessionAdapter extends BaseAdapter {
         }
         //holder.tv_name.setText(session.getFrom());
         holder.tv_content.setText(ExpressionUtils.prase(mContext, holder.tv_content, session.getContent() == null ? "" : session.getContent()));
-        holder.tv_time.setText(DateUtils.getCustomStr(DateUtils.StrToDate(session.getTime()),"HH:mm"));
+        holder.tv_time.setText(DateUtils.getAutoTimeStr(session.getTime()));
         if(!TextUtils.isEmpty(session.getNotReadCount())&&Integer.parseInt(session.getNotReadCount())>0){
             holder.tv_newmsg.setVisibility(View.VISIBLE);
             holder.tv_newmsg.setText(session.getNotReadCount());
