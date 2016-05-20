@@ -67,6 +67,12 @@ switch ($action) {
 		}
 		//$controller=new deleteController($dao,$_GET["id"]);
 		break;
+	case "delete":
+		if($_GET["type"]==="dream"){
+			$controller = new DreamController($dao);
+			$controller ->deleteDream($_GET["id"]);
+		}
+		break;
 	default :
 		//$controller=new listController($dao);
 		break;

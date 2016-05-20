@@ -22,6 +22,14 @@ class DreamModel {
 		if(!empty($dream) && $this -> dao -> query($sql)){
 			$json_out["ret"]=0;
 			$json_out["post"]="post successed";
+			$id=mysql_insert_id();
+			if(!empty($dream[metas])){
+				$metas=json_decode($dream[metas],true); 
+				foreach ($metas as $meta){
+					$this->postMeta($meta); 
+    				} 
+				
+			}
 			return $json_out;
 		}
 		else{
@@ -162,8 +170,17 @@ class DreamModel {
 	}
 
 	function deleteDream($id) {//删除一条梦想，$id是该条梦想的id
-		$sql = "DELETE FROM `dreamdb`.`dream_posts` WHERE `dream_post`.`ID`=" . $id;
-		$this -> dao -> fetch($sql);
+		$sql = "DELETE FROM `dreamdb`.`dream_posts` WHERE `dream_posts`.`ID`='" . $id."'";	
+if($this -> dao -> query($sql))
+			{
+				$json_out["ret"]=0;
+			$json_out["post"]="post successed";
+			return $json_out;
+			}else{
+				$json_out["ret"]=1;
+			$json_out["post"]="post failed!";
+			return $json_out;
+			}
 	}
 
 	function updateDream($dream, $id) {//更新一条梦想，$id是该梦想的id

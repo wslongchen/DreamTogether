@@ -60,8 +60,9 @@ class DreamController{
 		echo json_encode($json_out);
 	}
 	
-	function deleteDream($name){
-		//$this->model->deleteDream($id);
+	function deleteDream($id){
+		$json_out=$this->model->deleteDream($id);
+		echo json_encode($json_out);
 	}
 	
 	function output(){
