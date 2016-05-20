@@ -218,6 +218,7 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
                         int ret=0;
                         try {
                             JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF", ""));
+                            MyLog.i(TAG,msg.obj.toString().replace("\uFEFF", ""));
                             ret = jsonObject.getInt("ret");
                             if (ret == Config.RESULT_RET_SUCCESS) {
                                 Toast.makeText(context,"注册成功！",Toast.LENGTH_LONG).show();

@@ -236,13 +236,13 @@ public class ChatFragment extends Fragment implements View.OnClickListener,Dropd
         session.setContent(content);
         session.setTime(DateUtils.getCurrentTimeStr());
         session.setType(type);
-//        if(sessionDao.isContent(YOU, I)){
-//            sessionDao.updateSession(session);
-//        }else{
-//            sessionDao.insertSession(session);
-//        }
-//        Intent intent=new Intent(Config.ACTION_ADDFRIEND);//发送广播，通知消息界面更新
-//        context.sendBroadcast(intent);
+        if(sessionDao.isContent(YOU, I)){
+            sessionDao.updateSession(session);
+        }else{
+            sessionDao.insertSession(session);
+        }
+        Intent intent=new Intent(Config.ACTION_ADDFRIEND);//发送广播，通知消息界面更新
+        context.sendBroadcast(intent);
     }
 
     @Override
@@ -348,7 +348,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener,Dropd
      * 执行发送消息 文本类型
      * @param content
      */
-    void sendMsgText(String content){
+    void sendMsgText(final String content){
         Msg msg=getChatInfoTo(content, Config.MSG_TYPE_TEXT);
         msg.setMsgId(msgDao.insert(msg));
         listMsg.add(msg);
@@ -362,6 +362,15 @@ public class ChatFragment extends Fragment implements View.OnClickListener,Dropd
             public void run() {
                 try {
                     XmppUtil.sendMessage(MyApplication.xmppConnection, message, YOU);
+//                    Session session=new Session();
+//                    session.setFrom(I);
+//                    session.setTo(YOU);
+//                    session.setTime(DateUtils.getCurrentTimeStr());
+//                    session.setContent(content);
+//                    session.setType(Config.MSG_TYPE_TEXT);
+//                    session.setNotReadCount("");
+//                    if(!sessionDao.isContent(I,YOU))
+//                        sessionDao.insertSession(session);
                 } catch (XMPPException e) {
                     e.printStackTrace();
                     Looper.prepare();
@@ -386,6 +395,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener,Dropd
             @Override
             public void run() {
                 if (audioPath != null) {
+
 //                    try {
 //                        XmppUtil.sendMessageWithParams(MyApplication.xmppConnection, FileUtils.getFileName(audioPath),
 //                                new String[]{"imgData"}, new Object[]{BitmapUtils.getBase64StringFromFile(audioPath)},YOU);
@@ -395,6 +405,15 @@ public class ChatFragment extends Fragment implements View.OnClickListener,Dropd
 //                    }
                     try {
                         XmppUtil.sendMessage(MyApplication.xmppConnection, message, YOU);
+//                        Session session=new Session();
+//                        session.setFrom(I);
+//                        session.setTo(YOU);
+//                        session.setTime(DateUtils.getCurrentTimeStr());
+//                        session.setContent(audioPath);
+//                        session.setType(Config.MSG_TYPE_VOICE);
+//                        session.setNotReadCount("");
+//                        if(!sessionDao.isContent(I,YOU))
+//                            sessionDao.insertSession(session);
                     } catch (XMPPException e) {
                         e.printStackTrace();
                         Looper.prepare();

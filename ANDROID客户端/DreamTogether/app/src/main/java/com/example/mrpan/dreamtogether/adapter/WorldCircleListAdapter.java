@@ -1,7 +1,9 @@
 package com.example.mrpan.dreamtogether.adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -14,12 +16,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mrpan.dreamtogether.MainActivity;
 import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.entity.User;
+import com.example.mrpan.dreamtogether.fragment.DreamerLoginFragment;
+import com.example.mrpan.dreamtogether.http.HttpHelper;
+import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
 import com.example.mrpan.dreamtogether.utils.Config;
+import com.example.mrpan.dreamtogether.utils.MyLog;
+import com.example.mrpan.dreamtogether.utils.MySharePreference;
 import com.example.mrpan.dreamtogether.view.NoScrollGridView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +46,7 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
 
     private MyItemClickListener mItemClickListener;
     private MyItemLongClickListener mItemLongClickListener;
+    private RemoveItemListener removeItemListener;
 
     public WorldCircleListAdapter(Context context, List<Dream> dreams)
     {
@@ -49,6 +61,12 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.items, viewGroup, false);
         return new ViewHolder(v,mItemClickListener,mItemLongClickListener);
     }
+
+
+    public void setRemoveListener(RemoveItemListener removeItemListener) {
+        this.removeItemListener = removeItemListener;
+    }
+
 
     /**
      * 设置Item点击监听、、、、
@@ -66,10 +84,10 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
     }
 
     @Override
-    public void onBindViewHolder( ViewHolder viewHolder, int i )
+    public void onBindViewHolder( ViewHolder viewHolder, final int i )
     {
         // 给ViewHolder设置元素
-        Dream p = dreams.get(i);
+        final Dream p = dreams.get(i);
         viewHolder.dream_content.setText(p.getPost_content());
         final User u=p.getPost_author();
         viewHolder.dream_author.setText(u.getUser_nickname());
@@ -79,6 +97,64 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
         else{
 
         }
+        String username= new MySharePreference(mContext).getString("username","");
+        if(u.getUser_login().equals(username)){
+            viewHolder.deleteImage.setVisibility(View.VISIBLE);
+        }else{
+            viewHolder.deleteImage.setVisibility(View.GONE);
+        }
+        final int id=p.getID();
+        viewHolder.deleteImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeItemListener.removeItem(v, i);
+                //Toast.makeText(mContext, "delete", Toast.LENGTH_SHORT).show();
+//                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+//                builder.setMessage("是否删除?");
+//                builder.setTitle("提示");
+//                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        HttpHelper.getInstance().asyHttpGetRequest(Config.DeleteDreamByID(id), new HttpResponseCallBack() {
+//                            @Override
+//                            public void onSuccess(String url, String result) {
+//                                int ret = 0;
+//                                notifyDataSetChanged();
+//                                try {
+//                                    JSONObject jsonObject = new JSONObject(result.toString().replace("\uFEFF", ""));
+//                                    ret = jsonObject.getInt("ret");
+//                                    if (ret == Config.RESULT_RET_SUCCESS) {
+//                                        //Toast.makeText(mContext,"删除成功！",Toast.LENGTH_LONG).show();
+//                                        //Intent intent = new Intent(context, WorldCircleFragment.class);
+//                                        //startActivityForResult(intent, Config.RESULT_RET_SUCCESS);
+//
+//                                        // Toast.makeText(context, "Publish successed!", Toast.LENGTH_LONG).show();
+//                                    } else {
+//                                        //Toast.makeText(mContext, "删除失败！", Toast.LENGTH_LONG).show();
+//                                    }
+//                                } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onFailure(int httpResponseCode, int errCode, String err) {
+//
+//                            }
+//                        });
+//                    }
+//                });
+//
+//                builder.setNegativeButton("取消",
+//                        new android.content.DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.dismiss();
+//                            }
+//                        });
+//
+//                builder.create().show();
+
+            }
+        });
 //        if(p.getPost_comment_count()==null || p.getPost_comment_count().equals("")||p.getPost_comment_count().equals("0")){
 //            viewHolder.dream_comments_layout.setVisibility(View.GONE);
 //        }
@@ -167,6 +243,8 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
 
         public TextView dream_date;
 
+        public ImageView deleteImage;
+
         //public TextView dream_comments_names;
 
         //public RelativeLayout dream_comments_layout;
@@ -184,6 +262,7 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
             //dream_comments_names = (TextView) v.findViewById(R.id.dream_comments_names);
             dream_img_gridView=(NoScrollGridView)v.findViewById(R.id.dream_img_gridView);
             author_img = (ImageView) v.findViewById(R.id.dream_author_img);
+            deleteImage=(ImageView)v.findViewById(R.id.deleteImage);
             //dream_comments_layout=(RelativeLayout)v.findViewById(R.id.dream_comments_layout);
             this.mListener = listener;
             this.mLongClickListener = longClickListener;
@@ -213,5 +292,9 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
 
     public interface MyItemLongClickListener {
         public void onItemLongClick(View view,int postion);
+    }
+
+    public interface RemoveItemListener{
+        public void removeItem(View view,int position);
     }
 }

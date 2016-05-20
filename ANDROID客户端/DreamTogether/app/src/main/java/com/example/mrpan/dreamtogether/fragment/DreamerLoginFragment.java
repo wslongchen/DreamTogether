@@ -94,8 +94,8 @@ public class DreamerLoginFragment extends Fragment implements View.OnClickListen
         newUserRegister=(RelativeLayout)currentView.findViewById(R.id.newUserRegister);
         newUserRegister.setOnClickListener(this);
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
-        titleBar.setBgColor(R.color.dreamBlack);
         titleBar.showCenterTitle("个人中心");
+//        titleBar.setBgColor(R.color.dreamBlack);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.example.mrpan.dreamtogether.fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +31,9 @@ import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.AnimRefreshRecy
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.decoration.DividerItemDecoration;
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.manage.AnimRefreshLinearLayoutManager;
 import com.example.mrpan.dreamtogether.view.TitleBar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -154,6 +159,56 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                   getActivity().overridePendingTransition(R.anim.top_in, R.anim.top_out);
                 }
             });
+            worldCircleListAdapter.setRemoveListener(new WorldCircleListAdapter.RemoveItemListener() {
+                @Override
+                public void removeItem(View view, int position) {
+                    final int id=dreams.getPost().get(position).getID();
+                                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("是否删除?");
+                builder.setTitle("提示");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        HttpHelper.getInstance().asyHttpGetRequest(Config.DeleteDreamByID(id), new HttpResponseCallBack() {
+                            @Override
+                            public void onSuccess(String url, String result) {
+                                int ret = 0;
+                                worldCircleListAdapter.notifyDataSetChanged();
+                                recyclerView.getAdapter().notifyDataSetChanged();
+                                try {
+                                    JSONObject jsonObject = new JSONObject(result.toString().replace("\uFEFF", ""));
+                                    ret = jsonObject.getInt("ret");
+                                    if (ret == Config.RESULT_RET_SUCCESS) {
+                                        //Toast.makeText(mContext,"删除成功！",Toast.LENGTH_LONG).show();
+                                        //Intent intent = new Intent(context, WorldCircleFragment.class);
+                                        //startActivityForResult(intent, Config.RESULT_RET_SUCCESS);
+
+                                        // Toast.makeText(context, "Publish successed!", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        //Toast.makeText(mContext, "删除失败！", Toast.LENGTH_LONG).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(int httpResponseCode, int errCode, String err) {
+
+                            }
+                        });
+                    }
+                });
+
+                builder.setNegativeButton("取消",
+                        new android.content.DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                builder.create().show();
+                }
+            });
             recyclerView.setAdapter(worldCircleListAdapter);
             recyclerView.getAdapter().notifyDataSetChanged();
         }
@@ -161,6 +216,7 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
 
 
     Handler handler=new Handler(){
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.arg1) {

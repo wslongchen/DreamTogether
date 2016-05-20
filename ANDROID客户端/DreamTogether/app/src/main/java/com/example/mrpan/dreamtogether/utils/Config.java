@@ -25,7 +25,7 @@ public class Config {
     public static String DIR_IMAGE_PATH = Environment.getExternalStorageDirectory()
             .toString() + "/Dream/Image/";
     public static String DIR_DATABASE_PATH=Environment.getExternalStorageDirectory()
-            .toString() +"Dream/DataBase/";
+            .toString() +"/Dream/DataBase/";
     public final static String SAVE_SOUND_PATH = Environment.getExternalStorageDirectory()
             .toString() + "/Dream/Sounds/";
 
@@ -52,6 +52,7 @@ public class Config {
     public static final String CREATE_USER="http://dream.mrpann.com/index.php?action=post&type=user";
     public static final String CREATE_DREAM_WITH_IMG="http://dream.mrpann.com/allpost.php?action=postDreamImg";
     public static final String CREATE_COMMENT="http://dream.mrpann.com/index.php?action=comment&type=postComment";
+    public static final String DELETE_DREAM="http://dream.mrpann.com/index.php?action=delete&type=dream&id=";
     private static final String LOGIN_Str="http://dream.mrpann.com/index.php?action=list&type=loginUser&name=";
     private static final String LOGIN_Str2="&password=";
     private static final String REQUEST_ALL_AUTHOR_DREAM="http://dream.mrpann.com/index.php?action=list&type=getDreamByAuthor&id=";
@@ -62,7 +63,9 @@ public class Config {
     public static String GetCommentByID(int id){
         return REQUEST_COMMENT+id;
     }
-
+    public static String DeleteDreamByID(int id){
+        return DELETE_DREAM+id;
+    }
 
     public static String GetUserByID(int id){
         return REQUEST_USE_WITH_ID+id;

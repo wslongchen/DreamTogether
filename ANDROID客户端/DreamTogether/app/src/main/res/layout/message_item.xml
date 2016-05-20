@@ -5,7 +5,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp" >
+        android:layout_height="wrap_content" >
 
         <com.example.mrpan.dreamtogether.view.CircleImageView
             android:id="@+id/user_head"
@@ -26,6 +26,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:singleLine="true"
+            android:text="2012-12-12"
             android:textColor="#999999"
             android:textSize="12sp" />
 
@@ -33,17 +34,15 @@
             android:id="@+id/tv_newmsg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="10dp"
             android:background="@drawable/skin_tips_newmessage"
             android:gravity="center"
+            android:layout_marginTop="5dp"
             android:text="9"
-            android:layout_below="@id/tv_time"
             android:visibility="visible"
             android:textColor="@color/dreamWhite"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:layout_below="@+id/tv_time"
+            android:layout_alignEnd="@+id/tv_time" />
 
         <LinearLayout
             android:id="@+id/ll_news"
@@ -84,13 +83,13 @@
             <TextView
                 android:id="@+id/content"
                 android:layout_width="wrap_content"
-                android:minHeight="56dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:singleLine="true"
+                android:text="ss"
                 android:textColor="@color/dreamDarkBlack2"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
     </RelativeLayout>

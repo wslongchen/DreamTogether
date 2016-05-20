@@ -45,6 +45,15 @@ card_view:cardCornerRadius="5dp">
             android:layout_below="@+id/dream_author"
             android:layout_alignStart="@+id/dream_author" />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/deleteImage"
+            android:layout_above="@+id/dreamer_sign"
+            android:src="@drawable/flz"
+            android:visibility="gone"
+            android:layout_alignParentEnd="true" />
+
     </RelativeLayout>
 
 

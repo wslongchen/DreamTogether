@@ -1,6 +1,7 @@
 package com.example.mrpan.dreamtogether.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -223,16 +224,11 @@ public class UserDreamListFragment extends Fragment implements View.OnClickListe
                     transaction=getFragmentManager().beginTransaction();
                     transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
                     ((ChatFragment) OtherActivity.fragmentHashMap.get(ChatFragment.TAG)).setToUser(user);
-                    transaction.add(R.id.other_layout, OtherActivity.fragmentHashMap.get(ChatFragment.TAG));
+                    transaction.replace(R.id.other_layout, OtherActivity.fragmentHashMap.get(ChatFragment.TAG));
                     transaction.addToBackStack(null);
                     transaction.commit();
                 }else{
                     Toast.makeText(context,"请先登录",Toast.LENGTH_SHORT).show();
-                    transaction=getFragmentManager().beginTransaction();
-                    transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
-                    transaction.add(R.id.frame_content, MainActivity.fragmentHashMap.get(DreamerLoginFragment.TAG));
-                    transaction.addToBackStack(null);
-                    transaction.commit();
                 }
                 break;
             default:

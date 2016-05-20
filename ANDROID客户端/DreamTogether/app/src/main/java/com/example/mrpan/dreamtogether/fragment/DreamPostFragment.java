@@ -321,6 +321,7 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
         path = file.getPath();
         Uri imageUri = Uri.fromFile(file);
         openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        openCameraIntent.putExtra(path, file);
         startActivityForResult(openCameraIntent, Config.TAKE_PICTURE);
     }
 
@@ -349,6 +350,7 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                 if (BitmapUtils.drr.size() < 9 && resultCode == -1) {
                     BitmapUtils.drr.add(path);
                 }
+
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -448,6 +450,33 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
         }).start();
     }
 
+    public void loading2(){
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    for (int i = 0; i < BitmapUtils.drr.size(); i++) {
+                        String path = BitmapUtils.drr.get(BitmapUtils.max);
+                        Bitmap bm = BitmapUtils.revitionImageSize(path);
+                        System.out.println(path);
+                        if (!BitmapUtils.bmp.contains(bm)) {
+                            BitmapUtils.bmp.add(bm);
+                            String newStr = path.substring(
+                                    path.lastIndexOf("/") + 1,
+                                    path.lastIndexOf("."));
+                            FileUtils.saveBitmap(bm, newStr, Config.DIR_IMAGE_PATH);
+                        }
+                    }
+                    Message message = new Message();
+                    message.what = 1;
+                    handler.sendMessage(message);
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     public void backgroundAlpha(float bgAlpha)
     {
         WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
@@ -465,7 +494,7 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                             if(msg.obj!=null){
                                 int ret=0;
                                 try {
-                                    JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF\uFEFF\uFEFF", ""));
+                                    JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF", ""));
                                     ret = jsonObject.getInt("ret");
                                     if (ret == Config.RESULT_RET_SUCCESS) {
                                         Toast.makeText(context,"发表成功！",Toast.LENGTH_LONG).show();
@@ -486,7 +515,7 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                             if(msg.obj!=null){
                                 int ret=0;
                                 try {
-                                    JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF\uFEFF\uFEFF", ""));
+                                    JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF", ""));
                                     ret = jsonObject.getInt("ret");
                                     if (ret == Config.RESULT_RET_SUCCESS) {
                                         Toast.makeText(context,"发表成功！",Toast.LENGTH_LONG).show();
