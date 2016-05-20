@@ -31,6 +31,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -371,5 +372,32 @@ public class BitmapUtils {
 		drawable.draw(canvas);
 		return bitmap;
 
+	}
+
+	public static Bitmap getBitmapFromBase64String(String imageString)
+	{
+
+		if (imageString == null)
+			return null;
+		byte[] data = Base64.decode(imageString, Base64.DEFAULT);
+		return BitmapFactory.decodeByteArray(data, 0, data.length);
+	}
+
+	public static String getBase64StringFromFile(String imageFile)
+	{
+		InputStream in = null;
+		byte[] data = null;
+		try
+		{
+			in = new FileInputStream(imageFile);
+			data = new byte[in.available()];
+			in.read(data);
+			in.close();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return Base64.encodeToString(data, Base64.DEFAULT);
 	}
 }

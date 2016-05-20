@@ -70,19 +70,15 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
     void initView(){
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
         titleBar.setBgColor(getResources().getColor(R.color.dreamBlack));
-        titleBar.showRight("梦想圈",R.mipmap.xiuxiu,this);
+        titleBar.showRight("梦想圈", R.mipmap.xiuxiu, this);
         context=getActivity();
+        recyclerView=(AnimRefreshRecyclerView)currentView.findViewById(R.id.dream_list);
         //recyclerView=(AnimRefreshRecyclerView)currentView.findViewById(R.id.dream_list);
         //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         // 设置ItemAnimator
         //recyclerView.setItemAnimator(new DefaultItemAnimator());
         // 设置固定大小
         //recyclerView.setHasFixedSize(true);
-        httpHelper=HttpHelper.getInstance();
-        httpHelper.asyHttpGetRequest(Config.REQUEST_ALL_DREAM, new DreamHttpResponseCallBack(Config.ALL_DREAM));
-
-        recyclerView=(AnimRefreshRecyclerView)currentView.findViewById(R.id.dream_list);
-
         //headerView = LayoutInflater.from(getActivity()).inflate(R.layout.recyle_header_view, null);
         // 脚部
         //footerView = LayoutInflater.from(getActivity()).inflate(R.layout.recyle_footer_view, null);
@@ -134,6 +130,8 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
 
         recyclerView.setRefresh(true);
         isFresh=true;
+        httpHelper=HttpHelper.getInstance();
+        httpHelper.asyHttpGetRequest(Config.REQUEST_ALL_DREAM, new DreamHttpResponseCallBack(Config.ALL_DREAM));
 
 
     }
@@ -187,9 +185,10 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                                 if(isFresh) {
                                     if(recyclerView!=null) {
                                         refreshComplate();
+                                        recyclerView.refreshComplate();
                                     }
                                     // 刷新完成后调用，必须在UI线程中
-                                    recyclerView.refreshComplate();
+                                   // recyclerView.refreshComplate();
                                 }
                                 showData(dreams);
                                 break;
@@ -281,7 +280,10 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
     }
 
     public void refreshComplate() {
-        recyclerView.getAdapter().notifyDataSetChanged();
+        if(recyclerView!=null){
+            recyclerView.getAdapter().notifyDataSetChanged();
+        }
+
     }
 
     public void loadMoreComplate() {

@@ -39,6 +39,7 @@
             android:layout_height="44.0dip"
             android:background="#00ffffff"
             android:hint="用户名"
+            android:singleLine="true"
             android:maxLength="11"
             android:maxLines="1"
             android:paddingLeft="12.0dip"

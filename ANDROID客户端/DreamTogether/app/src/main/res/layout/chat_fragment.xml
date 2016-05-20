@@ -54,6 +54,13 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/image_add"
                 android:src="@drawable/btn_chat_emo_selector" />
+            <ImageView
+                android:id="@+id/image_voice"
+                android:layout_width="35dip"
+                android:layout_height="35dip"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/image_face"
+                android:src="@mipmap/voicefrom0" />
 
             <EditText
                 android:id="@+id/input_sms"
@@ -62,12 +69,27 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="5dip"
                 android:layout_toLeftOf="@+id/send_sms"
-                android:layout_toRightOf="@id/image_face"
+                android:layout_toRightOf="@id/image_voice"
                 android:background="@drawable/caht_input_bg"
                 android:maxLength="240"
                 android:padding="2dip"
                 android:singleLine="true"
                 android:textSize="14sp" />
+            <com.example.mrpan.dreamtogether.view.RecordButton
+                android:id="@+id/recordBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/bg_bombbox"
+                android:minHeight="35dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dip"
+                android:layout_toLeftOf="@+id/send_sms"
+                android:layout_toRightOf="@id/image_voice"
+                android:text="按住录音"
+                android:padding="2dip"
+                android:textColor="#fff"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/send_sms"

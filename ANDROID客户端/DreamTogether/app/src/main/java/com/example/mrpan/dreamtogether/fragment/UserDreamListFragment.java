@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mrpan.dreamtogether.MainActivity;
 import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.Dream;
@@ -33,6 +34,7 @@ import com.example.mrpan.dreamtogether.utils.GsonUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.adapter.StatusExpandAdapter;
 import com.example.mrpan.dreamtogether.adapter.TimeLineAdapter;
+import com.example.mrpan.dreamtogether.utils.MySharePreference;
 import com.example.mrpan.dreamtogether.view.TitleBar;
 
 import java.util.ArrayList;
@@ -215,12 +217,23 @@ public class UserDreamListFragment extends Fragment implements View.OnClickListe
                 getActivity().finish();
                 break;
             case R.id.contanct_dreamer:
-                FragmentTransaction transaction=getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
-                ((ChatFragment) OtherActivity.fragmentHashMap.get(ChatFragment.TAG)).setToUser(user);
-                transaction.add(R.id.other_layout, OtherActivity.fragmentHashMap.get(ChatFragment.TAG));
-                transaction.addToBackStack(null);
-                transaction.commit();
+                FragmentTransaction transaction;
+                String name=new MySharePreference(context).getString("username","");
+                if(!name.equals("")){
+                    transaction=getFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
+                    ((ChatFragment) OtherActivity.fragmentHashMap.get(ChatFragment.TAG)).setToUser(user);
+                    transaction.add(R.id.other_layout, OtherActivity.fragmentHashMap.get(ChatFragment.TAG));
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }else{
+                    Toast.makeText(context,"请先登录",Toast.LENGTH_SHORT).show();
+                    transaction=getFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
+                    transaction.add(R.id.frame_content, MainActivity.fragmentHashMap.get(DreamerLoginFragment.TAG));
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
                 break;
             default:
                 break;

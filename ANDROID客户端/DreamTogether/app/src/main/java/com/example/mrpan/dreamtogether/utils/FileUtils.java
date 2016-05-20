@@ -85,4 +85,13 @@ public class FileUtils {
 			e.printStackTrace();
 		}
 	}
+
+	public static String getFileName(String url) {
+		String fileName = "";
+		if (url != null) {
+			fileName = url.substring(url.lastIndexOf("/") + 1);
+		}
+		return fileName;
+	}
+
 }

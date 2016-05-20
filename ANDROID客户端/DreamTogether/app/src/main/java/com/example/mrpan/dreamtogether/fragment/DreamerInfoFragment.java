@@ -163,6 +163,8 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
 
                         MySharePreference mySharePreference = new MySharePreference(context);
                         mySharePreference.commitBoolean("isLogin", false);
+                        mySharePreference.commitString("username","");
+                        mySharePreference.commitString("userpassword","");
                         android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.frame_content, MainActivity.fragmentHashMap.get(DreamerLoginFragment.TAG));
                         //transaction.addToBackStack(null);

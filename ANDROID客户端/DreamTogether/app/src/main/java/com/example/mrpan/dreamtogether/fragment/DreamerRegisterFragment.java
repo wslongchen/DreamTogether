@@ -2,6 +2,7 @@ package com.example.mrpan.dreamtogether.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,10 +27,13 @@ import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DateUtils;
 import com.example.mrpan.dreamtogether.utils.DialogUtils;
 import com.example.mrpan.dreamtogether.utils.Md5Utils;
+import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.utils.OtherUtils;
 import com.example.mrpan.dreamtogether.utils.RegexUtils;
 import com.example.mrpan.dreamtogether.view.DeletableEditText;
 import com.example.mrpan.dreamtogether.view.TitleBar;
+import com.example.mrpan.dreamtogether.xmpp.MySystemService;
+import com.example.mrpan.dreamtogether.xmpp.XmppConnectionManager;
 import com.example.mrpan.dreamtogether.xmpp.XmppUtil;
 
 import org.jivesoftware.smack.XMPPConnection;
@@ -76,9 +80,11 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
     }
 
     private void init(){
+        Intent intent = new Intent(context, MySystemService.class);
+        context.startService(intent);
         transaction=getFragmentManager().beginTransaction();
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
-        titleBar.showLeft("新用户注册",R.drawable.btn_backed,this);
+        titleBar.showLeft("新用户注册",R.drawable.btn_back,this);
         name=(DeletableEditText)currentView.findViewById(R.id.register_loginName);
         nickname=(DeletableEditText)currentView.findViewById(R.id.register_nickname);
         password=(DeletableEditText)currentView.findViewById(R.id.register_password);
@@ -155,14 +161,18 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
                     dialog = DialogUtils.getLoadDialog(getActivity());
                     dialog.show();
                     if (user != null) {
-                        XMPPConnection xmppConnection= MyApplication.xmppConnection;
-                        if(xmppConnection!=null){
-                            if(XmppUtil.register(xmppConnection,user.getUser_login(),user.getUser_pass())==1){
-                                try {
-                                    XmppUtil.updateUserVCard(xmppConnection,user);
-                                } catch (XMPPException e) {
-                                    e.printStackTrace();
-                                }
+                       // XMPPConnection xmppConnection= MyApplication.xmppConnection;
+                        //if(xmppConnection!=null){
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                            if(XmppConnectionManager.getInstance().registerUser(user.getUser_login(), password.getText().toString())==1){
+//                                try {
+//                                    //MyApplication.xmppConnection.login(user.getUser_login(),password.getText().toString());
+//                                   // XmppUtil.updateUserVCard(MyApplication.xmppConnection,user);
+//                                } catch (XMPPException e) {
+//                                    e.printStackTrace();
+//                                }
                                 httpHelper.asyHttpPostRequest(Config.CREATE_USER, OtherUtils.UserToNameValuePair(user), new HttpResponseCallBack() {
                                     @Override
                                     public void onSuccess(String url, String result) {
@@ -183,9 +193,12 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
                                     }
                                 });
                             }
+                            }
+                        }).start();
                         }
 
-                    }
+
+                    //}
                 }
                 break;
             case R.id.titleBarLeftImage:

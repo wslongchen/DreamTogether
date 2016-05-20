@@ -52,7 +52,6 @@ public class MsgListener implements MessageListener {
 			String msgBody = message.getBody();
 			if (TextUtils.isEmpty(msgBody))
 				return;
-
 			//iz28dbl1lqiz
 			if(message.getFrom().equals(Config.XMPP_HOSTNAME)){
 				System.out.println(message.getFrom());
@@ -82,6 +81,7 @@ public class MsgListener implements MessageListener {
 				session.setTo(to);
 				session.setNotReadCount("");//未读消息数量
 				session.setTime(msgtime);
+				MyLog.i("DDDD",msgcontent+",type"+msgtype);
 				if (msgtype.equals(Config.MSG_TYPE_TEXT)) {//文本类型
 					Msg msg = new Msg();
 					msg.setToUser(to);
@@ -94,6 +94,25 @@ public class MsgListener implements MessageListener {
 					msgDao.insert(msg);
 					sendNewMsg(msg);
 					session.setType(Config.MSG_TYPE_TEXT);
+					session.setContent(msgcontent);
+					if (sessionDao.isContent(from, to)) {//判断最近联系人列表是否已存在记录
+						sessionDao.updateSession(session);
+					} else {
+						sessionDao.insertSession(session);
+					}
+				}
+				if (msgtype.equals(Config.MSG_TYPE_VOICE)) {//语音类型
+					Msg msg = new Msg();
+					msg.setToUser(to);
+					msg.setFromUser(from);
+					msg.setIsComing(0);
+					msg.setContent(msgcontent);
+					msg.setDate(msgtime);
+					msg.setIsReaded("0");
+					msg.setType(msgtype);
+					msgDao.insert(msg);
+					sendNewMsg(msg);
+					session.setType(Config.MSG_TYPE_VOICE);
 					session.setContent(msgcontent);
 					if (sessionDao.isContent(from, to)) {//判断最近联系人列表是否已存在记录
 						sessionDao.updateSession(session);

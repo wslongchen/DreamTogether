@@ -121,9 +121,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         initPermission();
 
         initView();
-        initReceiver();
-        Intent intent = new Intent(this, MySystemService.class);
-        startService(intent);
+
+        boolean isLogin=new MySharePreference(this).getBoolean("isLogin",false);
+        if(isLogin){
+            initReceiver();
+            Intent intent = new Intent(this, MySystemService.class);
+            startService(intent);
+        }
     }
     private BroadcastReceiver receiver;
     private void initReceiver() {
@@ -159,7 +163,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             //申请WRITE_EXTERNAL_STORAGE权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.RECORD_AUDIO},
                     Config.REQUEST_CODE_PERMISSIONS);
         }
     }

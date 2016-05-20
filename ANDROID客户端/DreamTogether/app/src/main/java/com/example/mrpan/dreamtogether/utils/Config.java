@@ -26,6 +26,8 @@ public class Config {
             .toString() + "/Dream/Image/";
     public static String DIR_DATABASE_PATH=Environment.getExternalStorageDirectory()
             .toString() +"Dream/DataBase/";
+    public final static String SAVE_SOUND_PATH = Environment.getExternalStorageDirectory()
+            .toString() + "/Dream/Sounds/";
 
     public static final int TAKE_PICTURE = 0x000000;
 
@@ -131,5 +133,8 @@ public class Config {
     public static final String MSG_TYPE_VOICE="msg_type_voice";//语音
     public static final String MSG_TYPE_LOCATION="msg_type_location";//位置
     public static final String SPLIT="卍";
+
+
+
 
 }

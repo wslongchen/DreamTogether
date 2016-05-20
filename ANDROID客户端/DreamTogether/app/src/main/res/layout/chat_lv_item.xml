@@ -43,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/chatfrom_bg"
                 android:gravity="center_vertical"
+                android:includeFontPadding="false"
                 android:textColor="@color/dreamBlack"
                 android:textSize="14sp" />
 
@@ -74,7 +75,33 @@
                 android:src="@mipmap/ic_launcher"
                 android:text="河南省郑州市金水区南阳路"
                 android:visibility="gone" />
-
+            <ImageView
+                android:id="@+id/chatfrom_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/chatfrom_bg"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:src="@mipmap/voicefrom0"
+                android:visibility="gone" />
+            <TextView
+                android:id="@+id/chatfrom_soundView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:maxWidth="30dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="10dp"
+                android:text="1&quot;"
+                android:layout_toLeftOf="@+id/chatfrom_voice"
+                android:textColor="#999999"
+                android:visibility="gone" />
             <ProgressBar
                 android:id="@+id/progress_load"
                 android:layout_width="15dp"
@@ -107,7 +134,7 @@
                 android:background="@drawable/chatto_bg"
                 android:gravity="center_vertical"
                 android:textColor="@color/dreamWhite"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <ImageView
                 android:id="@+id/chatto_img"
@@ -136,6 +163,34 @@
                 android:paddingTop="5dp"
                 android:scaleType="fitXY"
                 android:src="@mipmap/ic_launcher"
+                android:visibility="gone" />
+            <ImageView
+                android:id="@+id/chatto_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/chatto_bg"
+                android:layout_toLeftOf="@+id/chatto_icon"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:src="@mipmap/voiceto0"
+                android:visibility="gone" />
+            <TextView
+                android:id="@+id/chatto_soundView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:maxWidth="30dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="10dp"
+                android:text="1&quot;"
+                android:layout_toLeftOf="@+id/chatto_voice"
+                android:textColor="#999999"
                 android:visibility="gone" />
         </RelativeLayout>
     </RelativeLayout>

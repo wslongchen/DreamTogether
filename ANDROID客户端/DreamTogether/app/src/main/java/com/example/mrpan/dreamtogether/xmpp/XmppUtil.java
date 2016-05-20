@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mrpan.dreamtogether.MyApplication;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.Session;
 import com.example.mrpan.dreamtogether.entity.User;
@@ -26,6 +27,7 @@ import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.filter.PacketIDFilter;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Registration;
@@ -34,8 +36,13 @@ import org.jivesoftware.smackx.Form;
 import org.jivesoftware.smackx.ReportedData;
 import org.jivesoftware.smackx.packet.VCard;
 import org.jivesoftware.smackx.search.UserSearchManager;
+import org.jivesoftware.smackx.workgroup.ext.history.ChatMetadata;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -52,32 +59,33 @@ public class XmppUtil {
      *            注册密码 
      * @return 1、注册成功 0、服务器没有返回结果2、这个账号已经存在3、注册失败 
      */  
-    public static int register(XMPPConnection mXMPPConnection,String account, String password) {
+    public static int register(String account, String password) {
+		XMPPConnection xmppConnection= MyApplication.xmppConnection;
         Registration reg = new Registration();
         reg.setType(IQ.Type.SET);
-        reg.setTo(mXMPPConnection.getServiceName());  
-        // 注意这里createAccount注册时，参数是UserName，不是jid，是"@"前面的部分。  
-        reg.setUsername(account);  
-        reg.setPassword(password);  
-        // 这边addAttribute不能为空，否则出错。所以做个标志是android手机创建的吧！！！！！  
-        reg.addAttribute("android", "geolo_createUser_android");  
+        reg.setTo(xmppConnection.getServiceName());
+        // 注意这里createAccount注册时，参数是UserName，不是jid，是"@"前面的部分。
+        reg.setUsername(account);
+        reg.setPassword(password);
+        // 这边addAttribute不能为空，否则出错。所以做个标志是android手机创建的吧！！！！！
+        reg.addAttribute("android", "geolo_createUser_android");
         PacketFilter filter = new AndFilter(new PacketIDFilter(reg.getPacketID()), new PacketTypeFilter(IQ.class));
-        PacketCollector collector =mXMPPConnection.createPacketCollector(filter);
-        mXMPPConnection.sendPacket(reg);  
+        PacketCollector collector =xmppConnection.createPacketCollector(filter);
+		xmppConnection.sendPacket(reg);
         IQ result = (IQ) collector.nextResult(SmackConfiguration.getPacketReplyTimeout());
-        // Stop queuing results停止请求results（是否成功的结果）  
-        collector.cancel();  
-        if (result == null) {  
-            return 0;  
+        // Stop queuing results停止请求results（是否成功的结果）
+        collector.cancel();
+        if (result == null) {
+            return 0;
         } else if (result.getType() == IQ.Type.RESULT) {
-            return 1;  
-        } else {  
-            if (result.getError().toString().equalsIgnoreCase("conflict(409)")) {  
-                return 2;  
-            } else {  
-                return 3;  
-            }  
-        }  
+            return 1;
+        } else {
+            if (result.getError().toString().equalsIgnoreCase("conflict(409)")) {
+                return 2;
+            } else {
+                return 3;
+            }
+        }
     }  
     
     /**
@@ -373,7 +381,7 @@ public class XmppUtil {
 
 	public static void updateUserVCard(XMPPConnection connection,User user) throws XMPPException{
 		VCard vCard=new VCard();
-		vCard.load(connection);
+		vCard.load(connection, user + "@" + Config.XMPP_HOSTNAME);
 		vCard.setNickName(user.getUser_nickname());
 		vCard.setEmailHome(user.getUser_email());
 		vCard.setPhoneHome(user.getUser_phone(), user.getUser_phone());
@@ -397,6 +405,22 @@ public class XmppUtil {
 		if (chat != null) {
 			chat.sendMessage(content);
 			MyLog.i("jj", touser + "发送成功");
+		}
+	}
+
+	public static void sendMessageWithParams(XMPPConnection xmppConnection,String msg,String[] args,Object[] datas,String touser) throws XMPPException {
+		if(xmppConnection==null || !xmppConnection.isConnected()){
+			throw new XMPPException();
+		}
+		ChatManager chatManager=xmppConnection.getChatManager();
+		Chat chat=chatManager.createChat(touser+"@"+Config.XMPP_HOSTNAME,null);
+		if(chat!=null){
+			Message message=new Message();
+			for(int i=0;i<datas.length;i++){
+				message.setProperty(args[i],datas[i]);
+			}
+			message.setBody(msg);
+			chat.sendMessage(message);
 		}
 	}
 	
@@ -457,5 +481,31 @@ public class XmppUtil {
 	        }  
 		return presence;
 	}
-    
+
+
+	/**
+	 * 文件转字节
+	 *
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
+	private byte[] getFileBytes(File file) throws IOException {
+		BufferedInputStream bis = null;
+		try {
+			bis = new BufferedInputStream(new FileInputStream(file));
+			int bytes = (int) file.length();
+			byte[] buffer = new byte[bytes];
+			int readBytes = bis.read(buffer);
+			if (readBytes != buffer.length) {
+				throw new IOException("Entire file not read");
+			}
+			return buffer;
+		} finally {
+			if (bis != null) {
+				bis.close();
+			}
+		}
+	}
+
 }
