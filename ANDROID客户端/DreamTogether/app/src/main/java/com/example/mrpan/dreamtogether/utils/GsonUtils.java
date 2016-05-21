@@ -27,4 +27,15 @@ public class GsonUtils {
 
         return null;
     }
+
+    public static String getJsonStr(Object baseEntity){
+        String str="";
+        try {
+            Gson gson = new Gson();
+            str = gson.toJson(baseEntity);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return str;
+    }
 }

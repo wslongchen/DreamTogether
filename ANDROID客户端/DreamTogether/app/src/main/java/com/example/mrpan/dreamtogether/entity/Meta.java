@@ -6,6 +6,7 @@ package com.example.mrpan.dreamtogether.entity;
 public class Meta extends BaseEntity {
     private int dumeta_id;
     private int user_id;
+    private int post_id;
     private String meta_key;
     private String meta_value;
 
@@ -39,5 +40,13 @@ public class Meta extends BaseEntity {
 
     public void setMeta_value(String meta_value) {
         this.meta_value = meta_value;
+    }
+
+    public int getPost_id() {
+        return post_id;
+    }
+
+    public void setPost_id(int post_id) {
+        this.post_id = post_id;
     }
 }

@@ -64,6 +64,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private SystemSettingsFragment systemSettingsFragment=null;
 
 
+    private Fragment currentFragment=null;
+
 
 
 
@@ -75,18 +77,32 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private void initView(){
         fragmentHashMap=new HashMap<>();
-        worldCircleFragment=new WorldCircleFragment();
-        fragmentHashMap.put(WorldCircleFragment.TAG,worldCircleFragment);
-        dreamerLoginFragment=new DreamerLoginFragment();
-        fragmentHashMap.put(DreamerLoginFragment.TAG,dreamerLoginFragment);
-        dreamerInfoFragment=new DreamerInfoFragment();
-        fragmentHashMap.put(DreamerInfoFragment.TAG, dreamerInfoFragment);
+        if(worldCircleFragment==null)
+        {
+            worldCircleFragment=new WorldCircleFragment();
+            fragmentHashMap.put(WorldCircleFragment.TAG,worldCircleFragment);
+        }
+
+        if(dreamerInfoFragment==null)
+        {
+            dreamerLoginFragment=new DreamerLoginFragment();
+            fragmentHashMap.put(DreamerLoginFragment.TAG,dreamerLoginFragment);
+        }
+
+        if(dreamerInfoFragment==null){
+            dreamerInfoFragment=new DreamerInfoFragment();
+            fragmentHashMap.put(DreamerInfoFragment.TAG, dreamerInfoFragment);
+        }
        // dreamerRegisterFragment=new DreamerRegisterFragment();
         //fragmentHashMap.put(DreamerRegisterFragment.TAG,dreamerRegisterFragment);
-        dreamSearchFragment=new DreamSearchFragment();
-        fragmentHashMap.put(DreamSearchFragment.TAG, dreamSearchFragment);
-        systemSettingsFragment=new SystemSettingsFragment();
-        fragmentHashMap.put(SystemSettingsFragment.TAG,systemSettingsFragment);
+        if(dreamSearchFragment==null){
+            dreamSearchFragment=new DreamSearchFragment();
+            fragmentHashMap.put(DreamSearchFragment.TAG, dreamSearchFragment);
+        }
+        if(systemSettingsFragment==null){
+            systemSettingsFragment=new SystemSettingsFragment();
+            fragmentHashMap.put(SystemSettingsFragment.TAG,systemSettingsFragment);
+        }
 
 
 
@@ -192,7 +208,26 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 //
 //    }
 
+    public void switchContent(Fragment from, Fragment to) {
+        if(currentFragment==null){
+            currentFragment=to;
+            transaction = getSupportFragmentManager().beginTransaction();
+            if (!to.isAdded()) {
+                transaction.add(R.id.frame_content, to).commit();
+            }
+        }else{
+            if (currentFragment != to) {
+                currentFragment = to;
+                transaction = getSupportFragmentManager().beginTransaction();
+                if (!to.isAdded()) {
+                    transaction.hide(from).add(R.id.frame_content, to).commit();
+                } else {
+                    transaction.hide(from).show(to).commit();
+                }
+            }
+        }
 
+    }
     //点击图片切换事件
     private void home_click(){
         home_iv.setSelected(true);
@@ -204,15 +239,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         more_iv.setSelected(false);
         menuMore.setSelected(false);
 
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_content,fragmentHashMap.get(WorldCircleFragment.TAG));
-        //transaction.addToBackStack(null);
-        transaction.commit();
+        switchContent(currentFragment,worldCircleFragment);
 
 
     }
 
-    private void auth_click(){
+    private void auth_click() {
 
         home_iv.setSelected(false);
         menuHome.setSelected(false);
@@ -223,16 +255,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         more_iv.setSelected(false);
         menuMore.setSelected(false);
 
-        MySharePreference mySharePreference=new MySharePreference(this);
-        boolean isLogin=mySharePreference.getBoolean("isLogin",false);
-        transaction = getSupportFragmentManager().beginTransaction();
-        if(isLogin){
-            transaction.replace(R.id.frame_content,fragmentHashMap.get(DreamerInfoFragment.TAG));
-        }else{
-            transaction.replace(R.id.frame_content,fragmentHashMap.get(DreamerLoginFragment.TAG));
+        MySharePreference mySharePreference = new MySharePreference(this);
+        boolean isLogin = mySharePreference.getBoolean("isLogin", false);
+        if (isLogin) {
+            switchContent(currentFragment,dreamerInfoFragment);
+        } else {
+            switchContent(currentFragment,dreamerLoginFragment);
         }
-        //transaction.addToBackStack(null);
-        transaction.commit();
+
     }
 
     private void search_click(){
@@ -244,10 +274,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         menuSearch.setSelected(true);
         more_iv.setSelected(false);
         menuMore.setSelected(false);
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_content, fragmentHashMap.get(DreamSearchFragment.TAG));
-        //transaction.addToBackStack(null);
-        transaction.commit();
+
+        switchContent(currentFragment,dreamSearchFragment);
     }
 
     private void more_click(){
@@ -259,10 +287,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         menuSearch.setSelected(false);
         more_iv.setSelected(true);
         menuMore.setSelected(true);
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_content, fragmentHashMap.get(SystemSettingsFragment.TAG));
-        //transaction.addToBackStack(null);
-        transaction.commit();
+        switchContent(currentFragment,systemSettingsFragment);
     }
 
 

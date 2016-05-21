@@ -36,14 +36,26 @@ card_view:cardCornerRadius="5dp">
             android:layout_alignTop="@+id/dream_author_img"
             android:layout_toEndOf="@+id/dream_author_img" />
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dream_date"
+            android:layout_below="@+id/dream_author"
+            android:layout_marginTop="3dp"
+            android:layout_alignStart="@+id/dream_author"
+            android:text="20:03"
+            />
+        <TextView
             android:id="@+id/dreamer_sign"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="花有百样红，人与狗不同。"
             android:textColor="@color/dreamDarkGery"
             android:textSize="16.0sp"
+            android:visibility="gone"
+            android:layout_marginLeft="5dp"
             android:layout_below="@+id/dream_author"
-            android:layout_alignStart="@+id/dream_author" />
+            android:layout_toRightOf="@id/dream_date"
+             />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -105,8 +117,8 @@ card_view:cardCornerRadius="5dp">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dip"
-
-                android:text="iPone6 Plus"
+                android:id="@+id/dream_deviceinfo"
+                android:text="某未知品牌手机"
                 android:textColor="@color/dreamqianlan"
                 android:textSize="18.0sp" />
         </LinearLayout>
@@ -119,6 +131,21 @@ card_view:cardCornerRadius="5dp">
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dream_location"
+                        android:text="湖南省 火星镇"
+                        android:layout_margin="2dp"
+                        android:visibility="gone"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ncm"/>
+                </LinearLayout>
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="25dp"
@@ -126,7 +153,7 @@ card_view:cardCornerRadius="5dp">
                     android:layout_marginRight="10dip"
                     android:background="@mipmap/dream_icon_comment"
                     android:scaleType="fitXY"
-                    android:id="@+id/imageView3" />
+                    android:id="@+id/dream_like" />
                 <ImageView
                     android:id="@+id/dream_comments"
                     android:layout_width="17dp"
@@ -136,7 +163,7 @@ card_view:cardCornerRadius="5dp">
                     android:background="@mipmap/like"
                     android:scaleType="fitXY"
                     android:layout_alignParentTop="true"
-                    android:layout_toStartOf="@+id/imageView3" />
+                    android:layout_toStartOf="@+id/dream_like" />
             </RelativeLayout>
         </FrameLayout>
         <FrameLayout
@@ -159,7 +186,8 @@ card_view:cardCornerRadius="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2k"
+                    android:text="0k"
+                    android:id="@+id/dream_hot_info"
                     android:textSize="18dp"
                     android:textColor="@color/dramGrey"
                     android:layout_centerVertical="true"

@@ -20,14 +20,17 @@ import com.example.mrpan.dreamtogether.MainActivity;
 import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.Dream;
+import com.example.mrpan.dreamtogether.entity.Meta;
 import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.fragment.DreamerLoginFragment;
 import com.example.mrpan.dreamtogether.http.HttpHelper;
 import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
 import com.example.mrpan.dreamtogether.utils.Config;
+import com.example.mrpan.dreamtogether.utils.DateUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.utils.MySharePreference;
 import com.example.mrpan.dreamtogether.view.NoScrollGridView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -91,11 +94,12 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
         viewHolder.dream_content.setText(p.getPost_content());
         final User u=p.getPost_author();
         viewHolder.dream_author.setText(u.getUser_nickname());
+        viewHolder.dream_date.setText(DateUtils.getAutoTimeStr(p.getPost_date()));
         if(u.getUser_img()==null||u.getUser_img().isEmpty()){
            viewHolder.author_img.setImageResource(R.mipmap.ic_launcher);
         }
         else{
-
+            ImageLoader.getInstance().displayImage("http://"+u.getUser_img(),viewHolder.author_img);
         }
         String username= new MySharePreference(mContext).getString("username","");
         if(u.getUser_login().equals(username)){
@@ -108,53 +112,9 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
             @Override
             public void onClick(View v) {
                 removeItemListener.removeItem(v, i);
-                //Toast.makeText(mContext, "delete", Toast.LENGTH_SHORT).show();
-//                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-//                builder.setMessage("是否删除?");
-//                builder.setTitle("提示");
-//                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        HttpHelper.getInstance().asyHttpGetRequest(Config.DeleteDreamByID(id), new HttpResponseCallBack() {
-//                            @Override
-//                            public void onSuccess(String url, String result) {
-//                                int ret = 0;
-//                                notifyDataSetChanged();
-//                                try {
-//                                    JSONObject jsonObject = new JSONObject(result.toString().replace("\uFEFF", ""));
-//                                    ret = jsonObject.getInt("ret");
-//                                    if (ret == Config.RESULT_RET_SUCCESS) {
-//                                        //Toast.makeText(mContext,"删除成功！",Toast.LENGTH_LONG).show();
-//                                        //Intent intent = new Intent(context, WorldCircleFragment.class);
-//                                        //startActivityForResult(intent, Config.RESULT_RET_SUCCESS);
-//
-//                                        // Toast.makeText(context, "Publish successed!", Toast.LENGTH_LONG).show();
-//                                    } else {
-//                                        //Toast.makeText(mContext, "删除失败！", Toast.LENGTH_LONG).show();
-//                                    }
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onFailure(int httpResponseCode, int errCode, String err) {
-//
-//                            }
-//                        });
-//                    }
-//                });
-//
-//                builder.setNegativeButton("取消",
-//                        new android.content.DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                dialog.dismiss();
-//                            }
-//                        });
-//
-//                builder.create().show();
-
             }
         });
+
 //        if(p.getPost_comment_count()==null || p.getPost_comment_count().equals("")||p.getPost_comment_count().equals("0")){
 //            viewHolder.dream_comments_layout.setVisibility(View.GONE);
 //        }
@@ -200,7 +160,23 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
                         });
             }
         }
-//        List<Meta> metas=dreams.get(i).getMetas();
+        List<Meta> metas=p.getMetas();
+        if(metas.size()>0){
+            for (Meta m:metas) {
+                if(m.getMeta_key().equals("device_info")){
+                    viewHolder.dream_deviceinfo.setText(m.getMeta_value());
+                }
+                if(m.getMeta_key().equals("hot_info")){
+                    viewHolder.dream_hot_info.setText(m.getMeta_value()+"");
+                }
+                if(m.getMeta_key().equals("location")){
+                    viewHolder.dream_location.setText(m.getMeta_value());
+                }
+//                if(m.getMeta_key().equals("sign")){
+//                    viewHolder.dreamer_sign.setText(m.getMeta_value());
+//                }
+            }
+        }
 //        List<HashMap<String,Object>> datas=new ArrayList<>();
 //        for (Meta m:metas) {
 //            if(m.getMeta_key().equals("dream_img")){
@@ -245,6 +221,8 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
 
         public ImageView deleteImage;
 
+        public TextView dream_deviceinfo,dream_hot_info,dream_location,dreamer_sign;
+
         //public TextView dream_comments_names;
 
         //public RelativeLayout dream_comments_layout;
@@ -263,6 +241,10 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
             dream_img_gridView=(NoScrollGridView)v.findViewById(R.id.dream_img_gridView);
             author_img = (ImageView) v.findViewById(R.id.dream_author_img);
             deleteImage=(ImageView)v.findViewById(R.id.deleteImage);
+            dream_deviceinfo=(TextView)v.findViewById(R.id.dream_deviceinfo);
+            dream_hot_info=(TextView)v.findViewById(R.id.dream_hot_info);
+            dream_location=(TextView)v.findViewById(R.id.dream_location);
+            dreamer_sign=(TextView)v.findViewById(R.id.dreamer_sign);
             //dream_comments_layout=(RelativeLayout)v.findViewById(R.id.dream_comments_layout);
             this.mListener = listener;
             this.mLongClickListener = longClickListener;

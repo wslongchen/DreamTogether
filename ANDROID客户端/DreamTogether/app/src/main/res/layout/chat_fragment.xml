@@ -56,11 +56,12 @@
                 android:src="@drawable/btn_chat_emo_selector" />
             <ImageView
                 android:id="@+id/image_voice"
-                android:layout_width="35dip"
-                android:layout_height="35dip"
+                android:layout_width="30dip"
+                android:layout_height="30dip"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/image_face"
-                android:src="@mipmap/voicefrom0" />
+                android:layout_marginRight="5dp"
+                android:src="@drawable/fbr" />
 
             <EditText
                 android:id="@+id/input_sms"
@@ -80,7 +81,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_centerInParent="true"
-                android:background="@drawable/fbr"
+                android:background="@drawable/bg_bombbox"
                 android:minHeight="35dp"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="5dip"

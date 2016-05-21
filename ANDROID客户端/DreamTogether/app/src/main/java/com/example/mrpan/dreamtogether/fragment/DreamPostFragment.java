@@ -38,6 +38,7 @@ import android.widget.Toast;
 import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.Dream;
+import com.example.mrpan.dreamtogether.entity.Meta;
 import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.http.HttpHelper;
 import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
@@ -377,6 +378,17 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                     dream.setPost_comment_status("0");
                     dream.setPost_type("0");
                     dream.setPost_status("0");
+                    List<Meta> metas=new ArrayList<>();
+                    Meta meta=null;
+                    meta=new Meta();
+                    meta.setMeta_key("hot_info");
+                    meta.setMeta_value("1");
+                    metas.add(meta);
+                    meta=new Meta();
+                    meta.setMeta_key("device_info");
+                    meta.setMeta_value(OtherUtils.getDeviceInfo());
+                    metas.add(meta);
+                    dream.setMetas(metas);
                     List<String> list = new ArrayList<String>();
                 for (int i = 0; i < BitmapUtils.drr.size(); i++) {
                     String Str = BitmapUtils.drr.get(i).substring(
@@ -556,6 +568,7 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
 
         @Override
         public void onSuccess(String url, String result) {
+            MyLog.i(TAG,result);
             Message message = new Message();
             message.arg1 = Config.HTTP_REQUEST_SUCCESS;
             message.arg2=flag;

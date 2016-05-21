@@ -55,10 +55,10 @@ public class DateUtils {
         if(date!=null){
             long diff=currentDate.getTime()-date.getTime();
             int dayDiff=(int)diff/(1000*60*60*24);
-            if(dayDiff<0){
-                str="未来";
-                return str;
-            }
+//            if(dayDiff<0){
+//                str="未来";
+//                return str;
+//            }
             Calendar c = Calendar.getInstance();
             c.setTime(date);
             String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };

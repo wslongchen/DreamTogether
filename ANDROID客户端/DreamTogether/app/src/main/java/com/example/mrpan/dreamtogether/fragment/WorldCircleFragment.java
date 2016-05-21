@@ -20,6 +20,7 @@ import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.adapter.WorldCircleListAdapter;
 import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.entity.DreamPosts;
+import com.example.mrpan.dreamtogether.entity.Meta;
 import com.example.mrpan.dreamtogether.http.HttpHelper;
 import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
 import com.example.mrpan.dreamtogether.utils.CacheUtils;
@@ -27,6 +28,7 @@ import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DateUtils;
 import com.example.mrpan.dreamtogether.utils.GsonUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
+import com.example.mrpan.dreamtogether.utils.OtherUtils;
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.AnimRefreshRecyclerView;
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.decoration.DividerItemDecoration;
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.manage.AnimRefreshLinearLayoutManager;
@@ -35,6 +37,7 @@ import com.example.mrpan.dreamtogether.view.TitleBar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,7 +71,6 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
             viewGroup.removeView(currentView);
         }
         initView();
-
         return currentView;
     }
 
@@ -161,7 +163,8 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
             });
             worldCircleListAdapter.setRemoveListener(new WorldCircleListAdapter.RemoveItemListener() {
                 @Override
-                public void removeItem(View view, int position) {
+                public void removeItem(View view, final int position) {
+
                     final int id=dreams.getPost().get(position).getID();
                                     final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setMessage("是否删除?");
@@ -172,12 +175,14 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                             @Override
                             public void onSuccess(String url, String result) {
                                 int ret = 0;
-                                worldCircleListAdapter.notifyDataSetChanged();
-                                recyclerView.getAdapter().notifyDataSetChanged();
+
                                 try {
                                     JSONObject jsonObject = new JSONObject(result.toString().replace("\uFEFF", ""));
                                     ret = jsonObject.getInt("ret");
                                     if (ret == Config.RESULT_RET_SUCCESS) {
+                                        dreams.getPost().remove(position);
+                                        worldCircleListAdapter.notifyDataSetChanged();
+                                        recyclerView.getAdapter().notifyDataSetChanged();
                                         //Toast.makeText(mContext,"删除成功！",Toast.LENGTH_LONG).show();
                                         //Intent intent = new Intent(context, WorldCircleFragment.class);
                                         //startActivityForResult(intent, Config.RESULT_RET_SUCCESS);
@@ -337,7 +342,9 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
 
     public void refreshComplate() {
         if(recyclerView!=null){
-            recyclerView.getAdapter().notifyDataSetChanged();
+            if(recyclerView.getAdapter()!=null){
+                recyclerView.getAdapter().notifyDataSetChanged();
+            }
         }
 
     }
@@ -374,7 +381,6 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
             message.arg1 = Config.HTTP_REQUEST_SUCCESS;
             message.arg2=position;
             message.obj = result;
-            MyLog.i("HHH",result);
             handler.sendMessage(message);
         }
 
