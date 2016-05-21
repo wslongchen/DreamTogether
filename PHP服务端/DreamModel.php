@@ -26,6 +26,7 @@ class DreamModel {
 			if(!empty($dream[metas])){
 				$metas=json_decode($dream[metas],true); 
 				foreach ($metas as $meta){
+					$meta[post_id]=$id;
 					$this->postMeta($meta); 
     				} 
 				
@@ -40,7 +41,8 @@ class DreamModel {
 	}
 	
 	function postMeta($meta){
-		$sql="INSERT INTO `dreamdb`.`dream_posts_meta` (`dpmeta_id`, `post_id`, `meta_key`, `meta_value`) VALUES (NULL, '".$meta[post_id]."', '".$meta[key]."', '".$meta[value]."');";
+		var_dump($meta);
+		$sql="INSERT INTO `dreamdb`.`dream_posts_meta` (`post_id`, `meta_key`, `meta_value`) VALUES ('".$meta[post_id]."', '".$meta[meta_key]."', '".$meta[meta_value]."');";
 		if(!empty($dream) && $this -> dao -> query($sql)){
 			$json_out["ret"]=0;
 			$json_out["post"]="post successed";
