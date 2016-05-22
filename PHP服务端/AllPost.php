@@ -91,7 +91,9 @@ case "updateUserImg":
 		if (move_uploaded_file($_FILES['uploadfile']['tmp_name'], $target_path)) {
 			$file=$_SERVER['SERVERNAME'].$base_path.$_FILES['uploadfile']['name'];
 			$controller=new UserController($dao);
-			$controller->updateUserImg($file);
+			$controller->updateUserImg($file,$GET["id"]);
+			$array = array("ret" => "0", "post" => "修改成功！");
+			echo json_encode($array);
 		} else {
 			$array = array("ret" => "1", "post" => "修改失败！");
 			echo json_encode($array);

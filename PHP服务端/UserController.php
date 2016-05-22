@@ -28,9 +28,12 @@ class UserController{
 		echo json_encode($json_out);
 	}
 	
-	function updateUserImg($file){
-		$json_out=$this->model->updateUserImg($file);
-		echo json_encode($json_out);
+	function updateUserSign($sign,$id){
+		$this->updateUserSign($sign, $id);
+	}
+	
+	function updateUserImg($file,$id){
+		$this->model->updateUserImg($file,$id);
 	}
 	
 	function postUser($user){

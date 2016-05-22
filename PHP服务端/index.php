@@ -73,6 +73,12 @@ switch ($action) {
 			$controller ->deleteDream($_GET["id"]);
 		}
 		break;
+	case "update":
+		if($_GET["type"]==="sign"){
+			$controller = new UserController($dao);
+			$controller ->updateUserSign($_POST["sign"],$_POST["id"]);
+		}
+		break;
 	default :
 		//$controller=new listController($dao);
 		break;

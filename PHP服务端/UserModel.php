@@ -25,6 +25,16 @@ if(!empty($user) && $this->dao->query($sql)){
 		}
 	}
 	
+	function updateUserImg($file,$id){
+		$sql="UPDATE `dream_users` SET `user_img`='".$file."' WHERE `ID`='".$id."'";
+		$this->dao->fetch($sql);
+	}
+	
+	function updateSign($sign,$id){
+		$sql="UPDATE `dream_users` SET `user_display_name`='".$sign."' WHERE `ID`='".$id."'";
+		$this->dao->fetch($sql);
+	}
+	
 	function updateUser(){
 		//$sql="UPDATE `dreamdb`.`dream_users` SET ";
 	}

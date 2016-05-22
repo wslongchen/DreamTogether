@@ -41,7 +41,6 @@ class DreamModel {
 	}
 	
 	function postMeta($meta){
-		var_dump($meta);
 		$sql="INSERT INTO `dreamdb`.`dream_posts_meta` (`post_id`, `meta_key`, `meta_value`) VALUES ('".$meta[post_id]."', '".$meta[meta_key]."', '".$meta[meta_value]."');";
 		if(!empty($dream) && $this -> dao -> query($sql)){
 			$json_out["ret"]=0;
