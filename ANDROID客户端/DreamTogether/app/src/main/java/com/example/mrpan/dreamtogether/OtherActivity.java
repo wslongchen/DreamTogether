@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MotionEvent;
 import android.view.WindowManager;
+import android.widget.EditText;
 
 import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.fragment.BrowserFragment;
@@ -18,6 +19,7 @@ import com.example.mrpan.dreamtogether.fragment.DreamPostFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamRadomFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamXiuXiuFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamerRegisterFragment;
+import com.example.mrpan.dreamtogether.fragment.EditFragment;
 import com.example.mrpan.dreamtogether.fragment.MessegeFragment;
 import com.example.mrpan.dreamtogether.fragment.PhotoFragment;
 import com.example.mrpan.dreamtogether.fragment.PicSelectFragment;
@@ -49,6 +51,7 @@ public class OtherActivity extends FragmentActivity {
     private BrowserFragment browserFragment=null;
     private ChatFragment chatFragment=null;
     private MessegeFragment messegeFragment=null;
+    private EditFragment editFragment=null;
 
 
     @Override
@@ -130,6 +133,13 @@ public class OtherActivity extends FragmentActivity {
                 //transaction.addToBackStack(null);
                 transaction.commit();
                 break;
+            case Config.EDIT_TYPE:
+                transaction = getSupportFragmentManager().beginTransaction();
+                //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
+                transaction.replace(R.id.other_layout, fragmentHashMap.get(EditFragment.TAG));
+                //transaction.addToBackStack(null);
+                transaction.commit();
+                break;
             default:
                 break;
         }
@@ -149,6 +159,7 @@ public class OtherActivity extends FragmentActivity {
         browserFragment=new BrowserFragment();
         chatFragment=new ChatFragment();
         messegeFragment=new MessegeFragment();
+        editFragment=new EditFragment();
 
         fragmentHashMap.put(DreamerRegisterFragment.TAG, dreamerRegisterFragment);
         fragmentHashMap.put(UserDreamListFragment.TAG,userDreamListFragment);
@@ -162,6 +173,7 @@ public class OtherActivity extends FragmentActivity {
         fragmentHashMap.put(BrowserFragment.TAG,browserFragment);
         fragmentHashMap.put(ChatFragment.TAG,chatFragment);
         fragmentHashMap.put(MessegeFragment.TAG,messegeFragment);
+        fragmentHashMap.put(EditFragment.TAG,editFragment);
     }
 
 }

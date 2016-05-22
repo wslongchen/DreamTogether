@@ -79,7 +79,7 @@ public class OtherUtils {
         List<Meta> metas=dream.getMetas();
         if(metas.size()>0){
             String jsonStr= GsonUtils.getJsonStr(metas);
-            map.put("metas",jsonStr);
+            map.put("metas", jsonStr);
         }
         return map;
     }
@@ -94,7 +94,18 @@ public class OtherUtils {
         nameValuePairs.add(new BasicNameValuePair("time", comment.getComment_time()));
         return nameValuePairs;
     }
+    public static List<NameValuePair> signToNameValuePair(String sign,int id) {
+        List<NameValuePair> nameValuePairs = new ArrayList<>();
+        nameValuePairs.add(new BasicNameValuePair("sign", sign));
+        nameValuePairs.add(new BasicNameValuePair("id", String.valueOf(id)));
+        return nameValuePairs;
+    }
 
+    public static Map<String, String> StringToMap(int id) {
+        Map<String, String> map = new HashMap<>();
+        map.put("id", String.valueOf(id));
+        return map;
+    }
     public static String getDeviceInfo() {
         return Build.BRAND;
     }

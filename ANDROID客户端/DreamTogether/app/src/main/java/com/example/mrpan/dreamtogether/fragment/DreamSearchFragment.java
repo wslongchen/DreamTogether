@@ -111,6 +111,7 @@ public class DreamSearchFragment extends Fragment implements View.OnClickListene
         back_arrow.clearAnimation();
         handler.removeMessages(Config.FEEDKEY_START);
         STATE = 0;
+        getFragmentManager().beginTransaction().remove(this);
     }
 
     @Override

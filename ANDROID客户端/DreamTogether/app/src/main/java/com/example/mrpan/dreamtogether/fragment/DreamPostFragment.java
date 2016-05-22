@@ -190,8 +190,8 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
         super.onResume();
         MyLog.i("post", "resume");
         Message message = new Message();
-        message.what = 1;
-        handler.sendMessage(message);
+        message.what = 4;
+        myHander.sendMessage(message);
 
     }
 
@@ -415,25 +415,14 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
     }
 
 
-        Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    adapter.notifyDataSetChanged();
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    };
-
     public void loading() {
         new Thread(new Runnable() {
             public void run() {
                 while (true) {
                     if (BitmapUtils.max == BitmapUtils.drr.size()) {
                         Message message = new Message();
-                        message.what = 1;
-                        handler.sendMessage(message);
+                        message.what = 4;
+                        myHander.sendMessage(message);
                         break;
                     } else {
                         try {
@@ -450,8 +439,8 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                             FileUtils.saveBitmap(bm, newStr,Config.DIR_IMAGE_PATH);
                             BitmapUtils.max += 1;
                             Message message = new Message();
-                            message.what = 1;
-                            handler.sendMessage(message);
+                            message.what = 4;
+                            myHander.sendMessage(message);
                         } catch (IOException e) {
 
                             e.printStackTrace();
@@ -479,8 +468,8 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                         }
                     }
                     Message message = new Message();
-                    message.what = 1;
-                    handler.sendMessage(message);
+                    message.what = 4;
+                    myHander.sendMessage(message);
                 } catch (IOException e) {
 
                     e.printStackTrace();
@@ -547,6 +536,9 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                         default:
                             break;
                     }
+                    break;
+                case 4:
+                    adapter.notifyDataSetChanged();
                     break;
                 case Config.HTTP_REQUEST_ERROR:
                     Toast.makeText(context,"联网失败！",Toast.LENGTH_LONG).show();

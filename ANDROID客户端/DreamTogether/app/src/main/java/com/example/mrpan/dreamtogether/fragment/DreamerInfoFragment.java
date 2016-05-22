@@ -1,19 +1,35 @@
 package com.example.mrpan.dreamtogether.fragment;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,13 +37,17 @@ import com.example.mrpan.dreamtogether.MainActivity;
 import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.User;
+import com.example.mrpan.dreamtogether.utils.BitmapUtils;
 import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.adapter.UserInfoAdapter;
 import com.example.mrpan.dreamtogether.utils.MySharePreference;
+import com.example.mrpan.dreamtogether.utils.SystemStatusManager;
+import com.example.mrpan.dreamtogether.view.CircleImageView;
 import com.example.mrpan.dreamtogether.view.CustomDialog;
 import com.example.mrpan.dreamtogether.view.TitleBar;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,38 +56,50 @@ import java.util.List;
 /**
  * Created by mrpan on 16/3/24.
  */
-public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemClickListener,View.OnClickListener{
+public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemClickListener,View.OnClickListener {
 
-    public final static String TAG="DreamerInfo";
+    public final static String TAG = "DreamerInfo";
 
     private View currentView;
 
-    private TextView userNickname,userInfos;
+    private TextView userNickname, userInfos,user_head_sign;
 
-    private ImageView userImg,qrImg;
+    private ImageView userImg, qrImg, takePhoto,user_head_sign_edit;
+
+    private CircleImageView photo;
 
     private ListView userInfoList;
 
     private Context context;
 
-    private User user=null;
+    private User user = null;
 
-    private TitleBar titleBar=null;
+    private TitleBar titleBar = null;
+
+    private RelativeLayout relativeLayout = null;
+
+    private String path = "";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        currentView=inflater.inflate(R.layout.user_info,container,false);
-        ViewGroup viewGroup= (ViewGroup) currentView.getParent();
-        if(viewGroup!=null){
+        //透明状态栏
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //透明导航栏
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        initStatus();
+
+        currentView = inflater.inflate(R.layout.user_info, container, false);
+        ViewGroup viewGroup = (ViewGroup) currentView.getParent();
+        if (viewGroup != null) {
             viewGroup.removeView(currentView);
         }
-        context=getActivity();
-        Bundle data=getArguments();
-        if(data!=null) {
+        context = getActivity();
+        Bundle data = getArguments();
+        if (data != null) {
             user = (User) data.getSerializable("data");
-        }else{
-            user=(User)CacheUtils.readHttpCache(Config.DIR_CACHE_PATH,"user_info");
+        } else {
+            user = (User) CacheUtils.readHttpCache(Config.DIR_CACHE_PATH, "user_info");
         }
         initView();
 
@@ -75,69 +107,111 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
 
     }
 
-    private void initView(){
-        titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
-       // titleBar.setBgColor(R.color.dreamBlack);
-        titleBar.showRight("我的梦想",R.drawable.btn_post,this);
-        userInfoList=(ListView)currentView.findViewById(R.id.user_info_list);
-        userNickname=(TextView)currentView.findViewById(R.id.user_nickname);
-        userImg=(ImageView)currentView.findViewById(R.id.userImg);
-        qrImg=(ImageView)currentView.findViewById(R.id.qrImg);
+    private void initStatus() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+            SystemStatusManager tintManager = new SystemStatusManager(getActivity());
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarAlpha(0.0f);
+            tintManager.setStatusBarTintColor(R.color.dreamTransparent);
+        }
+    }
+
+    private void setTranslucentStatus(boolean on) {
+        Window win = getActivity().getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
+    }
+
+    private void initView() {
+        user_head_sign=(TextView)currentView.findViewById(R.id.user_head_sign);
+        user_head_sign_edit=(ImageView)currentView.findViewById(R.id.user_head_sign_edit);
+        user_head_sign_edit.setOnClickListener(this);
+        userInfoList = (ListView) currentView.findViewById(R.id.user_info_list);
+        View headerview = View.inflate(context, R.layout.user_info_header, (ViewGroup) currentView.getParent());
+        userInfoList.addHeaderView(headerview);
+        relativeLayout = (RelativeLayout) currentView.findViewById(R.id.user_info_head);
+        relativeLayout.setOnClickListener(this);
+        relativeLayout.setBackground(BitmapUtils.BlurImages(BitmapUtils.drawableToBitmap(getResources().getDrawable(R.mipmap.bg_search)), context));
+        titleBar = (TitleBar) currentView.findViewById(R.id.top_bar);
+        // titleBar.setBgColor(R.color.dreamBlack);
+        titleBar.showRight("我的梦想", R.drawable.btn_post, this);
+        titleBar.setBgColor(R.color.dreamTransparent);
+        titleBar.setBackgroundColor(getResources().getColor(R.color.dreamTransparent));
+
+        userNickname = (TextView) currentView.findViewById(R.id.user_nickname);
+        userImg = (ImageView) currentView.findViewById(R.id.userImg);
+        qrImg = (ImageView) currentView.findViewById(R.id.qrImg);
         qrImg.setOnClickListener(this);
 
-        if(user!=null){
+        photo = (CircleImageView) currentView.findViewById(R.id.user_head_photo);
+        //photo.setImageResource(R.mipmap.bg_search);
+
+        takePhoto = (ImageView) currentView.findViewById(R.id.user_head_takephoto);
+        takePhoto.setOnClickListener(this);
+        //takePhoto.setImageResource(R.mipmap.mfy);
+       // takePhoto.setBackgroundColor(getResources().getColor(R.color.dreamWhite));
+
+        if (user != null) {
             userNickname.setText(user.getUser_nickname());
+            user_head_sign.setText(user.getUser_display_name());
         }
 
-        List<HashMap<String,Object>> datas=new ArrayList<>();
-        HashMap<String,Object> data=null;
-        data=new HashMap<>();
+        List<HashMap<String, Object>> datas = new ArrayList<>();
+        HashMap<String, Object> data = null;
+        data = new HashMap<>();
         data.put("isNull", true);
         datas.add(data);
-        data=new HashMap<>();
+        data = new HashMap<>();
         data.put("isNull", false);
         data.put("menuImg", R.mipmap.ic_launcher);
         data.put("menuText", "我的梦想历程");
-        data.put("menu","menu1");
+        data.put("menu", "menu1");
         datas.add(data);
-        data=new HashMap<>();
+        data = new HashMap<>();
         data.put("isNull", false);
         data.put("menuImg", R.mipmap.new_message);
         data.put("menuText", "梦想消息");
-        data.put("menu","menu2");
+        data.put("menu", "menu2");
         datas.add(data);
-        data=new HashMap<>();
+        data = new HashMap<>();
         data.put("isNull", true);
         datas.add(data);
-        data=new HashMap<>();
+        data = new HashMap<>();
         data.put("isNull", false);
         data.put("menuImg", R.mipmap.ic_launcher);
         data.put("menuText", "退出登录");
-        data.put("menu","menuExit");
+        data.put("menu", "menuExit");
         datas.add(data);
-        data=new HashMap<>();
+        data = new HashMap<>();
         data.put("isNull", true);
         datas.add(data);
 
         //View heardview=View.inflate(context,R.layout.user_info_header,null);
         //userInfoList.addHeaderView(heardview);
-        UserInfoAdapter infoAdapter=new UserInfoAdapter(datas,context);
+        UserInfoAdapter infoAdapter = new UserInfoAdapter(datas, context);
         userInfoList.setAdapter(infoAdapter);
         userInfoList.setOnItemClickListener(this);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ListView listView=(ListView)parent;
+        ListView listView = (ListView) parent;
         HashMap<String, Object> map = (HashMap<String, Object>) listView.getItemAtPosition(position);
-        if(map.get("isNull").equals(true))
+        if (map.get("isNull").equals(true))
             return;
-        Intent intent=null;
-        Bundle bundle=null;
-        switch (map.get("menu").toString()){
+        Intent intent = null;
+        Bundle bundle = null;
+        switch (map.get("menu").toString()) {
             case "menu1":
-                intent=new Intent();
-                bundle=new Bundle();
+                intent = new Intent();
+                bundle = new Bundle();
                 bundle.putInt("type", Config.TIMELINE_TYPE);
                 bundle.putInt("data", user.getID());
                 intent.putExtras(bundle);
@@ -146,8 +220,8 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
                 getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
                 break;
             case "menu2":
-                intent=new Intent();
-                bundle=new Bundle();
+                intent = new Intent();
+                bundle = new Bundle();
                 bundle.putInt("type", Config.MESSAGE_TYPE);
                 intent.setClass(context, OtherActivity.class);
                 intent.putExtras(bundle);
@@ -163,8 +237,8 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
 
                         MySharePreference mySharePreference = new MySharePreference(context);
                         mySharePreference.commitBoolean("isLogin", false);
-                        mySharePreference.commitString("username","");
-                        mySharePreference.commitString("userpassword","");
+                        mySharePreference.commitString("username", "");
+                        mySharePreference.commitString("userpassword", "");
                         android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.frame_content, MainActivity.fragmentHashMap.get(DreamerLoginFragment.TAG));
                         //transaction.addToBackStack(null);
@@ -191,13 +265,15 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        Intent intent = null;
+        Bundle bundle = null;
+        switch (v.getId()) {
             case R.id.qrImg:
-                Toast.makeText(context,"QR",Toast.LENGTH_LONG).show();
+                //Toast.makeText(context,"QR",Toast.LENGTH_LONG).show();
                 break;
             case R.id.titleBarRightImage:
-                Intent intent=new Intent();
-                Bundle bundle=new Bundle();
+                intent = new Intent();
+                bundle = new Bundle();
                 bundle.putInt("type", Config.POST_TYPE);
                 bundle.putInt("data", user.getID());
                 intent.putExtras(bundle);
@@ -205,8 +281,145 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.top_in, R.anim.top_out);
                 break;
+            case R.id.user_info:
+//                Toast.makeText(context,"dddd",Toast.LENGTH_LONG).show();
+                break;
+            case R.id.user_head_takephoto:
+                new PopupWindows(context, currentView);
+                backgroundAlpha(0.7f);
+                break;
+            case R.id.user_head_sign_edit:
+//                intent = new Intent();
+//                bundle = new Bundle();
+//                bundle.putInt("type", Config.POST_TYPE);
+//                bundle.putInt("data", user.getID());
+//                intent.putExtras(bundle);
+//                intent.setClass(context, OtherActivity.class);
+//                startActivity(intent);
+//                getActivity().overridePendingTransition(R.anim.top_in, R.anim.top_out);
+                break;
             default:
                 break;
+        }
+    }
+
+
+    public class PopupWindows extends PopupWindow {
+
+        public PopupWindows(Context mContext, View parent) {
+
+            final View view = View
+                    .inflate(mContext, R.layout.popwindow_dream_select_item, null);
+            view.startAnimation(AnimationUtils.loadAnimation(mContext,
+                    R.anim.fade_ins));
+            LinearLayout ll_popup = (LinearLayout) view
+                    .findViewById(R.id.dream_post_img_popup);
+            ll_popup.startAnimation(AnimationUtils.loadAnimation(mContext,
+                    R.anim.push_bottom_in_2));
+            //setOutsideTouchable(true);
+            setContentView(view);
+            setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+            setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+            setBackgroundDrawable(new BitmapDrawable());
+            setFocusable(true);
+
+
+            showAtLocation(parent, Gravity.BOTTOM, 0, 0);
+            update();
+
+
+            final Button bt1 = (Button) view
+                    .findViewById(R.id.dream_item_popupwindows_camera);
+            Button bt2 = (Button) view
+                    .findViewById(R.id.dream_item_popupwindows_Photo);
+            Button bt3 = (Button) view
+                    .findViewById(R.id.dream_item_popupwindows_cancel);
+            bt1.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    onPhoto();
+                    dismiss();
+                }
+            });
+            bt2.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+//                    Intent intent = new Intent(Intent.ACTION_PICK);
+//                    intent.setType("image/*");//相片类型
+//                    startActivityForResult(intent, 7);
+                    dismiss();
+                }
+            });
+            bt3.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
+
+            setOnDismissListener(new OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    backgroundAlpha(1f);
+                }
+            });
+
+        }
+    }
+
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getActivity().getWindow().setAttributes(lp);
+    }
+
+    public void onPhoto() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA);
+            if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_ASK_CALL_PHONE);
+                return;
+            } else {
+                //上面已经写好的拨号方法
+                photo();
+            }
+        } else {
+            //上面已经写好的拨号方法
+            photo();
+        }
+    }
+
+    //拍照
+    public void photo() {
+        Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File file = new File(Config.DIR_IMAGE_PATH + "take/", String.valueOf(System.currentTimeMillis())
+                + ".jpg");
+        path = file.getPath();
+        Uri imageUri = Uri.fromFile(file);
+        openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        openCameraIntent.putExtra(path, file);
+        startActivityForResult(openCameraIntent, Config.TAKE_PICTURE);
+    }
+
+    final public static int REQUEST_CODE_ASK_CALL_PHONE = 123;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case Config.TAKE_PICTURE:
+                if (BitmapUtils.drr.size() < 9 && resultCode == -1) {
+                    BitmapUtils.drr.add(path);
+                }
+
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        user = (User) CacheUtils.readHttpCache(Config.DIR_CACHE_PATH, "user_info");
+        if (user != null) {
+            userNickname.setText(user.getUser_nickname());
+            user_head_sign.setText(user.getUser_display_name());
         }
     }
 }

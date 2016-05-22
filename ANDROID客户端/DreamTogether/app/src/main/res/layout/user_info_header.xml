@@ -5,10 +5,12 @@
     android:weightSum="1">
 <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="58dp"
     android:layout_height="wrap_content"
     android:clickable="true"
-    android:background="@drawable/layout_selector">
+    android:id="@+id/user_info"
+    android:background="@drawable/layout_selector"
+    android:visibility="gone">
 
     <ImageView
         android:layout_width="90dp"
@@ -59,4 +61,54 @@
 
 
 </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="268dp"
+        android:id="@+id/user_info_head"
+        android:background="@drawable/layout_selector">
+        <com.example.mrpan.dreamtogether.view.CircleImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/bg_search"
+            android:scaleType="fitXY"
+            android:layout_marginTop="88dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/user_head_photo" />
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:id="@+id/user_head_takephoto"
+            android:src="@mipmap/mfy"
+            android:background="@color/dreamTransparent"
+            android:scaleType="fitXY"
+            android:layout_alignTop="@+id/user_head_photo"
+            android:layout_alignStart="@+id/user_head_photo" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Minidal Chan"
+            android:textColor="@color/dreamWhite"
+            android:id="@+id/user_nickname2"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/user_head_photo"
+            android:layout_centerHorizontal="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我只爱过一个正当最好年龄的人。"
+            android:layout_below="@+id/user_nickname2"
+            android:textColor="@color/dreamWhite"
+            android:id="@+id/user_head_sign"
+            android:layout_centerHorizontal="true" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/user_head_sign_edit"
+            android:layout_below="@+id/user_nickname2"
+            android:layout_toRightOf="@id/user_head_sign"
+            android:src="@mipmap/edit"/>
+    </RelativeLayout>
 </LinearLayout>

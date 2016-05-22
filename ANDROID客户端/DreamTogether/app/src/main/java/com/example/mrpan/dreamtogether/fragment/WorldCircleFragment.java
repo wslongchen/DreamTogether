@@ -58,6 +58,8 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
 
     private TitleBar titleBar;
 
+    int current;
+
     private Context context;
     private  WorldCircleListAdapter worldCircleListAdapter;
     private boolean isFresh=false;
@@ -331,9 +333,11 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                         // 刷新完成后调用，必须在UI线程中
                         recyclerView.refreshComplate();
                     } else {
+                        current=dreams.getPost().size();
                         addData();
                         loadMoreComplate();
                         recyclerView.loadMoreComplate();
+
                     }
                 }
             }, 2000);
@@ -351,6 +355,7 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
 
     public void loadMoreComplate() {
         recyclerView.getAdapter().notifyDataSetChanged();
+        recyclerView.scrollToPosition(current);
     }
 
     /**

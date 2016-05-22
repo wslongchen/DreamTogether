@@ -51,6 +51,8 @@ public class Config {
     public static final String CREATE_DREAM="http://dream.mrpann.com/index.php?action=post&type=dream";//"http://dream.mrpann.com/allpost.php?action=postDreamImg"
     public static final String CREATE_USER="http://dream.mrpann.com/index.php?action=post&type=user";
     public static final String CREATE_DREAM_WITH_IMG="http://dream.mrpann.com/allpost.php?action=postDreamImg";
+    public static final String UPDATE_USER_IMG="http://dream.mrpann.com/allpost.php?action=updateUserImg";
+    public static final String UPDATE_SIGN="http://dream.mrpann.com/index.php?action=update&type=sign";
     public static final String CREATE_COMMENT="http://dream.mrpann.com/index.php?action=comment&type=postComment";
     public static final String DELETE_DREAM="http://dream.mrpann.com/index.php?action=delete&type=dream&id=";
     private static final String LOGIN_Str="http://dream.mrpann.com/index.php?action=list&type=loginUser&name=";
@@ -95,6 +97,7 @@ public class Config {
     public static final int DREAM_DETAILS_TYPE=1015;
     public static final int BROWSER_TYPE=1016;
     public static final int MESSAGE_TYPE=1017;
+    public static final int EDIT_TYPE=1018;
 
 
     public static final int REQUEST_CODE_PERMISSIONS=123;

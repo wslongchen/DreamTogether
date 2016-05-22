@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    <com.example.mrpan.dreamtogether.view.TitleBar
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:id="@+id/top_bar"/>
+    >
 
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dreamBackground">
-
-    <include layout="@layout/user_info_header"
-        android:id="@+id/include"
-        />
     <!--style="@style/TextSettingItem"-->
     <ListView
 
@@ -25,8 +17,14 @@
         android:layout_height="match_parent"
         android:divider="@mipmap/line"
         android:listSelector="@color/dreamBlack"
-        android:layout_below="@+id/include">
+        android:layout_alignParentStart="true">
 
     </ListView>
+
+    <com.example.mrpan.dreamtogether.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/top_bar"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

@@ -15,6 +15,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,9 @@ import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.utils.BitmapUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,8 @@ public class PhotoFragment extends Fragment{
 	private ViewPager pager;
 	private MyPageAdapter adapter;
 	private int count;
+
+	private ProgressBar image_progressBar;
 
 	public List<Bitmap> bmp = new ArrayList<Bitmap>();
 	public List<String> drr = new ArrayList<String>();
@@ -62,7 +68,7 @@ public class PhotoFragment extends Fragment{
 			viewGroup.removeView(currentView);
 		}
 		context = getActivity();
-
+		image_progressBar=(ProgressBar)currentView.findViewById(R.id.image_progressBar);
 		photo_relativeLayout = (RelativeLayout) currentView.findViewById(R.id.photo_relativeLayout);
 		photo_relativeLayout.setBackgroundColor(0x70000000);
 		count_str=(TextView)currentView.findViewById(R.id.photo_count);
@@ -72,11 +78,21 @@ public class PhotoFragment extends Fragment{
 			isIndex=true;
 			if(imgs.length>0){
 				for(int i=0;i<imgs.length;i++){
-					Bitmap bitmap=ImageLoader.getInstance().loadImageSync("http://"+imgs[i]);
-					if(bitmap!=null)
-						bmp.add(bitmap);
-					System.out.println(imgs[i]);
+//					Bitmap bitmap=ImageLoader.getInstance().loadImageSync("http://"+imgs[i]);
+//					if(bitmap!=null)
+//						bmp.add(bitmap);
+					initListUrls("http://"+imgs[i]);
 				}
+				pager = (ViewPager) currentView.findViewById(R.id.viewpager);
+				pager.setOnPageChangeListener(pageChangeListener);
+
+				adapter = new MyPageAdapter(listViews);// 构造adapter
+				pager.setAdapter(adapter);// 设置适配器
+
+				int id = bundle.getInt("ID", 0);
+				pager.setCurrentItem(id);
+				String state = (id+1)+"/"+imgs.length;
+				count_str.setText(state);
 			}
 		}else{
 			for (int i = 0; i < BitmapUtils.bmp.size(); i++) {
@@ -86,6 +102,22 @@ public class PhotoFragment extends Fragment{
 				drr.add(BitmapUtils.drr.get(i));
 			}
 			max = BitmapUtils.max;
+
+			pager = (ViewPager) currentView.findViewById(R.id.viewpager);
+			pager.setOnPageChangeListener(pageChangeListener);
+			for (int i = 0; i < bmp.size(); i++) {
+				initListViews(bmp.get(i));//
+			}
+
+
+
+			adapter = new MyPageAdapter(listViews);// 构造adapter
+			pager.setAdapter(adapter);// 设置适配器
+
+			int id = bundle.getInt("ID", 0);
+			pager.setCurrentItem(id);
+			String state = (id+1)+"/"+bmp.size();
+			count_str.setText(state);
 		}
 
 
@@ -136,21 +168,7 @@ public class PhotoFragment extends Fragment{
 //			}
 //		});
 
-		pager = (ViewPager) currentView.findViewById(R.id.viewpager);
-		pager.setOnPageChangeListener(pageChangeListener);
-		for (int i = 0; i < bmp.size(); i++) {
-			initListViews(bmp.get(i));//
-		}
 
-
-
-		adapter = new MyPageAdapter(listViews);// 构造adapter
-		pager.setAdapter(adapter);// 设置适配器
-
-		int id = bundle.getInt("ID", 0);
-		pager.setCurrentItem(id);
-		String state = (id+1)+"/"+bmp.size();
-		count_str.setText(state);
 		return currentView;
 	}
 
@@ -160,6 +178,74 @@ public class PhotoFragment extends Fragment{
 		ImageView img = new ImageView(getActivity());// 构造textView对象
 		img.setBackgroundColor(0xff000000);
 		img.setImageBitmap(bm);
+		img.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.FILL_PARENT));
+		img.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(isIndex){
+					getActivity().finish();
+				}else{
+					getFragmentManager().popBackStack();
+				}
+			}
+		});
+		listViews.add(img);// 添加view
+	}
+
+	private void initListUrls(String url) {
+		if (listViews == null)
+			listViews = new ArrayList<View>();
+		ImageView img = new ImageView(getActivity());// 构造textView对象
+		img.setBackgroundColor(0xff000000);
+		ImageLoader.getInstance().displayImage(url, img, null, new SimpleImageLoadingListener() {
+			@Override
+			public void onLoadingStarted(String imageUri, View view) {
+				super.onLoadingStarted(imageUri, view);
+				image_progressBar.setVisibility(View.VISIBLE);
+			}
+
+			@Override
+			public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+				super.onLoadingFailed(imageUri, view, failReason);
+				String message = null;
+				switch (failReason.getType()) {
+					case IO_ERROR:
+						message = "网络异常";
+						break;
+					case DECODING_ERROR:
+						message = "图片解析失败";
+						break;
+					case NETWORK_DENIED:
+						message = "图片加载失败";
+						break;
+					case OUT_OF_MEMORY:
+						message = "内存溢出";
+						break;
+					case UNKNOWN:
+						message = "未知错误";
+						break;
+				}
+				Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+				image_progressBar.setVisibility(View.GONE);
+			}
+
+			@Override
+			public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+				super.onLoadingComplete(imageUri, view, loadedImage);
+				image_progressBar.setVisibility(View.GONE);
+			}
+		}, new ImageLoadingProgressListener() {
+			@Override
+			public void onProgressUpdate(String s, View view, int i, int i1) {
+				int progress=0;
+				if(i!=0&&i<=i1){
+					progress=(int)((float) i/(float)i1*100);
+					//loadingText.setText(""+progress+"%");
+					image_progressBar.setProgress(progress);
+				}
+			}
+		});
 		img.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT));
 		img.setOnClickListener(new View.OnClickListener() {
