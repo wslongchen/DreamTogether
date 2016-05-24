@@ -24,6 +24,7 @@ import com.example.mrpan.dreamtogether.fragment.MessegeFragment;
 import com.example.mrpan.dreamtogether.fragment.PhotoFragment;
 import com.example.mrpan.dreamtogether.fragment.PicSelectFragment;
 import com.example.mrpan.dreamtogether.fragment.SelectImageGridFragment;
+import com.example.mrpan.dreamtogether.fragment.ShareFragment;
 import com.example.mrpan.dreamtogether.fragment.UserDreamListFragment;
 import com.example.mrpan.dreamtogether.fragment.WorldCircleFragment;
 import com.example.mrpan.dreamtogether.utils.Config;
@@ -52,6 +53,7 @@ public class OtherActivity extends FragmentActivity {
     private ChatFragment chatFragment=null;
     private MessegeFragment messegeFragment=null;
     private EditFragment editFragment=null;
+    private ShareFragment shareFragment=null;
 
 
     @Override
@@ -140,6 +142,13 @@ public class OtherActivity extends FragmentActivity {
                 //transaction.addToBackStack(null);
                 transaction.commit();
                 break;
+            case Config.SHARE_TYPE:
+                transaction = getSupportFragmentManager().beginTransaction();
+                //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
+                transaction.replace(R.id.other_layout, fragmentHashMap.get(ShareFragment.TAG));
+                //transaction.addToBackStack(null);
+                transaction.commit();
+                break;
             default:
                 break;
         }
@@ -160,6 +169,7 @@ public class OtherActivity extends FragmentActivity {
         chatFragment=new ChatFragment();
         messegeFragment=new MessegeFragment();
         editFragment=new EditFragment();
+        shareFragment=new ShareFragment();
 
         fragmentHashMap.put(DreamerRegisterFragment.TAG, dreamerRegisterFragment);
         fragmentHashMap.put(UserDreamListFragment.TAG,userDreamListFragment);
@@ -174,6 +184,7 @@ public class OtherActivity extends FragmentActivity {
         fragmentHashMap.put(ChatFragment.TAG,chatFragment);
         fragmentHashMap.put(MessegeFragment.TAG,messegeFragment);
         fragmentHashMap.put(EditFragment.TAG,editFragment);
+        fragmentHashMap.put(ShareFragment.TAG,shareFragment);
     }
 
 }

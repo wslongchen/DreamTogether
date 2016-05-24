@@ -98,6 +98,7 @@ public class Config {
     public static final int BROWSER_TYPE=1016;
     public static final int MESSAGE_TYPE=1017;
     public static final int EDIT_TYPE=1018;
+    public static final int SHARE_TYPE=1019;
 
 
     public static final int REQUEST_CODE_PERMISSIONS=123;

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.example.mrpan.dreamtogether.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/top_bar"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/share_view"
+        android:background="@color/dream_bg"
+        android:scrollbars="none">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/dream_bg"
+            android:id="@+id/share_v">
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                card_view:cardCornerRadius="5dp"
+                android:background="@drawable/wan_card_bg"
+                android:layout_margin="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_margin="10dp"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/bg_search"/>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="27"
+                            android:textSize="22dp"
+                            android:textColor="@color/dreamDarkGery"
+                            android:gravity="bottom"
+                            android:layout_marginLeft="15dp"
+                            android:id="@+id/temprature"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="℃"
+                            android:textColor="@color/dreamDarkGery"
+                            android:textSize="14dp"
+                            android:id="@+id/temprature_fuhao"
+                            android:layout_alignBottom="@id/temprature"
+                            android:layout_toEndOf="@+id/temprature" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="张家界"
+                            android:textColor="@color/dreamDarkGery"
+                            android:layout_marginLeft="2dp"
+                            android:textSize="16dp"
+                            android:id="@+id/dream_location"
+                            android:layout_alignBottom="@id/temprature"
+                            android:layout_toEndOf="@+id/temprature_fuhao" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mon 23 May.2016"
+                            android:textColor="@color/dreamDarkGery"
+                            android:textSize="14dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_alignBottom="@id/temprature"
+                            android:layout_alignParentEnd="true" />
+                    </RelativeLayout>
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:textSize="16dp"
+                        android:background="@null"
+                        android:textColor="@color/dreamBlack"
+                        android:text="人有一种可怕的欲望，想窥探别人内心，传递自己的恐慌，为别人同自己一样悲伤恐惧而感到安慰，想要操纵别人，在得知别人受到自己影响时的自鸣得意。这些都是难以启齿的，我们心中的恶魔。 by 帕慕克"/>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="5dp"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14dp"
+                            android:textColor="@color/dreamDarkGery"
+                            android:text="From Dream/"
+                            android:layout_toLeftOf="@+id/author"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/dreamDarkGery"
+                            android:textSize="14dp"
+                            android:id="@+id/author"
+                            android:layout_alignParentRight="true"
+                            android:text="潘安"
+                            />
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

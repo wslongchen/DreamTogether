@@ -183,8 +183,10 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                                     ret = jsonObject.getInt("ret");
                                     if (ret == Config.RESULT_RET_SUCCESS) {
                                         dreams.getPost().remove(position);
-                                        worldCircleListAdapter.notifyDataSetChanged();
-                                        recyclerView.getAdapter().notifyDataSetChanged();
+                                        Message message = new Message();
+                                        message.arg1 = 1003;
+                                        message.arg2=position;
+                                        handler.sendMessage(message);
                                         //Toast.makeText(mContext,"删除成功！",Toast.LENGTH_LONG).show();
                                         //Intent intent = new Intent(context, WorldCircleFragment.class);
                                         //startActivityForResult(intent, Config.RESULT_RET_SUCCESS);
@@ -279,6 +281,11 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                     //recyclerView.setRefresh(false);
 
                     recyclerView.loadMoreComplate();
+                    break;
+                case 1003:
+                    worldCircleListAdapter.notifyDataSetChanged();
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                    recyclerView.scrollToPosition(msg.arg2);
                     break;
                 default:
                     break;

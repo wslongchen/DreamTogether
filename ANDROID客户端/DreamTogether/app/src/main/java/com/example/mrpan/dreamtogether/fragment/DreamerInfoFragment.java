@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -41,6 +44,7 @@ import com.example.mrpan.dreamtogether.utils.BitmapUtils;
 import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.adapter.UserInfoAdapter;
+import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.utils.MySharePreference;
 import com.example.mrpan.dreamtogether.utils.SystemStatusManager;
 import com.example.mrpan.dreamtogether.view.CircleImageView;
@@ -130,22 +134,31 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
     }
 
     private void initView() {
-        user_head_sign=(TextView)currentView.findViewById(R.id.user_head_sign);
-        user_head_sign_edit=(ImageView)currentView.findViewById(R.id.user_head_sign_edit);
-        user_head_sign_edit.setOnClickListener(this);
+
         userInfoList = (ListView) currentView.findViewById(R.id.user_info_list);
         View headerview = View.inflate(context, R.layout.user_info_header, (ViewGroup) currentView.getParent());
         userInfoList.addHeaderView(headerview);
+        user_head_sign=(TextView)currentView.findViewById(R.id.user_head_sign);
+        user_head_sign_edit=(ImageView)currentView.findViewById(R.id.user_head_sign_edit);
+        user_head_sign_edit.setOnClickListener(this);
         relativeLayout = (RelativeLayout) currentView.findViewById(R.id.user_info_head);
+        //relativeLayout.setBackground(BitmapUtils.blurImageAmeliorate(BitmapUtils.drawableToBitmap(getResources().getDrawable(R.mipmap.bg_search)), context));
+        float scaleFactor = 20;//图片缩放比例；
+        float radius = 10;//模糊程度
+        //MyLog.i(TAG,headerview.getWidth()+","+headerview.getHeight());
+
+        Bitmap overlay = BitmapUtils.drawableToBitmap(getResources().getDrawable(R.mipmap.bg_search));
+
+       // overlay = BitmapUtils.doBlur(overlay, (int) radius, true);
+        relativeLayout.setBackground(getResources().getDrawable(R.mipmap.bg_search));
         relativeLayout.setOnClickListener(this);
-        relativeLayout.setBackground(BitmapUtils.BlurImages(BitmapUtils.drawableToBitmap(getResources().getDrawable(R.mipmap.bg_search)), context));
         titleBar = (TitleBar) currentView.findViewById(R.id.top_bar);
         // titleBar.setBgColor(R.color.dreamBlack);
         titleBar.showRight("我的梦想", R.drawable.btn_post, this);
         titleBar.setBgColor(R.color.dreamTransparent);
         titleBar.setBackgroundColor(getResources().getColor(R.color.dreamTransparent));
 
-        userNickname = (TextView) currentView.findViewById(R.id.user_nickname);
+        userNickname = (TextView) currentView.findViewById(R.id.user_nickname2);
         userImg = (ImageView) currentView.findViewById(R.id.userImg);
         qrImg = (ImageView) currentView.findViewById(R.id.qrImg);
         qrImg.setOnClickListener(this);
@@ -155,8 +168,8 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
 
         takePhoto = (ImageView) currentView.findViewById(R.id.user_head_takephoto);
         takePhoto.setOnClickListener(this);
-        //takePhoto.setImageResource(R.mipmap.mfy);
-       // takePhoto.setBackgroundColor(getResources().getColor(R.color.dreamWhite));
+//        //takePhoto.setImageResource(R.mipmap.mfy);
+//       // takePhoto.setBackgroundColor(getResources().getColor(R.color.dreamWhite));
 
         if (user != null) {
             userNickname.setText(user.getUser_nickname());
@@ -198,6 +211,7 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
         UserInfoAdapter infoAdapter = new UserInfoAdapter(datas, context);
         userInfoList.setAdapter(infoAdapter);
         userInfoList.setOnItemClickListener(this);
+
     }
 
     @Override
@@ -421,5 +435,17 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
             userNickname.setText(user.getUser_nickname());
             user_head_sign.setText(user.getUser_display_name());
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getFragmentManager().beginTransaction().remove(MainActivity.fragmentHashMap.get(TAG));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getFragmentManager().beginTransaction().remove(MainActivity.fragmentHashMap.get(TAG));
     }
 }

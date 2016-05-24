@@ -1,0 +1,19 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dream_bg"
+    >
+    <com.example.mrpan.dreamtogether.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/top_bar"
+        />
+    <com.example.mrpan.dreamtogether.view.StarViewPager
+        android:id="@+id/myViewPager1"
+        android:layout_below="@id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    </com.example.mrpan.dreamtogether.view.StarViewPager>
+
+</RelativeLayout>

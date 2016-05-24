@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mrpan.dreamtogether.MainActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.view.DeletableEditText;
@@ -111,7 +112,13 @@ public class DreamSearchFragment extends Fragment implements View.OnClickListene
         back_arrow.clearAnimation();
         handler.removeMessages(Config.FEEDKEY_START);
         STATE = 0;
-        getFragmentManager().beginTransaction().remove(this);
+        getFragmentManager().beginTransaction().remove(MainActivity.fragmentHashMap.get(TAG));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getFragmentManager().beginTransaction().remove(MainActivity.fragmentHashMap.get(TAG));
     }
 
     @Override
