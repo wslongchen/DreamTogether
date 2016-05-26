@@ -23,6 +23,29 @@ public class FileUtils {
 		return false;
 	}
 
+	public static void delFile(String fileName){
+		File file = new File(Config.DIR_IMAGE_PATH + fileName);
+		if(file.isFile()){
+			file.delete();
+		}
+		file.exists();
+	}
+
+	public static void deleteDir() {
+		File dir = new File(Config.DIR_IMAGE_PATH);
+		if (dir == null || !dir.exists() || !dir.isDirectory())
+			return;
+
+		for (File file : dir.listFiles()) {
+			if (file.isFile())
+				file.delete();
+			else if (file.isDirectory())
+				deleteDir();
+		}
+		dir.delete();
+	}
+
+
 	/**
 	 * 创建根目录
 	 * 

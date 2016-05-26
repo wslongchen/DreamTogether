@@ -2,6 +2,7 @@ package com.example.mrpan.dreamtogether;
 
 import android.app.Application;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.xmpp.XmppConnectionManager;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
@@ -38,6 +39,7 @@ public class MyApplication extends Application {
         super.onCreate();
         instance = this;
         initImageLoader();
+        SDKInitializer.initialize(getApplicationContext());
         //SDKInitializer.initialize(this);
 
     }

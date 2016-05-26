@@ -21,8 +21,10 @@ import com.example.mrpan.dreamtogether.adapter.WorldCircleListAdapter;
 import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.entity.DreamPosts;
 import com.example.mrpan.dreamtogether.entity.Meta;
+import com.example.mrpan.dreamtogether.entity.SiteInfoBean;
 import com.example.mrpan.dreamtogether.http.HttpHelper;
 import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
+import com.example.mrpan.dreamtogether.http.HttpUtil;
 import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DateUtils;
@@ -63,6 +65,7 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
     private Context context;
     private  WorldCircleListAdapter worldCircleListAdapter;
     private boolean isFresh=false;
+    HttpUtil fileFetch;
 
     @Nullable
     @Override
@@ -73,7 +76,20 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
             viewGroup.removeView(currentView);
         }
         initView();
+        //TestMethod();
         return currentView;
+    }
+
+    public void TestMethod()
+    { ///xx/weblogic60b2_win.exe
+        try{
+            SiteInfoBean bean = new SiteInfoBean("http://qd2.cache.baidupcs.com/file/9c10249845d3abdeda6a1df0102c4d90?bkt=p3-0000a2d94d1f06956fd4f4ab7bf1938cc7a7&xcode=3997050783b092cf8f887117b779155538b2461c09c82b090b2977702d3e6764&fid=237621224-250528-855846111132216&time=1464164845&sign=FDTAXGERLBH-DCb740ccc5511e5e8fedcff06b081203-OcmUNMshAqdxY8bmTuqO0j0tbKY%3D&to=qc2&fm=Nan,B,U,nc&sta_dx=55&sta_cs=0&sta_ft=exe&sta_ct=4&fm2=Nanjing02,B,U,nc&newver=1&newfm=1&secfm=1&flow_ver=3&pkey=0000a2d94d1f06956fd4f4ab7bf1938cc7a7&sl=74317902&expires=8h&rt=pr&r=174042734&mlogid=3378862890857777325&vuk=237621224&vbdid=272158236&fin=openfire_4_0_2.exe&slt=pm&uta=0&rtype=1&iv=0&isw=0&dp-logid=3378862890857777325&dp-callid=0.1.1", Config.DIR_CACHE_PATH,"weblogic60b2_win.exe",5);
+            fileFetch = new HttpUtil(bean);
+            fileFetch.start();
+
+
+        }
+        catch(Exception e){e.printStackTrace ();}
     }
 
     void initView(){
@@ -306,6 +322,8 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                 intent.setClass(context, OtherActivity.class);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.top_in, R.anim.top_out);
+
+//                fileFetch.siteStop();
 //                List<Integer> it=new ArrayList<>();
 //                for(int i=0;i<100;i++){
 //                    it.add(i);

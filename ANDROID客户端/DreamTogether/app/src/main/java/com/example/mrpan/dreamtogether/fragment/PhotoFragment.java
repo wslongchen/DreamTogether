@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.utils.BitmapUtils;
+import com.example.mrpan.dreamtogether.utils.FileUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -39,18 +41,22 @@ public class PhotoFragment extends Fragment{
 	private ArrayList<View> listViews = null;
 	private ViewPager pager;
 	private MyPageAdapter adapter;
-	private int count;
+	private int currentItem=0;
 
 	private ProgressBar image_progressBar;
 
 	public List<Bitmap> bmp = new ArrayList<Bitmap>();
 	public List<String> drr = new ArrayList<String>();
-//	public List<String> del = new ArrayList<String>();
+	public List<String> del = new ArrayList<String>();
 	public int max;
 
 	RelativeLayout photo_relativeLayout;
 
+	private ImageView selected;
+
 	private View currentView;
+
+	private FragmentTransaction transaction;
 
 	private TextView count_str;
 
@@ -60,8 +66,8 @@ public class PhotoFragment extends Fragment{
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		getActivity().getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
-				WindowManager.LayoutParams. FLAG_FULLSCREEN);
+//		getActivity().getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
+//				WindowManager.LayoutParams. FLAG_FULLSCREEN);
 		currentView = inflater.inflate(R.layout.activity_photo, container, false);
 		ViewGroup viewGroup = (ViewGroup) currentView.getParent();
 		if (viewGroup != null) {
@@ -101,23 +107,29 @@ public class PhotoFragment extends Fragment{
 			for (int i = 0; i < BitmapUtils.drr.size(); i++) {
 				drr.add(BitmapUtils.drr.get(i));
 			}
+			for (int i = 0; i < bmp.size(); i++) {
+				initListViews(bmp.get(i));
+			}
 			max = BitmapUtils.max;
 
 			pager = (ViewPager) currentView.findViewById(R.id.viewpager);
 			pager.setOnPageChangeListener(pageChangeListener);
-			for (int i = 0; i < bmp.size(); i++) {
-				initListViews(bmp.get(i));//
-			}
+
+
 
 
 
 			adapter = new MyPageAdapter(listViews);// 构造adapter
 			pager.setAdapter(adapter);// 设置适配器
-
+			pager.getAdapter().notifyDataSetChanged();
 			int id = bundle.getInt("ID", 0);
-			pager.setCurrentItem(id);
+			currentItem=id;
 			String state = (id+1)+"/"+bmp.size();
+		//	pager.setCurrentItem(currentItem);
+
+			MyLog.i(TAG, "state:"+state+",pagerCurrentItem:"+pager.getCurrentItem()+",pagerSize"+pager.getAdapter().getCount());
 			count_str.setText(state);
+
 		}
 
 
@@ -129,45 +141,35 @@ public class PhotoFragment extends Fragment{
 //				//getActivity().finish();
 //			}
 //		});
-		//Button photo_bt_del = (Button) currentView.findViewById(R.id.photo_bt_del);
-//		photo_bt_del.setOnClickListener(new View.OnClickListener() {
-//			public void onClick(View v) {
-//				if (listViews.size() == 1) {
-//					BitmapUtils.bmp.clear();
-//					BitmapUtils.drr.clear();
-//					BitmapUtils.max = 0;
-//					//FileUtils.deleteDir();
-//					//finish();
-//				} else {
-//					String newStr = drr.get(count).substring(
-//							drr.get(count).lastIndexOf("/") + 1,
-//							drr.get(count).lastIndexOf("."));
-//					bmp.remove(count);
-//					drr.remove(count);
-//					del.add(newStr);
-//					max--;
-//					pager.removeAllViews();
-//					listViews.remove(count);
-//					adapter.setListViews(listViews);
-//					adapter.notifyDataSetChanged();
-//				}
-//			}
-//		});
-//		Button photo_bt_enter = (Button) currentView.findViewById(R.id.photo_bt_enter);
-//		photo_bt_enter.setOnClickListener(new View.OnClickListener() {
-//
-//			public void onClick(View v) {
-//
-//				BitmapUtils.bmp = bmp;
-//				BitmapUtils.drr = drr;
-//				BitmapUtils.max = max;
-//				for (int i = 0; i < del.size(); i++) {
-//					//FileUtils.delFile(del.get(i)+".JPEG");
-//				}
-//				//getActivity().finish();
-//			}
-//		});
-
+		if(!isIndex){
+			selected=(ImageView)currentView.findViewById(R.id.isselected);
+			selected.setVisibility(View.VISIBLE);
+			selected.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (listViews.size() == 1) {
+						BitmapUtils.bmp.clear();
+						BitmapUtils.drr.clear();
+						BitmapUtils.max = 0;
+						//FileUtils.deleteDir();
+						//finish();
+					} else {
+						String newStr = drr.get(currentItem).substring(
+								drr.get(currentItem).lastIndexOf("/") + 1,
+								drr.get(currentItem).lastIndexOf("."));
+						bmp.remove(currentItem);
+						drr.remove(currentItem);
+						del.add(newStr);
+						max--;
+						pager.removeAllViews();
+						selected.setVisibility(View.GONE);
+						listViews.remove(currentItem);
+						adapter.setListViews(listViews);
+						adapter.notifyDataSetChanged();
+					}
+				}
+			});
+		}
 
 		return currentView;
 	}
@@ -186,7 +188,18 @@ public class PhotoFragment extends Fragment{
 				if(isIndex){
 					getActivity().finish();
 				}else{
-					getFragmentManager().popBackStack();
+//					BitmapUtils.bmp = bmp;
+//				BitmapUtils.drr = drr;
+//				BitmapUtils.max = max;
+//				for (int i = 0; i < del.size(); i++) {
+//					//FileUtils.delFile(del.get(i)+".JPEG");
+//				}
+					transaction = getFragmentManager().beginTransaction();
+					//transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
+					transaction.replace(R.id.other_layout, OtherActivity.fragmentHashMap.get(DreamPostFragment.TAG));
+//					transaction.addToBackStack(null);
+//                    transaction.remove(SelectImageGridFragment.this);
+					transaction.commit();
 				}
 			}
 		});
@@ -266,6 +279,9 @@ public class PhotoFragment extends Fragment{
 		public void onPageSelected(int arg0) {// 页面选择响应函数
 			String state = (arg0+1)+"/"+bmp.size();
 			count_str.setText(state);
+			currentItem=arg0;
+
+
 		}
 
 		public void onPageScrolled(int arg0, float arg1, int arg2) {// 滑动中。。。
@@ -273,7 +289,7 @@ public class PhotoFragment extends Fragment{
 		}
 
 		public void onPageScrollStateChanged(int arg0) {// 滑动状态改变
-
+			currentItem=arg0;
 		}
 	};
 
@@ -325,5 +341,13 @@ public class PhotoFragment extends Fragment{
 
 	}
 
-
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		currentItem=0;
+		bmp.clear();
+		drr.clear();
+		del.clear();
+		listViews.clear();
+	}
 }

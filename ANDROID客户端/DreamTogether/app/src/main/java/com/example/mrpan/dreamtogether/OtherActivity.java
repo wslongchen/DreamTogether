@@ -6,6 +6,7 @@ import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -185,6 +186,18 @@ public class OtherActivity extends FragmentActivity {
         fragmentHashMap.put(MessegeFragment.TAG,messegeFragment);
         fragmentHashMap.put(EditFragment.TAG,editFragment);
         fragmentHashMap.put(ShareFragment.TAG,shareFragment);
+
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_BACK:
+
+                break;
+            default:
+                break;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

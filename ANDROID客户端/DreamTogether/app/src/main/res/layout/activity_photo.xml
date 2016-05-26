@@ -38,4 +38,15 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/isselected"
+        android:visibility="gone"
+        android:src="@drawable/icon_data_selected"
+        android:layout_below="@+id/image_progressBar"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="50dp"
+        android:layout_marginTop="50dp" />
+
 </RelativeLayout>

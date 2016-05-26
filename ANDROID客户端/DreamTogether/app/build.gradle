@@ -18,6 +18,11 @@ android {
         }
     }
     useLibrary 'org.apache.http.legacy'
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
@@ -32,4 +37,6 @@ dependencies {
     compile files('libs/rebound-core.jar')
     compile files('libs/asmack-android-6.jar')
     compile files('libs/open_sdk_r5509_lite.jar')
+    compile files('libs/BaiduLBS_Android.jar')
 }
+

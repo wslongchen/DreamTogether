@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
+import com.example.mrpan.dreamtogether.entity.ImageBucket;
 import com.example.mrpan.dreamtogether.entity.ImageItem;
 import com.example.mrpan.dreamtogether.utils.AlbumHelper;
 import com.example.mrpan.dreamtogether.utils.BitmapUtils;
@@ -62,11 +63,13 @@ public class SelectImageGridFragment extends Fragment implements View.OnClickLis
         context = getActivity();
         helper = AlbumHelper.getHelper();
         helper.init(context);
-        Bundle bundle=getArguments();
-        dataList=getDataList();
+
+
+        //Bundle bundle=getArguments();
+       // dataList=getDataList();
 //        dataList = (List<ImageItem>) bundle.getSerializable(
 //                EXTRA_IMAGE_LIST);
-
+        //initData();
         initView();
         //bt = (Button) currentView.findViewById(R.id.bt);
 //        bt.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +102,14 @@ public class SelectImageGridFragment extends Fragment implements View.OnClickLis
         return currentView;
     }
 
+    private void initData() {
+        List<ImageBucket> dataLists = helper.getImagesBucketList(false);
+        dataList=new ArrayList<>();
+        for (ImageBucket imgBucket:dataLists) {
+            dataList.addAll(imgBucket.imageList);
+        }
+    }
+
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -117,7 +128,7 @@ public class SelectImageGridFragment extends Fragment implements View.OnClickLis
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
         gridView = (GridView) currentView.findViewById(R.id.photo_img_gridview);
         gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        titleBar.showLeftStrAndRightStr(getResources().getString(R.string.app_name), "取消", "", this, this);
+        titleBar.showLeftStrAndRightStr(getResources().getString(R.string.app_name), "返回", "", this, this);
         adapter = new ImageGridAdapter(getActivity(), dataList,
                 mHandler);
         adapter.selectTotal=BitmapUtils.drr.size();
@@ -135,18 +146,13 @@ public class SelectImageGridFragment extends Fragment implements View.OnClickLis
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                /**
-                 * 鏍规嵁position鍙傛暟锛屽彲浠ヨ幏寰楄窡GridView鐨勫瓙View鐩哥粦瀹氱殑瀹炰綋绫伙紝鐒跺悗鏍规嵁瀹冪殑isSelected鐘舵
-                 * �锛� 鏉ュ垽鏂槸鍚︽樉绀洪�涓晥鏋溿� 鑷充簬閫変腑鏁堟灉鐨勮鍒欙紝涓嬮潰閫傞厤鍣ㄧ殑浠ｇ爜涓細鏈夎鏄�
-                 */
+
                 if (dataList.get(position).isSelected) {
                     dataList.get(position).isSelected = false;
                 } else {
                     dataList.get(position).isSelected = true;
                 }
-                /**
-                 * 閫氱煡閫傞厤鍣紝缁戝畾鐨勬暟鎹彂鐢熶簡鏀瑰彉锛屽簲褰撳埛鏂拌鍥�
-                 */
+
                 adapter.notifyDataSetChanged();
 
 
@@ -186,6 +192,9 @@ public class SelectImageGridFragment extends Fragment implements View.OnClickLis
                     BitmapUtils.act_bool = false;
                 }
                 //getActivity().finish();
+                break;
+            case R.id.titleBarLeftStr:
+                getFragmentManager().popBackStack();
                 break;
             default:
                 break;

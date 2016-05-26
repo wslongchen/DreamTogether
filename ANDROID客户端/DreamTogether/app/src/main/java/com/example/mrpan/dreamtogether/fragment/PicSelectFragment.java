@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Created by mrpan on 16/3/31.
  */
-public class PicSelectFragment extends Fragment {
+public class PicSelectFragment extends Fragment implements View.OnClickListener{
     public static final String TAG = "PicSelect";
 
     private View currentView = null;
@@ -82,6 +82,8 @@ public class PicSelectFragment extends Fragment {
      * 初始化view视图
      */
     private void initView() {
+        titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
+        titleBar.showLeftStrAndRightStr("相册","取消","",this,this);
         gridView = (GridView) currentView.findViewById(R.id.gridview);
         adapter = new ImageBucketAdapter(getActivity(), dataList);
 
@@ -113,7 +115,7 @@ public class PicSelectFragment extends Fragment {
                 transaction.replace(R.id.other_layout, OtherActivity.fragmentHashMap.get(SelectImageGridFragment.TAG));
                 //OtherActivity.fragmentHashMap.get(SelectImageGridFragment.TAG).setArguments(bundle);
                 //transaction.setCustomAnimations(R.anim.left_in, R.anim.left_out, R.anim.right_in, R.anim.right_out);
-                //transaction.addToBackStack(null);
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
 
@@ -123,5 +125,16 @@ public class PicSelectFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.titleBarLeftStr:
+                getActivity().finish();
+                break;
+            default:
+                break;
+        }
     }
 }
