@@ -1,10 +1,9 @@
-package com.example.mrpan.dreamtogether.tecent;
+package com.example.mrpan.dreamtogether.share;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.example.mrpan.dreamtogether.MainActivity;
 import com.example.mrpan.dreamtogether.entity.Share;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.share.QQShare;
@@ -44,7 +43,7 @@ public class TencentUtil {
         params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, share.getIMAGE_URL());
         params.putString(QQShare.SHARE_TO_QQ_APP_NAME, share.getAPP_NAME());
         // params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, "其他附加功能");
-        mTencent.shareToQQ(activity, params, new BaseUiListener());
+        mTencent.shareToQQ(activity, params, new BaseUiListener(0));
     }
 
     public void shareImage(Share share){
@@ -53,7 +52,7 @@ public class TencentUtil {
         params.putString(QQShare.SHARE_TO_QQ_APP_NAME, share.getAPP_NAME());
         params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_IMAGE);
         params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN);
-        mTencent.shareToQQ(activity, params, new BaseUiListener());
+        mTencent.shareToQQ(activity, params, new BaseUiListener(0));
     }
 
     public void shareQzone(Share share) {
@@ -66,7 +65,7 @@ public class TencentUtil {
                 share.getTARGET_URL());
         params.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL,
                 new ArrayList<String>());
-        mTencent.shareToQzone(activity, params, new BaseUiListener());
+        mTencent.shareToQzone(activity, params, new BaseUiListener(0));
     }
 
     public void ShareSimple(Share share) {
@@ -79,7 +78,7 @@ public class TencentUtil {
         params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, share.getIMAGE_URL());
         params.putString(QQShare.SHARE_TO_QQ_APP_NAME, share.getAPP_NAME());
         // params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, "其他附加功能");
-        mTencent.shareToQQ(activity, params, new BaseUiListener());
+        mTencent.shareToQQ(activity, params, new BaseUiListener(0));
     }
 
     public void shareMusic(Share share){
@@ -92,7 +91,7 @@ public class TencentUtil {
         params.putString(QQShare.SHARE_TO_QQ_AUDIO_URL, share.getAUDIO_URL());
         params.putString(QQShare.SHARE_TO_QQ_APP_NAME,  share.getAPP_NAME());
         params.putInt(QQShare.SHARE_TO_QQ_EXT_INT,QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN);
-        mTencent.shareToQQ(activity, params, new BaseUiListener());
+        mTencent.shareToQQ(activity, params, new BaseUiListener(0));
     }
 
 

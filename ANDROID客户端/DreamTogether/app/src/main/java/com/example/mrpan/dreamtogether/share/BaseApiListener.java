@@ -1,4 +1,4 @@
-package com.example.mrpan.dreamtogether.tecent;
+package com.example.mrpan.dreamtogether.share;
 
 import com.tencent.open.utils.HttpUtils;
 import com.tencent.tauth.IRequestListener;

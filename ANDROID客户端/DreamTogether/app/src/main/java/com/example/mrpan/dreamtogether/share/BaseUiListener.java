@@ -1,14 +1,18 @@
-package com.example.mrpan.dreamtogether.tecent;
+package com.example.mrpan.dreamtogether.share;
 
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
-
-import org.json.JSONObject;
 
 /**
  * Created by mrpan on 16/5/23.
  */
 public class BaseUiListener implements IUiListener {
+
+    int type;
+
+    public BaseUiListener(int type){
+        this.type=type;
+    }
 
     @Override
     public void onComplete(Object o) {

@@ -10,6 +10,7 @@ public class Share extends BaseEntity {
     String IMAGE_URL;
     String AUDIO_URL;
     String APP_NAME;
+    String VIDEO_URL;
 
     public Share(){
         APP_NAME="梦想";
@@ -61,5 +62,13 @@ public class Share extends BaseEntity {
 
     public void setAUDIO_URL(String AUDIO_URL) {
         this.AUDIO_URL = AUDIO_URL;
+    }
+
+    public String getVIDEO_URL() {
+        return VIDEO_URL;
+    }
+
+    public void setVIDEO_URL(String VIDEO_URL) {
+        this.VIDEO_URL = VIDEO_URL;
     }
 }

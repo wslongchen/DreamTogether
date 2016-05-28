@@ -144,7 +144,11 @@ public class OtherActivity extends FragmentActivity {
                 transaction.commit();
                 break;
             case Config.SHARE_TYPE:
+                Dream dream2= (Dream) bundle.getSerializable("data");
                 transaction = getSupportFragmentManager().beginTransaction();
+                if(dream2!=null){
+                    ((ShareFragment)fragmentHashMap.get(ShareFragment.TAG)).setDream(dream2);
+                }
                 //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
                 transaction.replace(R.id.other_layout, fragmentHashMap.get(ShareFragment.TAG));
                 //transaction.addToBackStack(null);

@@ -78,15 +78,12 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
             viewGroup.removeView(currentView);
         }
         initView();
-//        CustomProgressDialog customProgressDialog= DialogUtils.getCustomProgressDialog1(context);
-//        customProgressDialog.
-//        customProgressDialog.show();
-        //TestMethod();
         return currentView;
     }
 
+    //测试下载
     public void TestMethod()
-    { ///xx/weblogic60b2_win.exe
+    {
         try{
             SiteInfoBean bean = new SiteInfoBean("http://qd2.cache.baidupcs.com/file/9c10249845d3abdeda6a1df0102c4d90?bkt=p3-0000a2d94d1f06956fd4f4ab7bf1938cc7a7&xcode=3997050783b092cf8f887117b779155538b2461c09c82b090b2977702d3e6764&fid=237621224-250528-855846111132216&time=1464164845&sign=FDTAXGERLBH-DCb740ccc5511e5e8fedcff06b081203-OcmUNMshAqdxY8bmTuqO0j0tbKY%3D&to=qc2&fm=Nan,B,U,nc&sta_dx=55&sta_cs=0&sta_ft=exe&sta_ct=4&fm2=Nanjing02,B,U,nc&newver=1&newfm=1&secfm=1&flow_ver=3&pkey=0000a2d94d1f06956fd4f4ab7bf1938cc7a7&sl=74317902&expires=8h&rt=pr&r=174042734&mlogid=3378862890857777325&vuk=237621224&vbdid=272158236&fin=openfire_4_0_2.exe&slt=pm&uta=0&rtype=1&iv=0&isw=0&dp-logid=3378862890857777325&dp-callid=0.1.1", Config.DIR_CACHE_PATH,"weblogic60b2_win.exe",5);
             fileFetch = new HttpUtil(bean);
@@ -103,28 +100,10 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
         titleBar.showRight("梦想圈", R.mipmap.xiuxiu2, this);
         context=getActivity();
         recyclerView=(AnimRefreshRecyclerView)currentView.findViewById(R.id.dream_list);
-        //recyclerView=(AnimRefreshRecyclerView)currentView.findViewById(R.id.dream_list);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        // 设置ItemAnimator
-        //recyclerView.setItemAnimator(new DefaultItemAnimator());
-        // 设置固定大小
-        //recyclerView.setHasFixedSize(true);
-        //headerView = LayoutInflater.from(getActivity()).inflate(R.layout.recyle_header_view, null);
-        // 脚部
-        //footerView = LayoutInflater.from(getActivity()).inflate(R.layout.recyle_footer_view, null);
         // 使用重写后的线性布局管理器
         AnimRefreshLinearLayoutManager manager = new AnimRefreshLinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), manager.getOrientation(), true));
-//            // 添加头部和脚部，如果不添加就使用默认的头部和脚部//
-        //recyclerView.addHeaderView(headerView);
-            // 设置头部的最大拉伸倍率，默认1.5f，必须写在setHeaderImage()之前
-//            recyclerView.setScaleRatio    (1.7f);
-//            // 设置下拉时拉伸的图片，不设置就使用默认的
-//              recyclerView.setHeaderImage((ImageView) headerView.findViewById(R.id.iv_hander));
-//            recyclerView.addFootView(footerView);
-        // 设置刷新动画的颜色
-        //recyclerView.setColor(Color.RED, Color.BLUE);
         // 设置头部恢复动画的执行时间，默认500毫秒
         recyclerView.setHeaderImageDurationMillis(500);
         // 设置拉伸到最高时头部的透明度，默认0.5f
@@ -134,12 +113,7 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
         if(cache!=null)
         {
             dreams=cache;
-//            if(cache.getPost().size()>0)
-//                dreams=cache;
-
             showData(cache);
-            //     List<Dream> ps=cache.getPost();
-            //    MyLog.i("world","not null"+ps.size());
         }
 
         // 设置刷新和加载更多数据的监听，分别在onRefresh()和onLoadMore()方法中执行刷新和加载更多操作
@@ -156,13 +130,9 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                 addData();
             }
         });
-
-
-
         isFresh=true;
         httpHelper=HttpHelper.getInstance();
-        //recyclerView.setRefresh(true);
-       // httpHelper.asyHttpGetRequest(Config.REQUEST_ALL_DREAM, new DreamHttpResponseCallBack(Config.ALL_DREAM));
+        recyclerView.setRefresh(true);
 
 
     }
@@ -178,7 +148,6 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                     bundle.putInt("type", Config.DREAM_DETAILS_TYPE);
                     Dream dream = dreams.getPost().get(postion - 1);
                     bundle.putSerializable("data", dream);
-                    //Toast.makeText(context,""+dream.getPost_content(),Toast.LENGTH_LONG).show();
                     intent.putExtras(bundle);
                     intent.setClass(context, OtherActivity.class);
                     startActivity(intent);
@@ -210,10 +179,6 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                                             message.arg2 = position;
                                             handler.sendMessage(message);
                                             //Toast.makeText(mContext,"删除成功！",Toast.LENGTH_LONG).show();
-                                            //Intent intent = new Intent(context, WorldCircleFragment.class);
-                                            //startActivityForResult(intent, Config.RESULT_RET_SUCCESS);
-
-                                            // Toast.makeText(context, "Publish successed!", Toast.LENGTH_LONG).show();
                                         } else {
                                             //Toast.makeText(mContext, "删除失败！", Toast.LENGTH_LONG).show();
                                         }
@@ -257,6 +222,7 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                         switch (msg.arg2)
                         {
                             case Config.ALL_DREAM:
+                                //dreams.getPost().clear();
 
                                 dreams=(DreamPosts) GsonUtils.getEntity(msg.obj.toString().trim(), DreamPosts.class);
                                 //List<Dream> dreamList=dreams.getPost();
@@ -322,7 +288,6 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.titleBarRightImage:
-                //clickcount++;
                 Intent intent=new Intent();
                 Bundle bundle=new Bundle();
                 bundle.putInt("type", Config.XIUXIU_TYPE);
@@ -384,7 +349,6 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
     }
 
     public void newData() {
-        dreams.getPost().clear();
         isFresh=true;
         httpHelper.asyHttpGetRequest(Config.REQUEST_ALL_DREAM, new DreamHttpResponseCallBack(Config.ALL_DREAM));
     }

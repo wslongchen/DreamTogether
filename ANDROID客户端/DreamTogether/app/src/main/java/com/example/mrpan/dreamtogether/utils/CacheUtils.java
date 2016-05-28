@@ -147,11 +147,13 @@ public class CacheUtils {
         File netCache= new File(Config.DIR_CACHE_PATH);
         File imgCache=new File(Config.DIR_IMAGE_PATH);
         File dataBaseCache=new File(Config.DIR_DATABASE_PATH);
+        File soundCache=new File(Config.SAVE_SOUND_PATH);
         fileSize +=getDirSize(dataBaseCache);
         fileSize += getDirSize(netCache);
         fileSize+=getDirSize(imgCache);
         fileSize += getDirSize(filesDir);
         fileSize += getDirSize(cacheDir);
+        fileSize += getDirSize(soundCache);
 //		fileSize += getDirSize(ImageLoader.getInstance().getDiscCache()
 //				.getDirectory());
 

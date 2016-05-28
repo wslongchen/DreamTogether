@@ -123,16 +123,8 @@ public class StarFragment extends Fragment implements View.OnClickListener{
 
         @Override
         public Fragment getItem(int arg0) {
-            //Bundle bundle = new Bundle();
-            //bundle.putInt(Config.KEY, Config.images[arg0 % getCount()]);
             Fragment frag =null;
-//		frag=OtherActivity.fragmentHashMap.get(CardDreamFragment.TAG);
-//		if(frag!=null) {
-//			((CardDreamFragment)frag).setDream(dreams.get(arg0%getCount()));
-//		}
             frag=new StarItemFragment();
-
-            //frag.setArguments(bundle);
             return frag;
         }
 

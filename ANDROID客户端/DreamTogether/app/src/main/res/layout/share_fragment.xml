@@ -77,6 +77,7 @@
                             android:text="Mon 23 May.2016"
                             android:textColor="@color/dreamDarkGery"
                             android:textSize="14dp"
+                            android:id="@+id/time"
                             android:layout_marginRight="10dp"
                             android:layout_alignBottom="@id/temprature"
                             android:layout_alignParentEnd="true" />
@@ -89,6 +90,7 @@
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="5dp"
                         android:textSize="16dp"
+                        android:id="@+id/content"
                         android:background="@null"
                         android:textColor="@color/dreamBlack"
                         android:text="人有一种可怕的欲望，想窥探别人内心，传递自己的恐慌，为别人同自己一样悲伤恐惧而感到安慰，想要操纵别人，在得知别人受到自己影响时的自鸣得意。这些都是难以启齿的，我们心中的恶魔。 by 帕慕克"/>

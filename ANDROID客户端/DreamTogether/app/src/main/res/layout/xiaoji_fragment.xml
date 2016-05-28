@@ -23,7 +23,7 @@
                 android:orientation="vertical">
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
+                    android:layout_height="200dp"
                     android:layout_margin="10dp"
                     android:scaleType="fitXY"
                     android:id="@+id/image_star"
@@ -66,6 +66,7 @@
                         android:text="Mon 23 May.2016"
                         android:textColor="@color/dreamDarkGery"
                         android:textSize="14dp"
+                        android:id="@+id/time"
                         android:layout_marginRight="10dp"
                         android:layout_alignBottom="@id/temprature"
                         android:layout_alignParentEnd="true" />
@@ -78,6 +79,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="5dp"
                     android:textSize="16dp"
+                    android:id="@+id/content"
                     android:textColor="@color/dreamBlack"
                     android:text="人有一种可怕的欲望，想窥探别人内心，传递自己的恐慌，为别人同自己一样悲伤恐惧而感到安慰，想要操纵别人，在得知别人受到自己影响时的自鸣得意。这些都是难以启齿的，我们心中的恶魔。 by 帕慕克"/>
                 <RelativeLayout
@@ -86,7 +88,6 @@
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="15dp"
-                    android:layout_marginBottom="5dp"
                     >
                     <TextView
                         android:layout_width="wrap_content"
@@ -105,21 +106,23 @@
                         android:text="潘安"
                         />
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginTop="15dp"
                     >
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:id="@+id/image_share"
-                        android:src="@mipmap/share_image"/>
+                        android:src="@mipmap/share_image"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true" />
                 </RelativeLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
+
     </com.example.mrpan.dreamtogether.view.OverScrollView>
+
 </LinearLayout>

@@ -29,6 +29,21 @@ public class DateUtils {
         return mDate;
     }
 
+    public static String getDateStr(String str) {
+        Date date = StrToDate(str);
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        String[] weekDays = { "Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat" };
+        String[] monthSpells={"Jan.","Feb.","Mar.","Apr.","May.","Jun.","Jul.","Aug.","Sep.","Oct.","Nov.","Dec."};
+        int w = c.get(Calendar.DAY_OF_WEEK) - 1;
+        if (w < 0) {
+            w = 0;
+        }
+        MyLog.i("ddd",str+",date:"+c.get(Calendar.DATE));
+        String mDate=weekDays[w] +" "+c.get(Calendar.DATE) +" "+monthSpells[c.get(Calendar.MONTH)]+c.get(Calendar.YEAR);
+        return mDate;
+    }
 
     public static String getShortSpellMonth(Date date){
         String[] monthSpells={"Jan.","Feb.","Mar.","Apr.","May.","Jun.","Jul.","Aug.","Sep.","Oct.","Nov.","Dec."};
@@ -99,6 +114,18 @@ public class DateUtils {
 
 
         return str;
+    }
+
+    //获取到距现在的天数
+    public static String getDays(String str){
+        Date date=StrToDate(str);
+        Date currentDate=new Date(System.currentTimeMillis());
+        if(date!=null){
+            long diff=currentDate.getTime()-date.getTime();
+            int dayDiff=(int)diff/(1000*60*60*24);
+            return String.valueOf(dayDiff);
+        }
+        return "";
     }
 
     /**

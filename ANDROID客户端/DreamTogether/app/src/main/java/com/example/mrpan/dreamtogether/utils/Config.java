@@ -3,6 +3,7 @@ package com.example.mrpan.dreamtogether.utils;
 import android.os.Environment;
 
 import com.example.mrpan.dreamtogether.R;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 /**
  * Created by mrpan on 15/12/6.
@@ -16,6 +17,22 @@ public class Config {
      */
 
     public static boolean IS_DEBUG=true;
+
+    public static final String APP_ID="wx5d8c6f74169f5bc1";//微信
+    public static final String APP_KEY="";
+    public static final String PARTNER_ID="";
+    public static final String PARTNER_KEY = "8934e7d15453e97507ef794cf7b0519d";
+
+    public static final String APP_SECRET="3e12592968fa5946589aa14ee06ed22c";
+
+    //微博
+    public static final String SINA_APP_KEY = "3292895821"; // 应用的APP_KEY
+    public static final String SINA_APP_SECRET="ceb1fcbe5d0862c9e55d65ba731c0cb3";
+    public static final String SINA_REDIRECT_URL = "http://www.sina.com";// 应用的回调页
+     public static final String SINA_SCOPE = "email,direct_messages_read,direct_messages_write,"
+        + "friendships_groups_read,friendships_groups_write,statuses_to_me_read," + "follow_app_official_microblog," + "invitation_write";// 应用申请的高级权限
+    public static Oauth2AccessToken SINA_TOKEN=null;
+
 
     public static String TYPE_CONN = "TYPE_CONN";
     public static int TYPE_ALL = 0;
@@ -99,6 +116,9 @@ public class Config {
     public static final int MESSAGE_TYPE=1017;
     public static final int EDIT_TYPE=1018;
     public static final int SHARE_TYPE=1019;
+
+
+    public static final int SHARE=1019;
 
 
     public static final int REQUEST_CODE_PERMISSIONS=123;

@@ -13,7 +13,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -25,31 +24,30 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.entity.Share;
-import com.example.mrpan.dreamtogether.tecent.TencentUtil;
-import com.example.mrpan.dreamtogether.utils.BitmapUtils;
+import com.example.mrpan.dreamtogether.share.AllShare;
+import com.example.mrpan.dreamtogether.share.TencentUtil;
 import com.example.mrpan.dreamtogether.utils.Config;
+import com.example.mrpan.dreamtogether.utils.DateUtils;
 import com.example.mrpan.dreamtogether.utils.FileUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
+import com.example.mrpan.dreamtogether.view.SharePopupWindows;
 import com.example.mrpan.dreamtogether.view.TitleBar;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by mrpan on 16/5/24.
@@ -63,6 +61,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
     private TitleBar titleBar;
 
 
+    private TextView temprature,dream_location,time,content,author;
     private ImageView share_image;
     private ScrollView scrollView;
     private LinearLayout s;
@@ -102,6 +101,24 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
         share_image.setOnClickListener(this);
         scrollView.setDrawingCacheEnabled(true);
 
+        temprature=(TextView)currentView.findViewById(R.id.temprature);
+        dream_location=(TextView)currentView.findViewById(R.id.dream_location);
+        time=(TextView)currentView.findViewById(R.id.time);
+        time.setText(DateUtils.getDateStr(dream.getPost_date()));
+        content=(TextView)currentView.findViewById(R.id.content);
+        content.setText(dream.getPost_content());
+        author=(TextView)currentView.findViewById(R.id.author);
+        author.setText(dream.getPost_author().getUser_nickname());
+        if(dream.getPost_imgs()!=null && !dream.getPost_imgs().equals("")) {
+            if (dream.getPost_imgs().length() > 0 && !dream.getPost_imgs().trim().isEmpty() && !dream.getPost_imgs().equals("")) {
+                String[] imgs = dream.getPost_imgs().split(",");
+                if(imgs.length>0){
+                    ImageLoader.getInstance().displayImage("http://" + imgs[0],share_image);
+                }
+            }
+        }else{
+            share_image.setImageResource(R.mipmap.bg_search);
+        }
     }
     public static Bitmap getBitmapByView(ScrollView scrollView) {
         int h = 0;
@@ -117,22 +134,6 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
                 Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(bitmap);
         scrollView.draw(canvas);
-//        // 测试输出
-//        FileOutputStream out = null;
-//        try {
-//            out = new FileOutputStream("/sdcard/screen_test.png");
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            if (null != out) {
-//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-//                out.flush();
-//                out.close();
-//            }
-//        } catch (IOException e) {
-//            // TODO: handle exception
-//        }
         return bitmap;
     }
 
@@ -236,10 +237,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
             case 1003:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     photo();
-                    // Permission Granted
-                    //callDirectly("15574968442");
                 } else {
-                    // Permission Denied
                     Toast.makeText(getActivity(), "CALL_PHONE Denied", Toast.LENGTH_SHORT)
                             .show();
                 }
@@ -248,6 +246,8 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -316,21 +316,31 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
                 getActivity().finish();
                 break;
             case R.id.titleBarRightStr:
-                TencentUtil tencentUtil=new TencentUtil(getActivity(),context);
-                Share share=new Share();
-                share.setAPP_NAME("梦想");
-                Bitmap bitmap=getViewBitmap(s);
-                FileUtils.saveBitmap(bitmap, "share", Config.DIR_IMAGE_PATH);
-                share.setSUMMARY("test");
-                share.setTITLE("test");
-                share.setIMAGE_URL(Config.DIR_IMAGE_PATH+"share.JPEG");
-                tencentUtil.shareImage(share);
+                SharePopupWindows sharePopupWindows=new SharePopupWindows(context,currentView,0);
+
+//                Share share=new Share();
+//                share.setAPP_NAME("梦想");
+//                Bitmap bitmap=getViewBitmap(s);
+//                FileUtils.saveBitmap(bitmap, "share", Config.DIR_IMAGE_PATH);
+//                share.setSUMMARY("test");
+//                share.setTITLE("test");
+//                share.setIMAGE_URL(Config.DIR_IMAGE_PATH + "share.JPEG");
+//                AllShare.getInstance(context).qq_share_image(share);
                 break;
             case R.id.share_image:
                 new PopupWindows(context, currentView);
+                backgroundAlpha(0.7f);
                 break;
             default:
                 break;
         }
+    }
+
+    public Dream getDream() {
+        return dream;
+    }
+
+    public void setDream(Dream dream) {
+        this.dream = dream;
     }
 }
