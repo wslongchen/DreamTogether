@@ -2,11 +2,14 @@ package com.example.mrpan.dreamtogether.utils;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.example.mrpan.dreamtogether.R;
+import com.example.mrpan.dreamtogether.view.CustomProgressDialog;
 import com.example.mrpan.dreamtogether.view.loadview.Load2Dialog;
 import com.example.mrpan.dreamtogether.view.loadview.LoadDialog;
 
@@ -38,6 +41,13 @@ public class DialogUtils {
         return dialog;
     }
 
+    public static CustomProgressDialog getCustomProgressDialog1(Context context) {
+         return new CustomProgressDialog(context, "正在加载中", R.anim.frame);
+    }
+
+    public static CustomProgressDialog getCustomProgressDialog2(Context context) {
+        return new CustomProgressDialog(context, "正在加载中", R.anim.frame2);
+    }
 
     /**
      * 获取一个加载提示dialog

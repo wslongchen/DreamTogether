@@ -78,7 +78,6 @@ public class AnimRefreshRecyclerView extends RecyclerView implements Runnable{
                     || (dy > 0 && headerImage.getLayoutParams().height > headerImageHeight))) {
                 mHandler.obtainMessage(0, dy, 0, null).sendToTarget();
                 onScrollChanged(0, 0, 0, 0);
-                MyLog.i("result:",String.valueOf(dy));
             }
         }
     };

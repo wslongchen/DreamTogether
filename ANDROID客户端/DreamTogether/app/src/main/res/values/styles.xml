@@ -16,40 +16,6 @@
     <style name="AppBaseTheme" parent="android:Theme.Light"></style>
 
 
-    <style name="text_18_ffffff">
-        <item name="android:textSize">18.0dip</item>
-        <item name="android:textColor">#ffffffff</item>
-    </style>
-
-    <style name="text_16_666666">
-        <item name="android:textSize">16.0dip</item>
-        <item name="android:textColor">#ff666666</item>
-    </style>
-
-    <style name="sdw_white">
-        <item name="android:shadowColor">#7fffffff</item>
-        <item name="android:shadowDx">0.0</item>
-        <item name="android:shadowDy">0.65</item>
-        <item name="android:shadowRadius">1.0</item>
-    </style>
-
-    <style name="sdw_79351b">
-        <item name="android:shadowColor">#ff79351b</item>
-        <item name="android:shadowDx">0.0</item>
-        <item name="android:shadowDy">1.0</item>
-        <item name="android:shadowRadius">1.0</item>
-    </style>
-
-    <style name="text_15_ffffff_sdw" parent="@style/sdw_79351b">
-        <item name="android:textSize">15.0dip</item>
-        <item name="android:textColor">#ffffffff</item>
-    </style>
-
-    <style name="text_15_666666_sdw" parent="@style/sdw_white">
-        <item name="android:textSize">15.0dip</item>
-        <item name="android:textColor">#ff666666</item>
-    </style>
-
     <style name="Dialog" parent="android:style/Theme.Dialog">
         <item name="android:background">#00000000</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -57,43 +23,7 @@
         <item name="android:windowIsFloating">true</item>
     </style>
 
-    <style name="MoreSettingItem">
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingLeft">12dp</item>
-        <item name="android:paddingRight">12dp</item>
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">51.299988dip</item>
-    </style>
 
-    <style name="TextSettingItem">
-        <item name="android:textSize">16.5sp</item>
-        <item name="android:textColor">@color/dreamSettings_entry</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingLeft">12dp</item>
-        <item name="android:paddingRight">12dp</item>
-        <item name="android:clickable">true</item>
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">51.299988dip</item>
-        <item name="android:drawablePadding">12.5dip</item>
-    </style>
-
-    <style name="MoreItemTextStyle">
-        <item name="android:textSize">16.5sp</item>
-        <item name="android:textColor">@color/dreamSettings_entry</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_width">0.0dip</item>
-        <item name="android:layout_height">51.299988dip</item>
-        <item name="android:drawablePadding">12.5dip</item>
-        <item name="android:layout_weight">1.0</item>
-    </style>
-
-    <style name="SettingAttributeText">
-        <item name="android:textSize">16.5sp</item>
-        <item name="android:textColor">@color/Dreamsettings_attribute</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:drawablePadding">5.0dip</item>
-    </style>
     <style name="like_toast_dialog_style">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>

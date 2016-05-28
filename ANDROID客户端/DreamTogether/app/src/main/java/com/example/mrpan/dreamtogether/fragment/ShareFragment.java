@@ -200,8 +200,9 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
                     .findViewById(R.id.dream_item_popupwindows_camera);
             Button bt2 = (Button) view
                     .findViewById(R.id.dream_item_popupwindows_Photo);
-//            Button bt3 = (Button) view
-//                    .findViewById(R.id.dream_item_popupwindows_cancel);
+            Button bt3 = (Button) view
+                    .findViewById(R.id.dream_item_popupwindows_cancel);
+            bt3.setVisibility(View.GONE);
             bt1.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     onPhoto();

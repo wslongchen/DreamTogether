@@ -15,7 +15,6 @@
 
         <TextView
             android:id="@+id/title"
-            style="@style/text_18_ffffff"
             android:layout_width="fill_parent"
             android:layout_height="40.0dip"
             android:gravity="center"
@@ -30,7 +29,6 @@
 
             <TextView
                 android:id="@+id/message"
-                style="@style/text_16_666666"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left|center"
@@ -57,7 +55,6 @@
 
             <Button
                 android:id="@+id/positiveButton"
-                style="@style/text_15_ffffff_sdw"
                 android:layout_width="114.0dip"
                 android:layout_height="40.0dip"
                 android:background="@drawable/btn_ok_selector"
@@ -66,7 +63,6 @@
 
             <Button
                 android:id="@+id/negativeButton"
-                style="@style/text_15_666666_sdw"
                 android:layout_width="114.0dip"
                 android:layout_height="40.0dip"
                 android:layout_marginLeft="20.0dip"

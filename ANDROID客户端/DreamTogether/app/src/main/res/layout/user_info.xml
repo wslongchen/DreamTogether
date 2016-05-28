@@ -11,12 +11,10 @@
     android:background="@color/dreamBackground">
     <!--style="@style/TextSettingItem"-->
     <ListView
-
         android:id="@+id/user_info_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@mipmap/line"
-        android:listSelector="@color/dreamBlack"
         android:layout_alignParentStart="true">
 
     </ListView>

@@ -1,19 +1,24 @@
 package com.example.mrpan.dreamtogether.fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -40,21 +45,31 @@ import com.example.mrpan.dreamtogether.MainActivity;
 import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.User;
+import com.example.mrpan.dreamtogether.http.HttpHelper;
+import com.example.mrpan.dreamtogether.http.HttpResponseCallBack;
 import com.example.mrpan.dreamtogether.utils.BitmapUtils;
 import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.adapter.UserInfoAdapter;
+import com.example.mrpan.dreamtogether.utils.FileUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.utils.MySharePreference;
+import com.example.mrpan.dreamtogether.utils.OtherUtils;
 import com.example.mrpan.dreamtogether.utils.SystemStatusManager;
 import com.example.mrpan.dreamtogether.view.CircleImageView;
 import com.example.mrpan.dreamtogether.view.CustomDialog;
 import com.example.mrpan.dreamtogether.view.TitleBar;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -148,9 +163,9 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
         //MyLog.i(TAG,headerview.getWidth()+","+headerview.getHeight());
 
         Bitmap overlay = BitmapUtils.drawableToBitmap(getResources().getDrawable(R.mipmap.bg_search));
+        Bitmap bg= ImageLoader.getInstance().loadImageSync("http://"+user.getUser_img());
 
-       // overlay = BitmapUtils.doBlur(overlay, (int) radius, true);
-        relativeLayout.setBackground(getResources().getDrawable(R.mipmap.bg_search));
+
         relativeLayout.setOnClickListener(this);
         titleBar = (TitleBar) currentView.findViewById(R.id.top_bar);
         // titleBar.setBgColor(R.color.dreamBlack);
@@ -165,6 +180,14 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
 
         photo = (CircleImageView) currentView.findViewById(R.id.user_head_photo);
         //photo.setImageResource(R.mipmap.bg_search);
+        if(bg!=null){
+            relativeLayout.setBackground(BitmapUtils.bitmapTodrawable(bg));
+            // overlay = BitmapUtils.doBlur(overlay, (int) radius, true);
+
+            photo.setImageBitmap(bg);
+        }else{
+            relativeLayout.setBackground(getResources().getDrawable(R.mipmap.bg_search));
+        }
 
         takePhoto = (ImageView) currentView.findViewById(R.id.user_head_takephoto);
         takePhoto.setOnClickListener(this);
@@ -183,7 +206,7 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
         datas.add(data);
         data = new HashMap<>();
         data.put("isNull", false);
-        data.put("menuImg", R.mipmap.ic_launcher);
+        data.put("menuImg", R.mipmap.licheng);
         data.put("menuText", "我的梦想历程");
         data.put("menu", "menu1");
         datas.add(data);
@@ -198,7 +221,7 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
         datas.add(data);
         data = new HashMap<>();
         data.put("isNull", false);
-        data.put("menuImg", R.mipmap.ic_launcher);
+        data.put("menuImg", R.mipmap.tuichu);
         data.put("menuText", "退出登录");
         data.put("menu", "menuExit");
         datas.add(data);
@@ -338,7 +361,8 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
             setFocusable(true);
 
 
-            showAtLocation(parent, Gravity.BOTTOM, 0, 0);
+
+            showAtLocation(parent, Gravity.CENTER, 0, 0);
             update();
 
 
@@ -348,22 +372,20 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
                     .findViewById(R.id.dream_item_popupwindows_Photo);
             Button bt3 = (Button) view
                     .findViewById(R.id.dream_item_popupwindows_cancel);
+            bt3.setVisibility(View.GONE);
             bt1.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     onPhoto();
+                    //onCall("15574968442");
                     dismiss();
                 }
             });
             bt2.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-//                    Intent intent = new Intent(Intent.ACTION_PICK);
-//                    intent.setType("image/*");//相片类型
-//                    startActivityForResult(intent, 7);
-                    dismiss();
-                }
-            });
-            bt3.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
+
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/*");//相片类型
+                    startActivityForResult(intent, 7);
                     dismiss();
                 }
             });
@@ -377,6 +399,7 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
 
         }
     }
+
 
     public void backgroundAlpha(float bgAlpha) {
         WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
@@ -405,6 +428,7 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
         Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File file = new File(Config.DIR_IMAGE_PATH + "take/", String.valueOf(System.currentTimeMillis())
                 + ".jpg");
+
         path = file.getPath();
         Uri imageUri = Uri.fromFile(file);
         openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
@@ -416,16 +440,63 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        MyLog.i("CODE", Activity.RESULT_OK+"");
+        List<String> list;
         switch (requestCode) {
-            case Config.TAKE_PICTURE:
-                if (BitmapUtils.drr.size() < 9 && resultCode == -1) {
-                    BitmapUtils.drr.add(path);
-                }
 
+            case Config.TAKE_PICTURE:
+//                BitmapUtils.max+=1;
+                try {
+                    Bitmap bm = BitmapUtils.revitionImageSize(path);
+//                ImageView imageView = (ImageView) currentView.findViewById(R.id.iv01);
+                    photo.setImageBitmap(bm);
+                    relativeLayout.setBackground(BitmapUtils.bitmapTodrawable(bm));
+//                /* 将Bitmap设定到ImageView */
+//                imageView.setImageBitmap(bitmap);
+                    String Str = path.substring(
+                            path.lastIndexOf("/") + 1,
+                            path.lastIndexOf("."));
+                    list = new ArrayList<String>();
+                    MyLog.i("path", path);
+                    list.add(Config.DIR_IMAGE_PATH+"take/"+Str+".JPEG");
+                    HttpHelper.getInstance().asyHttpPostRequest(Config.UPDATE_USER_IMG, null, list, new DreamInfoHttpResponseCallBack(1));
+                } catch (Exception e) {
+                    MyLog.i("Exception", e.getMessage());
+                }
+                break;
+            case 7:
+                Uri uri = data.getData();
+
+                ContentResolver cr = context.getContentResolver();
+
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+
+                    BitmapUtils.saveBitmapToSDCard(bitmap, Config.DIR_IMAGE_PATH + "take/", "take");
+//                ImageView imageView = (ImageView) currentView.findViewById(R.id.iv01);
+
+                    list = new ArrayList<String>();
+                    path="take";
+                    Bitmap bm = BitmapUtils.revitionImageSize(Config.DIR_IMAGE_PATH + "take/" + path + ".jpg");
+                    BitmapUtils.saveBitmapToSDCard(bm, Config.DIR_IMAGE_PATH + "take/", "take");
+                    relativeLayout.setBackground(BitmapUtils.bitmapTodrawable(bm));
+                    photo.setImageBitmap(bm);
+                    list = new ArrayList<String>();
+                    list.add(Config.DIR_IMAGE_PATH + "take/" + path + ".jpg");
+                    MyLog.i("path", path);
+                    Map<String,String> map=new HashMap<>();
+                    map.put("id",String.valueOf(user.getID()));
+                    HttpHelper.getInstance().asyHttpPostRequest(Config.UPDATE_USER_IMG, map, list, new DreamInfoHttpResponseCallBack(1));
+//                /* 将Bitmap设定到ImageView */
+//                imageView.setImageBitmap(bitmap);
+                } catch (Exception e) {
+                    MyLog.i("Exception", e.getMessage());
+                }
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 
     @Override
     public void onResume() {
@@ -447,5 +518,73 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
     public void onDestroyView() {
         super.onDestroyView();
         getFragmentManager().beginTransaction().remove(MainActivity.fragmentHashMap.get(TAG));
+    }
+
+    Handler myHander=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.arg1){
+                case Config.HTTP_REQUEST_SUCCESS:
+                    switch (msg.arg2){
+                        case 1:
+                            if(msg.obj!=null){
+                                int ret=0;
+                                MyLog.i(TAG, msg.obj.toString());
+                                try {
+                                    JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF", ""));
+                                    ret = jsonObject.getInt("ret");
+                                    if (ret == Config.RESULT_RET_SUCCESS) {
+                                        Toast.makeText(context,"修改成功！",Toast.LENGTH_LONG).show();
+
+                                        FileUtils.deleteDir(Config.DIR_IMAGE_PATH + "take/");
+                                    } else
+                                    {
+                                        Toast.makeText(context, "修改失败！", Toast.LENGTH_LONG).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case 4:
+
+                    break;
+                case Config.HTTP_REQUEST_ERROR:
+                    Toast.makeText(context,"联网失败！",Toast.LENGTH_LONG).show();
+                    break;
+                default:
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
+    class DreamInfoHttpResponseCallBack implements HttpResponseCallBack {
+        private int flag;
+
+        public DreamInfoHttpResponseCallBack(int flag){
+            super();
+            this.flag=flag;
+        }
+
+        @Override
+        public void onSuccess(String url, String result) {
+            MyLog.i(TAG,result);
+            Message message = new Message();
+            message.arg1 = Config.HTTP_REQUEST_SUCCESS;
+            message.arg2=flag;
+            message.obj = result;
+            myHander.sendMessage(message);
+        }
+
+        @Override
+        public void onFailure(int httpResponseCode, int errCode, String err) {
+            Message message = new Message();
+            message.arg1 = Config.HTTP_REQUEST_ERROR;
+            myHander.sendMessage(message);
+        }
     }
 }

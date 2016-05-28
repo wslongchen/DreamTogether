@@ -29,6 +29,7 @@ import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DateUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.utils.MySharePreference;
+import com.example.mrpan.dreamtogether.view.CircleImageView;
 import com.example.mrpan.dreamtogether.view.NoScrollGridView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -50,6 +51,7 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
     private MyItemClickListener mItemClickListener;
     private MyItemLongClickListener mItemLongClickListener;
     private RemoveItemListener removeItemListener;
+    String [] imgs;
 
     public WorldCircleListAdapter(Context context, List<Dream> dreams)
     {
@@ -87,8 +89,9 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
     }
 
     @Override
-    public void onBindViewHolder( ViewHolder viewHolder, final int i )
+    public void onBindViewHolder( ViewHolder viewHolder,  int i )
     {
+        final int dream=i;
         // 给ViewHolder设置元素
         final Dream p = dreams.get(i);
         viewHolder.dream_content.setText(p.getPost_content());
@@ -107,21 +110,21 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
         }else{
             viewHolder.deleteImage.setVisibility(View.GONE);
         }
-        final int id=p.getID();
+        //int id=p.getID();
         viewHolder.deleteImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeItemListener.removeItem(v, i);
+                removeItemListener.removeItem(v, dream);
             }
         });
 
 //        if(p.getPost_comment_count()==null || p.getPost_comment_count().equals("")||p.getPost_comment_count().equals("0")){
 //            viewHolder.dream_comments_layout.setVisibility(View.GONE);
 //        }
-        final String[] imgs;
         if(p.getPost_imgs()!=null && !p.getPost_imgs().equals("")) {
             if (p.getPost_imgs().length() > 0 && !p.getPost_imgs().trim().isEmpty() && !p.getPost_imgs().equals("")) {
                 imgs = p.getPost_imgs().split(",");
+                MyLog.i("ddd","imgSize:"+imgs.length+",item:"+i);
                 List<HashMap<String, String>> lists = new ArrayList<>();
                 for (int j = 0; j < imgs.length; j++) {
                     HashMap<String, String> map = new HashMap<>();
@@ -159,6 +162,8 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
                             }
                         });
             }
+        }else{
+            viewHolder.dream_img_gridView.setVisibility(View.GONE);
         }
         List<Meta> metas=p.getMetas();
         if(metas.size()>0){
@@ -207,7 +212,7 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
             extends RecyclerView.ViewHolder
     implements View.OnClickListener,View.OnLongClickListener
     {
-        public ImageView author_img;
+        public CircleImageView author_img;
 
         public TextView dream_author;
 
@@ -239,7 +244,7 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
             dream_date = (TextView) v.findViewById(R.id.dream_date);
             //dream_comments_names = (TextView) v.findViewById(R.id.dream_comments_names);
             dream_img_gridView=(NoScrollGridView)v.findViewById(R.id.dream_img_gridView);
-            author_img = (ImageView) v.findViewById(R.id.dream_author_img);
+            author_img = (CircleImageView) v.findViewById(R.id.dream_author_img);
             deleteImage=(ImageView)v.findViewById(R.id.deleteImage);
             dream_deviceinfo=(TextView)v.findViewById(R.id.dream_deviceinfo);
             dream_hot_info=(TextView)v.findViewById(R.id.dream_hot_info);
@@ -267,6 +272,7 @@ public class WorldCircleListAdapter extends RecyclerView.Adapter<WorldCircleList
             return true;
         }
     }
+
 
     public interface MyItemClickListener {
         public void onItemClick(View view,int postion);

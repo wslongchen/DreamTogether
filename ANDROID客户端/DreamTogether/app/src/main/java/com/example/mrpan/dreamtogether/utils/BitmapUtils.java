@@ -134,7 +134,9 @@ public class BitmapUtils {
 	 */
 	public static Drawable bitmapTodrawable(Bitmap bitmap) {
 		Drawable drawable = new BitmapDrawable(bitmap);
-		drawable.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
+		if(bitmap!=null){
+			drawable.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
+		}
 		return drawable;
 	}
 

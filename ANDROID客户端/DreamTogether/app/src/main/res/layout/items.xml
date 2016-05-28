@@ -17,7 +17,7 @@ card_view:cardCornerRadius="5dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
+        <com.example.mrpan.dreamtogether.view.CircleImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginLeft="10dip"

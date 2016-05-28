@@ -10,7 +10,7 @@
 <com.example.mrpan.dreamtogether.view.LXiuXiu
     android:layout_width="match_parent"
     android:layout_height="300dp"
-    android:src="@mipmap/xiuxiu"
+    android:src="@mipmap/loadingpage_bg"
     android:id="@+id/dream_xiuxiu"
     android:layout_centerVertical="true"
     android:layout_centerHorizontal="true" />

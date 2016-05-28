@@ -87,17 +87,41 @@ case "postDream":
 	$controller -> publishDream($_POST);
 	break;
 case "updateUserImg":
-	$target_path = $base_path . basename($_FILES['uploadfile']['name']);
-		if (move_uploaded_file($_FILES['uploadfile']['tmp_name'], $target_path)) {
-			$file=$_SERVER['SERVERNAME'].$base_path.$_FILES['uploadfile']['name'];
-			$controller=new UserController($dao);
-			$controller->updateUserImg($file,$_GET["id"]);
-			$array = array("ret" => "0", "post" => "修改成功！");
-			echo json_encode($array);
-		} else {
-			$array = array("ret" => "1", "post" => "修改失败！");
-			echo json_encode($array);
-		}
+	$target_path = $base_path . basename($_FILES['file0']['name']);
+	$filename = explode("." . $_FILES['file0']['name']);
+				do {
+					$filename[0] = random(10);
+					//设置随机数长度
+					$name = implode(".", $filename);
+					//$name1=$name.".Mcncc";
+					$uploadfile = $base_path.$name ."." . strtolower(fileext($_FILES['file0']['name']));
+				} while(file_exists($uploadfile));
+
+				if (move_uploaded_file($_FILES['file0']['tmp_name'], $uploadfile)) {
+					if (is_uploaded_file($_FILES['file0']['tmp_name'])) {
+						$flag=false;echo "222";
+					} else {
+						$f="dream.mrpann.com/uploads/".$name ."." . strtolower(fileext($_FILES['file0']['name']));
+						$controller=new UserController($dao);
+						$controller->updateUserImg($f,$_GET["id"]);
+						$array = array("ret" => "0", "post" => "修改成功！");
+						echo json_encode($array);
+					}
+				}else{
+					$array = array("ret" => "1", "post" => "修改失败！");
+				echo json_encode($array);
+				}
+				
+//		if (move_uploaded_file($_FILES['file0']['tmp_name'], $target_path)) {
+//			$file=$_SERVER['SERVERNAME'].$base_path.$_FILES['file0']['name'];
+//			$controller=new UserController($dao);
+//			$controller->updateUserImg($file,$_GET["id"]);
+//			$array = array("ret" => "0", "post" => "修改成功！");
+//			echo json_encode($array);
+//		} else {
+//			$array = array("ret" => "1", "post" => "修改失败！");
+//			echo json_encode($array);
+//		}
 	break;
 		default:
 			break;

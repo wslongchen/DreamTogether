@@ -28,12 +28,14 @@ import com.example.mrpan.dreamtogether.http.HttpUtil;
 import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DateUtils;
+import com.example.mrpan.dreamtogether.utils.DialogUtils;
 import com.example.mrpan.dreamtogether.utils.GsonUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.utils.OtherUtils;
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.AnimRefreshRecyclerView;
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.decoration.DividerItemDecoration;
 import com.example.mrpan.dreamtogether.view.AnimRecycleView.view.manage.AnimRefreshLinearLayoutManager;
+import com.example.mrpan.dreamtogether.view.CustomProgressDialog;
 import com.example.mrpan.dreamtogether.view.TitleBar;
 
 import org.json.JSONException;
@@ -76,6 +78,9 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
             viewGroup.removeView(currentView);
         }
         initView();
+//        CustomProgressDialog customProgressDialog= DialogUtils.getCustomProgressDialog1(context);
+//        customProgressDialog.
+//        customProgressDialog.show();
         //TestMethod();
         return currentView;
     }
@@ -95,7 +100,7 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
     void initView(){
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
         titleBar.setBgColor(getResources().getColor(R.color.dreamBlack));
-        titleBar.showRight("梦想圈", R.mipmap.xiuxiu, this);
+        titleBar.showRight("梦想圈", R.mipmap.xiuxiu2, this);
         context=getActivity();
         recyclerView=(AnimRefreshRecyclerView)currentView.findViewById(R.id.dream_list);
         //recyclerView=(AnimRefreshRecyclerView)currentView.findViewById(R.id.dream_list);
@@ -141,22 +146,23 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
         recyclerView.setLoadDataListener(new AnimRefreshRecyclerView.LoadDataListener() {
             @Override
             public void onRefresh() {
-                new Thread(new MyRunnable(true)).start();
-                //newData();
+                // new Thread(new MyRunnable(true)).start();
+                newData();
             }
 
             @Override
             public void onLoadMore() {
-                new Thread(new MyRunnable(false)).start();
-               //addData();
+                //new Thread(new MyRunnable(false)).start();
+                addData();
             }
         });
 
 
-        recyclerView.setRefresh(true);
+
         isFresh=true;
         httpHelper=HttpHelper.getInstance();
-        httpHelper.asyHttpGetRequest(Config.REQUEST_ALL_DREAM, new DreamHttpResponseCallBack(Config.ALL_DREAM));
+        //recyclerView.setRefresh(true);
+       // httpHelper.asyHttpGetRequest(Config.REQUEST_ALL_DREAM, new DreamHttpResponseCallBack(Config.ALL_DREAM));
 
 
     }
@@ -167,75 +173,75 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
             worldCircleListAdapter.setOnItemClickListener(new WorldCircleListAdapter.MyItemClickListener() {
                 @Override
                 public void onItemClick(View view, int postion) {
-                    Intent intent=new Intent();
-                    Bundle bundle=new Bundle();
+                    Intent intent = new Intent();
+                    Bundle bundle = new Bundle();
                     bundle.putInt("type", Config.DREAM_DETAILS_TYPE);
-                    Dream dream=dreams.getPost().get(postion-1);
-                    bundle.putSerializable("data",dream);
+                    Dream dream = dreams.getPost().get(postion - 1);
+                    bundle.putSerializable("data", dream);
                     //Toast.makeText(context,""+dream.getPost_content(),Toast.LENGTH_LONG).show();
-                  intent.putExtras(bundle);
-                  intent.setClass(context, OtherActivity.class);
-                  startActivity(intent);
-                  getActivity().overridePendingTransition(R.anim.top_in, R.anim.top_out);
+                    intent.putExtras(bundle);
+                    intent.setClass(context, OtherActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.top_in, R.anim.top_out);
                 }
             });
             worldCircleListAdapter.setRemoveListener(new WorldCircleListAdapter.RemoveItemListener() {
                 @Override
                 public void removeItem(View view, final int position) {
 
-                    final int id=dreams.getPost().get(position).getID();
-                                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("是否删除?");
-                builder.setTitle("提示");
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        HttpHelper.getInstance().asyHttpGetRequest(Config.DeleteDreamByID(id), new HttpResponseCallBack() {
-                            @Override
-                            public void onSuccess(String url, String result) {
-                                int ret = 0;
+                    final int id = dreams.getPost().get(position).getID();
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("是否删除?");
+                    builder.setTitle("提示");
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            HttpHelper.getInstance().asyHttpGetRequest(Config.DeleteDreamByID(id), new HttpResponseCallBack() {
+                                @Override
+                                public void onSuccess(String url, String result) {
+                                    int ret = 0;
 
-                                try {
-                                    JSONObject jsonObject = new JSONObject(result.toString().replace("\uFEFF", ""));
-                                    ret = jsonObject.getInt("ret");
-                                    if (ret == Config.RESULT_RET_SUCCESS) {
-                                        dreams.getPost().remove(position);
-                                        Message message = new Message();
-                                        message.arg1 = 1003;
-                                        message.arg2=position;
-                                        handler.sendMessage(message);
-                                        //Toast.makeText(mContext,"删除成功！",Toast.LENGTH_LONG).show();
-                                        //Intent intent = new Intent(context, WorldCircleFragment.class);
-                                        //startActivityForResult(intent, Config.RESULT_RET_SUCCESS);
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(result.toString().replace("\uFEFF", ""));
+                                        ret = jsonObject.getInt("ret");
+                                        if (ret == Config.RESULT_RET_SUCCESS) {
+                                            dreams.getPost().remove(position);
+                                            Message message = new Message();
+                                            message.arg1 = 1003;
+                                            message.arg2 = position;
+                                            handler.sendMessage(message);
+                                            //Toast.makeText(mContext,"删除成功！",Toast.LENGTH_LONG).show();
+                                            //Intent intent = new Intent(context, WorldCircleFragment.class);
+                                            //startActivityForResult(intent, Config.RESULT_RET_SUCCESS);
 
-                                        // Toast.makeText(context, "Publish successed!", Toast.LENGTH_LONG).show();
-                                    } else {
-                                        //Toast.makeText(mContext, "删除失败！", Toast.LENGTH_LONG).show();
+                                            // Toast.makeText(context, "Publish successed!", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            //Toast.makeText(mContext, "删除失败！", Toast.LENGTH_LONG).show();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(int httpResponseCode, int errCode, String err) {
+                                @Override
+                                public void onFailure(int httpResponseCode, int errCode, String err) {
 
-                            }
-                        });
-                    }
-                });
+                                }
+                            });
+                        }
+                    });
 
-                builder.setNegativeButton("取消",
-                        new android.content.DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
+                    builder.setNegativeButton("取消",
+                            new android.content.DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
 
-                builder.create().show();
+                    builder.create().show();
                 }
             });
             recyclerView.setAdapter(worldCircleListAdapter);
-            recyclerView.getAdapter().notifyDataSetChanged();
+            //recyclerView.getAdapter().notifyDataSetChanged();
         }
     }
 
@@ -251,38 +257,39 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                         switch (msg.arg2)
                         {
                             case Config.ALL_DREAM:
-//                                JSONObject jsonObject = null;
-//                                try {
-//                                    jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF\uFEFF\uFEFF", ""));
-//                                    int ret = jsonObject.getInt("ret");
-//                                    System.out.println(ret+":ddd");
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-                               // DreamPosts dream= (DreamPosts) GsonUtils.getEntity("{\"ret\":0,\"post\":[{\"ID\":\"12\",\"post_author\":{\"ID\":\"5\",\"user_login\":\"longchen\",\"user_pass\":\"662e0103accf08eecbefc3d51302d182\",\"user_nickname\":\"\\u6f58\\u5b89\",\"user_img\":\"\",\"user_phone\":\"15574968443\",\"user_email\":\"wslongchen@qq.com\",\"user_url\":\"\",\"user_registered\":\"2016-04-09 14:44:08\",\"user_activation_key\":\"\",\"user_status\":\"0\",\"user_display_name\":\"\"},\"post_date\":\"2016-04-09 14:49:42\",\"post_content\":\"\\u5475\\u5475\",\"post_titile\":\"\",\"post_imgs\":null,\"post_status\":\"0\",\"post_password\":\"\",\"post_guid\":\"\",\"post_type\":\"0\",\"post_comment_status\":\"0\",\"post_comment_count\":\"0\"}]}",DreamPosts.class);
+
                                 dreams=(DreamPosts) GsonUtils.getEntity(msg.obj.toString().trim(), DreamPosts.class);
                                 //List<Dream> dreamList=dreams.getPost();
                                 CacheUtils.saveHttpCache(Config.DIR_CACHE_PATH, "all_dream", dreams);
-                                if(isFresh) {
-                                    if(recyclerView!=null) {
-                                        refreshComplate();
-                                        recyclerView.refreshComplate();
-                                    }
-                                    // 刷新完成后调用，必须在UI线程中
-                                   // recyclerView.refreshComplate();
-                                }
-                                showData(dreams);
+//                                if(isFresh) {
+//                                    if(recyclerView!=null) {
+//                                        refreshComplate();
+//                                        recyclerView.refreshComplate();
+//                                    }
+//                                    // 刷新完成后调用，必须在UI线程中
+//                                   // recyclerView.refreshComplate();
+//                                }
+                                refreshComplate();
+                                // 刷新完成后调用，必须在UI线程中
+                                recyclerView.refreshComplate();
+                                //showData(dreams);
                                 break;
                             case Config.SHOW_NEXT:
+                                current=dreams.getPost().size();
                                 DreamPosts dreamNewLists=(DreamPosts) GsonUtils.getEntity(msg.obj.toString().trim(), DreamPosts.class);
-                                if(dreamNewLists!=null){
+                                if(dreamNewLists.getPost().size()>0){
                                     dreams.getPost().addAll(dreamNewLists.getPost());
-                                    CacheUtils.saveHttpCache(Config.DIR_CACHE_PATH, "all_dream", dreams);
+                                    //worldCircleListAdapter.addData(dreamNewLists.getPost());
+                                    //showData(dreams);
+                                    loadMoreComplate();
                                 }
-                                showData(dreams);
-                                loadMoreComplate();
-                                // 加载更多完成后调用，必须在UI线程中
+
                                 recyclerView.loadMoreComplate();
+                                MyLog.i(TAG,dreams.getPost().size()+":size,newListSize:"+dreamNewLists.getPost().size()+",adapterSize:"+worldCircleListAdapter.getItemCount());
+                                //showData(dreams);
+                               // loadMoreComplate();
+//                                // 加载更多完成后调用，必须在UI线程中
+//                                recyclerView.loadMoreComplate();
                                 break;
                             default:
                                 break;
@@ -293,10 +300,11 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                     Toast.makeText(context, "联网失败！", Toast.LENGTH_LONG).show();
                     if(isFresh){
                         recyclerView.refreshComplate();
-                    }
+                    }else{
                     //recyclerView.setRefresh(false);
 
                     recyclerView.loadMoreComplate();
+                    }
                     break;
                 case 1003:
                     worldCircleListAdapter.notifyDataSetChanged();
@@ -322,64 +330,49 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
                 intent.setClass(context, OtherActivity.class);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.top_in, R.anim.top_out);
-
-//                fileFetch.siteStop();
-//                List<Integer> it=new ArrayList<>();
-//                for(int i=0;i<100;i++){
-//                    it.add(i);
-//                }
-//                List<Integer> integers=getRand(it,1);
-//                if(integers.get(0)==0){
-//                    Toast.makeText(context,"你点击了"+clickcount+"次，才摇到"+integers.get(0),Toast.LENGTH_LONG).show();
-//                    clickcount=0;
-//                }
                 break;
             default:
                 break;
         }
     }
 
-    class MyRunnable implements Runnable {
-
-        boolean isRefresh;
-
-        public MyRunnable(boolean isRefresh) {
-            this.isRefresh = isRefresh;
-        }
-
-        @Override
-        public void run() {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (isRefresh) {
-                        newData();
-                        refreshComplate();
-                        // 刷新完成后调用，必须在UI线程中
-                        recyclerView.refreshComplate();
-                    } else {
-                        current=dreams.getPost().size();
-                        addData();
-                        loadMoreComplate();
-                        recyclerView.loadMoreComplate();
-
-                    }
-                }
-            }, 2000);
-        }
-    }
+//    class MyRunnable implements Runnable {
+//
+//        boolean isRefresh;
+//
+//        public MyRunnable(boolean isRefresh) {
+//            this.isRefresh = isRefresh;
+//        }
+//
+//        @Override
+//        public void run() {
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (isRefresh) {
+//                        newData();
+//                    } else {
+//                        current=dreams.getPost().size();
+//                        addData();
+//                    }
+//                }
+//            }, 2000);
+//        }
+//    }
 
     public void refreshComplate() {
         if(recyclerView!=null){
             if(recyclerView.getAdapter()!=null){
-                recyclerView.getAdapter().notifyDataSetChanged();
+                //recyclerView.getAdapter().notifyDataSetChanged();
+                worldCircleListAdapter.notifyDataSetChanged();
             }
         }
 
     }
 
     public void loadMoreComplate() {
-        recyclerView.getAdapter().notifyDataSetChanged();
+        //recyclerView.getAdapter().notifyDataSetChanged();
+        worldCircleListAdapter.notifyDataSetChanged();
         recyclerView.scrollToPosition(current);
     }
 
@@ -391,6 +384,7 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
     }
 
     public void newData() {
+        dreams.getPost().clear();
         isFresh=true;
         httpHelper.asyHttpGetRequest(Config.REQUEST_ALL_DREAM, new DreamHttpResponseCallBack(Config.ALL_DREAM));
     }

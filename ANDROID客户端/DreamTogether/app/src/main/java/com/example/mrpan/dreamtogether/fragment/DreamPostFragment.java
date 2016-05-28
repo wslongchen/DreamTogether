@@ -203,7 +203,7 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                 }
             }
             mLocation.setAddr(location.getAddrStr());
-            mLocation.setLatitude(location.getLatitude()+"");
+            mLocation.setLatitude(location.getLatitude() + "");
             mLocation.setLontitude(location.getLongitude()+"");
             dream_location.setText(location.getAddrStr());
             MyLog.i("BaiduLocationApiDem", sb.toString());
@@ -325,6 +325,11 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
         BitmapUtils.bmp.clear();
         BitmapUtils.drr.clear();
         BitmapUtils.max=0;
+        if (mLocationClient != null && mLocationClient.isStarted()){
+            mLocationClient.stop();
+            mLocationClient = null;
+        }
+        
     }
 
 
@@ -635,6 +640,7 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                         case 1:
                             if(msg.obj!=null){
                                 int ret=0;
+                                MyLog.i(TAG,msg.obj.toString());
                                 try {
                                     JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF", ""));
                                     ret = jsonObject.getInt("ret");

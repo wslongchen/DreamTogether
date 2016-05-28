@@ -31,8 +31,8 @@ public class FileUtils {
 		file.exists();
 	}
 
-	public static void deleteDir() {
-		File dir = new File(Config.DIR_IMAGE_PATH);
+	public static void deleteDir(String path) {
+		File dir = new File(path);
 		if (dir == null || !dir.exists() || !dir.isDirectory())
 			return;
 
@@ -40,7 +40,7 @@ public class FileUtils {
 			if (file.isFile())
 				file.delete();
 			else if (file.isDirectory())
-				deleteDir();
+				deleteDir(path);
 		}
 		dir.delete();
 	}

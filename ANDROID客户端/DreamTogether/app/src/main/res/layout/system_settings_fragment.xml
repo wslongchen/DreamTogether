@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f2f2f2"
+    android:orientation="vertical" >
+
+    <com.example.mrpan.dreamtogether.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/top_bar"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dcdcdc" />
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/dreamWhite"
+                android:orientation="vertical"
+                android:paddingBottom="13dp"
+                android:paddingTop="10dp" >
+
+                <TextView
+                    android:id="@+id/collectMoney"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/dreamDarkRed"
+                    android:text="120"
+                    android:textSize="33sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:text="使用时间(天)"
+                    android:textColor="@color/aqzx_tx_col"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/daishoujine"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="#333333"
+                        android:text="3.4"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:text="我的缓存(M)"
+                        android:textColor="@color/aqzx_tx_col"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/keyongyue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="#333333"
+                        android:text="33.15"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:text="产生流量(M)"
+                        android:textColor="@color/aqzx_tx_col"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.example.mrpan.dreamtogether.view.NoScrollGridView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/dreamWhite"
+                android:numColumns="3"
+                android:divider="@mipmap/line"
+                android:scrollbars="none"
+                android:id="@+id/setting_grid"
+                />
+
+            <Button
+                android:id="@+id/out"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="13dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="13dp"
+                android:background="@drawable/yuanjiao_but"
+                android:text="退出程序"
+                android:textColor="@color/dreamWhite"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
