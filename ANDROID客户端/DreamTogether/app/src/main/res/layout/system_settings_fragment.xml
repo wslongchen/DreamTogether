@@ -33,7 +33,7 @@
                 android:paddingTop="10dp" >
 
                 <TextView
-                    android:id="@+id/collectMoney"
+                    android:id="@+id/total_user_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -65,7 +65,7 @@
                     android:orientation="vertical" >
 
                     <TextView
-                        android:id="@+id/daishoujine"
+                        android:id="@+id/total_user_cache"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -90,7 +90,7 @@
                     android:orientation="vertical" >
 
                     <TextView
-                        android:id="@+id/keyongyue"
+                        android:id="@+id/total_use_x"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -120,7 +120,7 @@
                 />
 
             <Button
-                android:id="@+id/out"
+                android:id="@+id/setting_out"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="13dp"

@@ -63,6 +63,10 @@ public class Config {
     public static final int RESULT_RET_SUCCESS=0;
     public static final int RESULT_RET_FAILD=1;
 
+    public static final String GET_WEATHER(String city){
+        return "http://wthrcdn.etouch.cn/weather_mini?city="+city;
+    }
+
     public static final String REQUEST_ALL_DREAM="http://dream.mrpann.com/index.php?action=list&type=dream&page=1";
     public static final String REQUEST_ALL_USER="http://dream.mrpann.com/index.php?action=list&type=user";
     public static final String CREATE_DREAM="http://dream.mrpann.com/index.php?action=post&type=dream";//"http://dream.mrpann.com/allpost.php?action=postDreamImg"

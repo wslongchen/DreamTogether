@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import com.example.mrpan.dreamtogether.MyApplication;
 import com.example.mrpan.dreamtogether.utils.Config;
@@ -127,6 +128,7 @@ public class MySystemService extends Service {
             e.printStackTrace();
             sendLoginBroadcast(false);
             stopSelf();
+            Toast.makeText(this,"服务器连接失败",Toast.LENGTH_SHORT).show();
         }															//登录XMPP
         ChatManager chatmanager = mXMPPConnection.getChatManager();
         chatmanager.addChatListener(new ChatManagerListener() {

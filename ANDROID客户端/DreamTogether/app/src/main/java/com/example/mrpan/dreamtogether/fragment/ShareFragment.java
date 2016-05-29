@@ -316,15 +316,15 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
                 getActivity().finish();
                 break;
             case R.id.titleBarRightStr:
-                SharePopupWindows sharePopupWindows=new SharePopupWindows(context,currentView,0);
 
-//                Share share=new Share();
-//                share.setAPP_NAME("梦想");
-//                Bitmap bitmap=getViewBitmap(s);
-//                FileUtils.saveBitmap(bitmap, "share", Config.DIR_IMAGE_PATH);
-//                share.setSUMMARY("test");
-//                share.setTITLE("test");
-//                share.setIMAGE_URL(Config.DIR_IMAGE_PATH + "share.JPEG");
+                Share share=new Share();
+                share.setAPP_NAME("梦想");
+                Bitmap bitmap=getViewBitmap(s);
+                FileUtils.saveBitmap(bitmap, "share", Config.DIR_IMAGE_PATH);
+                share.setSUMMARY("test");
+                share.setTITLE("test");
+                share.setIMAGE_URL(Config.DIR_IMAGE_PATH + "share.JPEG");
+                new SharePopupWindows(context,currentView,1,share);
 //                AllShare.getInstance(context).qq_share_image(share);
                 break;
             case R.id.share_image:

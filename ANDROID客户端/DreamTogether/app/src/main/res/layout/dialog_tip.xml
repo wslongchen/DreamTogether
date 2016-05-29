@@ -6,8 +6,8 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/xg_title"
-        android:layout_width="fill_parent"
+        android:id="@+id/show_title"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/dreamBlue2"
         android:gravity="center"
@@ -33,37 +33,44 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="30dp"
-        android:gravity="center"
         android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/show_btn_2"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_weight="1"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/yuanjiao_but"
             android:gravity="center"
-            android:text="暂不需要"
+            android:text="取消"
             android:textColor="@color/dreamWhite"
             android:textSize="16sp" />
         <TextView
             android:id="@+id/show_btn"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:background="@drawable/yuanjiao_but"
             android:gravity="center"
-            android:text="立即前往"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="确定"
             android:textColor="@color/dreamWhite"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
     </LinearLayout>
 
 </LinearLayout>

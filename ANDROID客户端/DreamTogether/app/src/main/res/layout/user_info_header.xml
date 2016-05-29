@@ -76,12 +76,11 @@
             android:layout_centerHorizontal="true"
             android:id="@+id/user_head_photo" />
 
-        <ImageView
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+        <com.example.mrpan.dreamtogether.view.CircleImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:id="@+id/user_head_takephoto"
-            android:src="@mipmap/mfy"
-            android:background="@color/dreamTransparent"
+            android:src="@mipmap/mfv"
             android:scaleType="fitXY"
             android:layout_alignTop="@+id/user_head_photo"
             android:layout_alignStart="@+id/user_head_photo" />

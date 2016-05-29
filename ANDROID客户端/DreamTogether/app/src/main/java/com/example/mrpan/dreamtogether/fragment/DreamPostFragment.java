@@ -136,6 +136,7 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
         option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤gps仿真结果，默认需要
         mLocationClient.setLocOption(option);
     }
+
     public class MyLocationListener implements BDLocationListener {
 
         @Override
@@ -202,7 +203,6 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
             mLocation.setLatitude(location.getLatitude() + "");
             mLocation.setLontitude(location.getLongitude()+"");
             dream_location.setText(location.getAddrStr());
-            MyLog.i("BaiduLocationApiDem", sb.toString());
         }
     }
 
@@ -402,11 +402,9 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
             case REQUEST_CODE_ASK_CALL_PHONE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     photo();
-                    // Permission Granted
-                    //callDirectly("15574968442");
                 } else {
                     // Permission Denied
-                    Toast.makeText(getActivity(), "CALL_PHONE Denied", Toast.LENGTH_SHORT)
+                    Toast.makeText(getActivity(), "Denied", Toast.LENGTH_SHORT)
                             .show();
                 }
                 break;
@@ -415,12 +413,7 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
         }
     }
 
-    private void callDirectly(String mobile){
-        Intent intent = new Intent();
-        intent.setAction("android.intent.action.CALL");
-        intent.setData(Uri.parse("tel:" + mobile));
-        context.startActivity(intent);
-    }
+
 
     public void onPhoto() {
         if (Build.VERSION.SDK_INT >= 23) {
@@ -429,11 +422,9 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_ASK_CALL_PHONE);
                 return;
             } else {
-                //上面已经写好的拨号方法
                 photo();
             }
         } else {
-            //上面已经写好的拨号方法
             photo();
         }
     }
@@ -452,21 +443,7 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
 
     final public static int REQUEST_CODE_ASK_CALL_PHONE = 123;
 
-    public void onCall(String mobile){
-        if (Build.VERSION.SDK_INT >= 23) {
-            int checkCallPhonePermission = ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.CALL_PHONE);
-            if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CALL_PHONE},REQUEST_CODE_ASK_CALL_PHONE);
-                return;
-            }else{
-                //上面已经写好的拨号方法
-                callDirectly(mobile);
-            }
-        } else {
-            //上面已经写好的拨号方法
-            callDirectly(mobile);
-        }
-    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

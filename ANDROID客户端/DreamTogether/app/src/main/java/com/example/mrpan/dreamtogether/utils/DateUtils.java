@@ -40,7 +40,6 @@ public class DateUtils {
         if (w < 0) {
             w = 0;
         }
-        MyLog.i("ddd",str+",date:"+c.get(Calendar.DATE));
         String mDate=weekDays[w] +" "+c.get(Calendar.DATE) +" "+monthSpells[c.get(Calendar.MONTH)]+c.get(Calendar.YEAR);
         return mDate;
     }
@@ -122,7 +121,8 @@ public class DateUtils {
         Date currentDate=new Date(System.currentTimeMillis());
         if(date!=null){
             long diff=currentDate.getTime()-date.getTime();
-            int dayDiff=(int)diff/(1000*60*60*24);
+            long dayDiff=diff/1000/60/60/24;
+            //MyLog.i("ddd",str+",date:"+(int)dayDiff);
             return String.valueOf(dayDiff);
         }
         return "";

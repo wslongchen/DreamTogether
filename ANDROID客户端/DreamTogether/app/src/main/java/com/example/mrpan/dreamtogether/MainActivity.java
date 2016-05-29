@@ -133,7 +133,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+
 
         //透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -142,7 +142,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         setContentView(R.layout.activity_main);
         //setTranslucentStatus();
         initPermission();
-
+        super.onCreate(savedInstanceState);
         initView();
 
         boolean isLogin=new MySharePreference(this).getBoolean("isLogin",false);
@@ -171,6 +171,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 //                        startActivity(intent2);
 //                        finish();
                     }else{
+                        Toast.makeText(context,"登录失败，请检您的网络是否正常以及用户名和密码是否正确",Toast.LENGTH_LONG).show();
                         //ToastUtil.showShortToast(mContext, "登录失败，请检您的网络是否正常以及用户名和密码是否正确");
                     }
                 }
@@ -186,7 +187,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             //申请WRITE_EXTERNAL_STORAGE权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.RECORD_AUDIO,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.LOCATION_HARDWARE},
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.RECORD_AUDIO,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.LOCATION_HARDWARE,Manifest.permission.CAMERA,Manifest.permission.CALL_PHONE},
                     Config.REQUEST_CODE_PERMISSIONS);
         }
     }

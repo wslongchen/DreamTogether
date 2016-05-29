@@ -32,14 +32,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/image_weather"
+                        android:layout_marginLeft="15dp"
+                        android:src="@mipmap/weather_unknown"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="27"
                         android:textSize="22dp"
+                        android:layout_marginLeft="5dp"
                         android:textColor="@color/dreamDarkGery"
                         android:gravity="bottom"
-                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@id/image_weather"
+
                         android:id="@+id/temprature"/>
                     <TextView
                         android:layout_width="wrap_content"
@@ -112,6 +120,12 @@
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="20dp"
                     >
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/image_xiaoji"
+                        android:src="@mipmap/xiaoji"
+                        android:layout_toLeftOf="@+id/image_share" />
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"

@@ -4,6 +4,7 @@ import android.content.Entity;
 import android.os.Build;
 import android.widget.NumberPicker;
 
+import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.entity.Comment;
 import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.entity.Meta;
@@ -108,6 +109,43 @@ public class OtherUtils {
     }
     public static String getDeviceInfo() {
         return Build.BRAND;
+    }
+
+    public static int revertWeatherToImg(String weather){
+        int ResId=0;
+        switch (weather){
+            case "晴":
+                ResId= R.mipmap.weather_sunny;
+                break;
+            case "多云":
+                ResId=R.mipmap.weather_cloudy;
+                break;
+            case "中雨":
+                ResId=R.mipmap.weather_moderate_rain;
+                break;
+            case "小雨":
+                ResId=R.mipmap.weather_light_rain;
+                break;
+            case "阴":
+                ResId=R.mipmap.weather_overcast;
+                break;
+            case "雷阵雨":
+                ResId=R.mipmap.weather_thundershower;
+                break;
+//            case "雷阵雨":
+//                ResId=R.mipmap.weather_thundershower;
+//                break;
+//            case "雷阵雨":
+//                ResId=R.mipmap.weather_thundershower;
+//                break;
+//            case "雷阵雨":
+//                ResId=R.mipmap.weather_thundershower;
+//                break;
+            default:
+                ResId=R.mipmap.weather_unknown;
+                break;
+        }
+        return ResId;
     }
 
 }

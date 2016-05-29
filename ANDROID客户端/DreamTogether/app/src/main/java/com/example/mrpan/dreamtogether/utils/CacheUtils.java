@@ -158,7 +158,7 @@ public class CacheUtils {
 //				.getDirectory());
 
         if (fileSize > 0)
-            cacheSize = formatFileSize(fileSize);
+            cacheSize = formatFileSize2(fileSize);
         return cacheSize;
     }
 
@@ -206,6 +206,12 @@ public class CacheUtils {
         } else {
             fileSizeString = df.format((double) fileS / 1073741824) + "G";
         }
+        return fileSizeString;
+    }
+
+    public static String formatFileSize2(long fileS) {
+        java.text.DecimalFormat df = new java.text.DecimalFormat("#.00");
+        String fileSizeString = df.format((double) fileS / 1048576);
         return fileSizeString;
     }
 }
