@@ -76,7 +76,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
             case R.id.titleBarRightStr:
                 String text=sign.getText().toString();
                 if(!TextUtils.isEmpty(text)){
-                    HttpHelper.getInstance().asyHttpPostRequest(Config.UPDATE_SIGN, OtherUtils.signToNameValuePair(text, user.getID()), new MyHttpResponseCallBack(0));
+                    HttpHelper.getInstance().asyHttpPostRequest(Config.UPDATE_SIGN, OtherUtils.signToNameValuePair(text, user.getID(),"updateUserSign"), new MyHttpResponseCallBack(0));
                 }else{
                     Toast.makeText(context, "不能为空～", Toast.LENGTH_SHORT).show();
                 }

@@ -201,7 +201,7 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
             }
             mLocation.setAddr(location.getAddrStr());
             mLocation.setLatitude(location.getLatitude() + "");
-            mLocation.setLontitude(location.getLongitude()+"");
+            mLocation.setLontitude(location.getLongitude() + "");
             dream_location.setText(location.getAddrStr());
         }
     }
@@ -508,9 +508,9 @@ public class DreamPostFragment extends Fragment implements View.OnClickListener 
                     list.add(Config.DIR_IMAGE_PATH+Str+".JPEG");
                 }
                     if(list.size()>0){
-                        HttpHelper.getInstance().asyHttpPostRequest(Config.CREATE_DREAM_WITH_IMG, OtherUtils.DreamToMap(dream), list,new DreamPostHttpResponseCallBack(2));
+                        HttpHelper.getInstance().asyHttpPostRequest(Config.CREATE_DREAM_WITH_IMG, OtherUtils.DreamToMap(dream,"postDreamImg"), list,new DreamPostHttpResponseCallBack(2));
                     }else {
-                        HttpHelper.getInstance().asyHttpPostRequest(Config.CREATE_DREAM, OtherUtils.DreamToNameValuePair(dream), new DreamPostHttpResponseCallBack(1));
+                        HttpHelper.getInstance().asyHttpPostRequest(Config.CREATE_DREAM, OtherUtils.DreamToNameValuePair(dream,"publishDream"), new DreamPostHttpResponseCallBack(1));
                     }
 
                 }else {

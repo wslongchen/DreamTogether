@@ -271,7 +271,7 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
                 comment.setComment_content(commentText.getText().toString().trim());
                 comment.setPost_id(String.valueOf(dream.getID()));
                 comment.setComment_user_id(user);
-                httpHelper.asyHttpPostRequest(Config.CREATE_COMMENT, OtherUtils.CommentToMap(comment), new DetailHttpListener(2));
+                httpHelper.asyHttpPostRequest(Config.CREATE_COMMENT, OtherUtils.CommentToMap(comment,"postComment"), new DetailHttpListener(2));
                 hideSoftInputView();
                 break;
             case R.id.comment_content:

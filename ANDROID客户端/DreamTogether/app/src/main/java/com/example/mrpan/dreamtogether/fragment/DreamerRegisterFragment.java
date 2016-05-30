@@ -99,12 +99,9 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
         register_agree_ck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                {
+                if (isChecked) {
                     registerBtn.setEnabled(true);
-                }
-                else
-                {
+                } else {
                     registerBtn.setEnabled(false);
                 }
             }
@@ -153,6 +150,44 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
     }
 
 
+    private void resigster(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(XmppConnectionManager.getInstance().registerUser(user.getUser_login(), password.getText().toString())==1){
+//                                try {
+//                                    //MyApplication.xmppConnection.login(user.getUser_login(),password.getText().toString());
+//                                   // XmppUtil.updateUserVCard(MyApplication.xmppConnection,user);
+//                                } catch (XMPPException e) {
+//                                    e.printStackTrace();
+//                                }
+                    httpHelper.asyHttpPostRequest(Config.CREATE_USER, OtherUtils.UserToNameValuePair(user, "postuser"), new HttpResponseCallBack() {
+                        @Override
+                        public void onSuccess(String url, String result) {
+                            dialog.dismiss();
+                            MyLog.i(TAG,"zhuce:"+ result);
+                            Message message = new Message();
+                            message.arg1 = Config.HTTP_REQUEST_SUCCESS;
+                            message.arg2=1;
+                            message.obj = result;
+                            myHander.sendMessage(message);
+                        }
+
+                        @Override
+                        public void onFailure(int httpResponseCode, int errCode, String err) {
+                            if (dialog.isShowing())
+                                dialog.dismiss();
+                            MyLog.i(TAG,"zhuce:"+ err);
+                            Message message = new Message();
+                            message.arg1 = Config.HTTP_REQUEST_ERROR;
+                            myHander.sendMessage(message);
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -161,40 +196,31 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
                     dialog = DialogUtils.getLoadDialog(getActivity());
                     dialog.show();
                     if (user != null) {
-                       // XMPPConnection xmppConnection= MyApplication.xmppConnection;
-                        //if(xmppConnection!=null){
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                            if(XmppConnectionManager.getInstance().registerUser(user.getUser_login(), password.getText().toString())==1){
-//                                try {
-//                                    //MyApplication.xmppConnection.login(user.getUser_login(),password.getText().toString());
-//                                   // XmppUtil.updateUserVCard(MyApplication.xmppConnection,user);
-//                                } catch (XMPPException e) {
-//                                    e.printStackTrace();
-//                                }
-                                httpHelper.asyHttpPostRequest(Config.CREATE_USER, OtherUtils.UserToNameValuePair(user), new HttpResponseCallBack() {
-                                    @Override
-                                    public void onSuccess(String url, String result) {
-                                        dialog.dismiss();
-                                        Message message = new Message();
-                                        message.arg1 = Config.HTTP_REQUEST_SUCCESS;
-                                        message.obj = result;
-                                        myHander.sendMessage(message);
-                                    }
+                        httpHelper.asyHttpPostRequest(Config.QUERY_IS_HAVE_USER, OtherUtils.UserToNameValuePair(user,"isHaveUser"), new HttpResponseCallBack(){
 
-                                    @Override
-                                    public void onFailure(int httpResponseCode, int errCode, String err) {
-                                        if (dialog.isShowing())
-                                            dialog.dismiss();
-                                        Message message = new Message();
-                                        message.arg1 = Config.HTTP_REQUEST_ERROR;
-                                        myHander.sendMessage(message);
-                                    }
-                                });
+                            @Override
+                            public void onSuccess(String url, String result) {
+                                if (dialog.isShowing())
+                                    dialog.dismiss();
+                                MyLog.i(TAG,result);
+                                Message message = new Message();
+                                message.arg1 = Config.HTTP_REQUEST_SUCCESS;
+                                message.arg2=0;
+                                message.obj = result;
+                                myHander.sendMessage(message);
                             }
+
+                            @Override
+                            public void onFailure(int httpResponseCode, int errCode, String err) {
+                                MyLog.i(TAG,err);
+                                if (dialog.isShowing())
+                                    dialog.dismiss();
+                                Message message = new Message();
+                                message.arg1 = Config.HTTP_REQUEST_ERROR;
+                                myHander.sendMessage(message);
                             }
-                        }).start();
+                        });
+
                         }
 
 
@@ -214,25 +240,54 @@ public class DreamerRegisterFragment extends Fragment implements View.OnClickLis
         public void handleMessage(Message msg) {
             switch (msg.arg1){
                 case Config.HTTP_REQUEST_SUCCESS:
-                    if(msg.obj!=null){
-                        int ret=0;
-                        try {
-                            JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF", ""));
-                            MyLog.i(TAG,msg.obj.toString().replace("\uFEFF", ""));
-                            ret = jsonObject.getInt("ret");
-                            if (ret == Config.RESULT_RET_SUCCESS) {
-                                Toast.makeText(context,"注册成功！",Toast.LENGTH_LONG).show();
-                                //Intent intent = new Intent(context, WorldCircleFragment.class);
-                                //startActivityForResult(intent, Config.RESULT_RET_SUCCESS);
-                                getActivity().finish();
-                                // Toast.makeText(context, "Publish successed!", Toast.LENGTH_LONG).show();
-                            } else
-                            {
-                                Toast.makeText(context, "注册失败！", Toast.LENGTH_LONG).show();
+                    switch (msg.arg2){
+                        case 0:
+                            if(msg.obj!=null){
+                                int ret=0;
+                                try {
+                                    JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF", ""));
+                                    MyLog.i(TAG,msg.obj.toString().replace("\uFEFF", ""));
+                                    ret = jsonObject.getInt("ret");
+                                    if (ret == Config.RESULT_RET_SUCCESS) {
+                                          resigster();
+//                                        Toast.makeText(context,jsonObject.getInt("post"),Toast.LENGTH_LONG).show();
+//                                        //Intent intent = new Intent(context, WorldCircleFragment.class);
+//                                        //startActivityForResult(intent, Config.RESULT_RET_SUCCESS);
+//                                        getActivity().finish();
+//                                        // Toast.makeText(context, "Publish successed!", Toast.LENGTH_LONG).show();
+                                    } else
+                                    {
+                                        Toast.makeText(context, jsonObject.getString("post"), Toast.LENGTH_LONG).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                            break;
+                        case 1:
+                            if(msg.obj!=null){
+                                int ret=0;
+                                try {
+                                    JSONObject jsonObject = new JSONObject(msg.obj.toString().replace("\uFEFF", ""));
+
+                                    ret = jsonObject.getInt("ret");
+                                    if (ret == Config.RESULT_RET_SUCCESS) {
+                                        Toast.makeText(context,"注册成功！",Toast.LENGTH_LONG).show();
+                                        //Intent intent = new Intent(context, WorldCircleFragment.class);
+                                        //startActivityForResult(intent, Config.RESULT_RET_SUCCESS);
+                                        getActivity().finish();
+                                        // Toast.makeText(context, "Publish successed!", Toast.LENGTH_LONG).show();
+                                    } else
+                                    {
+                                        Toast.makeText(context, "注册失败！", Toast.LENGTH_LONG).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            break;
+                        default:
+                            break;
                     }
 
                     break;

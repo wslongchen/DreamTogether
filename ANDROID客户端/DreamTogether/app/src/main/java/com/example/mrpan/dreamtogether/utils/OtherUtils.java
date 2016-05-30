@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public class OtherUtils {
     //转换实体与NameValuePair
-    public static List<NameValuePair> UserToNameValuePair(User user) {
+    public static List<NameValuePair> UserToNameValuePair(User user,String methodName) {
         List<NameValuePair> nameValuePairs = new ArrayList<>();
         nameValuePairs.add(new BasicNameValuePair("name", user.getUser_login()));
         nameValuePairs.add(new BasicNameValuePair("pass", user.getUser_pass()));
@@ -40,10 +40,15 @@ public class OtherUtils {
         nameValuePairs.add(new BasicNameValuePair("activationkey", user.getUser_activation_key()));
         nameValuePairs.add(new BasicNameValuePair("status", user.getUser_status()));
         nameValuePairs.add(new BasicNameValuePair("displayname", user.getUser_display_name()));
+        long TimeStamp = System.currentTimeMillis();
+        String appkey = "dream,.*-app" + TimeStamp + methodName.toLowerCase();;
+        String sign = Md5Utils.StrToMd5(appkey);
+        nameValuePairs.add(new BasicNameValuePair("signkey", sign));
+        nameValuePairs.add(new BasicNameValuePair("timestamp", String.valueOf(TimeStamp)));
         return nameValuePairs;
     }
 
-    public static List<NameValuePair> DreamToNameValuePair(Dream dream) {
+    public static List<NameValuePair> DreamToNameValuePair(Dream dream,String methodName) {
         List<NameValuePair> nameValuePairs = new ArrayList<>();
         int ID = dream.getPost_author().getID();
         nameValuePairs.add(new BasicNameValuePair("author", String.valueOf(ID)));
@@ -56,6 +61,11 @@ public class OtherUtils {
         nameValuePairs.add(new BasicNameValuePair("type", dream.getPost_type()));
         nameValuePairs.add(new BasicNameValuePair("commentstatus", dream.getPost_comment_status()));
         nameValuePairs.add(new BasicNameValuePair("commentcount", dream.getPost_comment_count()));
+        long TimeStamp = System.currentTimeMillis();
+        String appkey = "dream,.*-app" + TimeStamp + methodName.toLowerCase();;
+        String sign = Md5Utils.StrToMd5(appkey);
+        nameValuePairs.add(new BasicNameValuePair("signkey", sign));
+        nameValuePairs.add(new BasicNameValuePair("timestamp", String.valueOf(TimeStamp)));
         List<Meta> metas=dream.getMetas();
         if(metas.size()>0){
             String jsonStr= GsonUtils.getJsonStr(metas);
@@ -64,7 +74,7 @@ public class OtherUtils {
         return nameValuePairs;
     }
 
-    public static Map<String, String> DreamToMap(Dream dream) {
+    public static Map<String, String> DreamToMap(Dream dream,String methodName) {
         Map<String, String> map = new HashMap<>();
         int ID = dream.getPost_author().getID();
         map.put("author", String.valueOf(ID));
@@ -77,6 +87,12 @@ public class OtherUtils {
         map.put("type", dream.getPost_type().toString());
         map.put("commentstatus", dream.getPost_comment_status().toString());
         map.put("commentcount", dream.getPost_comment_count().toString());
+        long TimeStamp = System.currentTimeMillis();
+        String appkey = "dream,.*-app" + TimeStamp + methodName.toLowerCase();;
+        String sign = Md5Utils.StrToMd5(appkey);
+        map.put("signkey", sign);
+        map.put("timestamp", String.valueOf(TimeStamp));
+
         List<Meta> metas=dream.getMetas();
         if(metas.size()>0){
             String jsonStr= GsonUtils.getJsonStr(metas);
@@ -85,7 +101,7 @@ public class OtherUtils {
         return map;
     }
 
-    public static List<NameValuePair> CommentToMap(Comment comment) {
+    public static List<NameValuePair> CommentToMap(Comment comment,String methodName) {
         List<NameValuePair> nameValuePairs = new ArrayList<>();
         int ID = comment.getComment_user_id().getID();
         nameValuePairs.add(new BasicNameValuePair("author", String.valueOf(ID)));
@@ -93,12 +109,22 @@ public class OtherUtils {
         nameValuePairs.add(new BasicNameValuePair("dreamid", comment.getPost_id()));
         nameValuePairs.add(new BasicNameValuePair("content", comment.getComment_content()));
         nameValuePairs.add(new BasicNameValuePair("time", comment.getComment_time()));
+        long TimeStamp = System.currentTimeMillis();
+        String appkey = "dream,.*-app" + TimeStamp + methodName.toLowerCase();;
+        String sign = Md5Utils.StrToMd5(appkey);
+        nameValuePairs.add(new BasicNameValuePair("signkey", sign));
+        nameValuePairs.add(new BasicNameValuePair("timestamp", String.valueOf(TimeStamp)));
         return nameValuePairs;
     }
-    public static List<NameValuePair> signToNameValuePair(String sign,int id) {
+    public static List<NameValuePair> signToNameValuePair(String signed,int id,String methodName) {
         List<NameValuePair> nameValuePairs = new ArrayList<>();
-        nameValuePairs.add(new BasicNameValuePair("sign", sign));
+        nameValuePairs.add(new BasicNameValuePair("sign", signed));
         nameValuePairs.add(new BasicNameValuePair("id", String.valueOf(id)));
+        long TimeStamp = System.currentTimeMillis();
+        String appkey = "dream,.*-app" + TimeStamp + methodName.toLowerCase();;
+        String sign = Md5Utils.StrToMd5(appkey);
+        nameValuePairs.add(new BasicNameValuePair("signkey", sign));
+        nameValuePairs.add(new BasicNameValuePair("timestamp", String.valueOf(TimeStamp)));
         return nameValuePairs;
     }
 
@@ -109,6 +135,15 @@ public class OtherUtils {
     }
     public static String getDeviceInfo() {
         return Build.BRAND;
+    }
+
+
+    public static String addSignValidate(String url,String methodName){
+        long TimeStamp = System.currentTimeMillis();
+        String appkey = "dream,.*-app" + TimeStamp + methodName.toLowerCase();;
+        String sign = Md5Utils.StrToMd5(appkey);
+        String get_url=url+"&timestamp="+TimeStamp+"&signkey="+sign;
+        return get_url;
     }
 
     public static int revertWeatherToImg(String weather){

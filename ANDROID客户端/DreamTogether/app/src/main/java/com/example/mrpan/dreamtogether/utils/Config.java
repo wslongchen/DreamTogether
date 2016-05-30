@@ -80,6 +80,8 @@ public class Config {
     private static final String LOGIN_Str2="&password=";
     private static final String REQUEST_ALL_AUTHOR_DREAM="http://dream.mrpann.com/index.php?action=list&type=getDreamByAuthor&id=";
 
+    public static final String QUERY_IS_HAVE_USER="http://dream.mrpann.com/index.php?action=post&type=isHaveUser";
+
     private static final String REQUEST_USE_WITH_ID="http://dream.mrpann.com/index.php?action=list&type=getUserByID&id=";
     public static final String REQUEST_RADOM_DREAM="http://dream.mrpann.com/index.php?action=list&type=getRandomDream";
     private static final String REQUEST_COMMENT="http://dream.mrpann.com/index.php?action=comment&type=getComment&id=";

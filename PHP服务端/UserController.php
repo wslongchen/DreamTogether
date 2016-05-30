@@ -28,10 +28,13 @@ class UserController{
 		echo json_encode($json_out);
 	}
 	
-	
+	function activationUser($id,$key){
+		$output=$this->model->activationUser($id,$key);
+		echo $output;
+	}
 	
 	function updateUserSign($sign,$id){
-		$this->updateUserSign($sign, $id);
+		$this->model->updateUserSign($sign, $id);
 	}
 	
 	function updateUserImg($file,$id){
@@ -40,6 +43,11 @@ class UserController{
 	
 	function postUser($user){
 		$json_output=$this->model->postUser($user);
+		echo json_encode($json_output);
+	}
+	
+	function isHaveUser($user){
+		$json_output=$this->model->isHaveUser($user);
 		echo json_encode($json_output);
 	}
 	

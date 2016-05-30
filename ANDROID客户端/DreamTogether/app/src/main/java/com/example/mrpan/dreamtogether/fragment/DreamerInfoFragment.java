@@ -266,33 +266,40 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
                 getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
                 break;
             case "menuExit":
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("是否退出登陆?");
-                builder.setTitle("提示");
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        MySharePreference mySharePreference = new MySharePreference(context);
-                        mySharePreference.commitBoolean("isLogin", false);
-                        mySharePreference.commitString("username", "");
-                        mySharePreference.commitString("userpassword", "");
-                        android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.frame_content, MainActivity.fragmentHashMap.get(DreamerLoginFragment.TAG));
-                        //transaction.addToBackStack(null);
-                        transaction.commit();
-                        dialog.dismiss();
-                    }
-                });
-
-                builder.setNegativeButton("取消",
-                        new android.content.DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                builder.create().show();
-
+//                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//                builder.setMessage("是否退出登陆?");
+//                builder.setTitle("提示");
+//                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                        MySharePreference mySharePreference = new MySharePreference(context);
+//                        mySharePreference.commitBoolean("isLogin", false);
+//                        mySharePreference.commitString("username", "");
+//                        mySharePreference.commitString("userpassword", "");
+//                        android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                        transaction.replace(R.id.frame_content, MainActivity.fragmentHashMap.get(DreamerLoginFragment.TAG));
+//                        //transaction.addToBackStack(null);
+//                        transaction.commit();
+//                        dialog.dismiss();
+//                    }
+//                });
+//
+//                builder.setNegativeButton("取消",
+//                        new android.content.DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.dismiss();
+//                            }
+//                        });
+//
+//                builder.create().show();
+                MySharePreference mySharePreference = new MySharePreference(context);
+                mySharePreference.commitBoolean("isLogin", false);
+                mySharePreference.commitString("username", "");
+                mySharePreference.commitString("userpassword", "");
+                android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_content, MainActivity.fragmentHashMap.get(DreamerLoginFragment.TAG));
+                //transaction.addToBackStack(null);
+                transaction.commit();
                 break;
             default:
                 break;
