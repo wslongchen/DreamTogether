@@ -165,17 +165,17 @@ public class CustomDialog extends Dialog {
                 layout.findViewById(R.id.show_btn_2).setVisibility(
                         View.GONE);
             }
-            // set the content message
-            if (message != null) {
-                ((TextView) layout.findViewById(R.id.show_text)).setText(message);
-            } else if (contentView != null) {
-                // if no message set
-                // add the contentView to the dialog body
-                ((LinearLayout) layout.findViewById(R.id.show_text))
-                        .removeAllViews();
-                ((LinearLayout) layout.findViewById(R.id.show_text))
-                        .addView(contentView, new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
-            }
+//            // set the content message
+//            if (message != null) {
+//                ((TextView) layout.findViewById(R.id.show_text)).setText(message);
+//            } else if (contentView != null) {
+//                // if no message set
+//                // add the contentView to the dialog body
+//                ((LinearLayout) layout.findViewById(R.id.show_text))
+//                        .removeAllViews();
+//                ((LinearLayout) layout.findViewById(R.id.show_text))
+//                        .addView(contentView, new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
+//            }
             dialog.setContentView(layout);
             return dialog;
         }

@@ -18,12 +18,12 @@ public class Config {
 
     public static boolean IS_DEBUG=true;
 
-    public static final String APP_ID="wx5d8c6f74169f5bc1";//微信
+    public static final String APP_ID="wx01301b546bb77b67";//微信
     public static final String APP_KEY="";
     public static final String PARTNER_ID="";
     public static final String PARTNER_KEY = "8934e7d15453e97507ef794cf7b0519d";
 
-    public static final String APP_SECRET="3e12592968fa5946589aa14ee06ed22c";
+    public static final String APP_SECRET="20feef8cc7a101a908ec45700893cf21";
 
     //微博
     public static final String SINA_APP_KEY = "3292895821"; // 应用的APP_KEY
@@ -122,6 +122,7 @@ public class Config {
     public static final int MESSAGE_TYPE=1017;
     public static final int EDIT_TYPE=1018;
     public static final int SHARE_TYPE=1019;
+    public static final int DREAM_MAPS=1020;
 
 
     public static final int SHARE=1019;
@@ -166,6 +167,19 @@ public class Config {
     public static final String MSG_TYPE_VOICE="msg_type_voice";//语音
     public static final String MSG_TYPE_LOCATION="msg_type_location";//位置
     public static final String SPLIT="卍";
+
+
+    //音乐进度条广播
+
+    public static final String ACTION_PROGRESSBAR="com.android.communication.progressbar";
+    public static final String ACTION_CHAGE_MUSIC="com.android.communication.chagemusic";
+
+    public static final int PLAY_MSG = 1;                      //开始播放
+    public static final int PAUSE = 2;                         //暂停播放
+    public static final int PREVIOUS_MUSIC = 3;                //上一首
+    public static final int NEXT_MUSIC = 4;                    //下一首
+    public static final int LOOP_MODE = 5;                     //循环播放
+    public static final int RANDOM_MODE = 6;                   //随机播放
 
 
 

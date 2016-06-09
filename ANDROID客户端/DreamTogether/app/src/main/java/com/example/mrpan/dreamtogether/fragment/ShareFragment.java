@@ -38,6 +38,7 @@ import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.entity.Share;
 import com.example.mrpan.dreamtogether.share.AllShare;
 import com.example.mrpan.dreamtogether.share.TencentUtil;
+import com.example.mrpan.dreamtogether.utils.BitmapUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DateUtils;
 import com.example.mrpan.dreamtogether.utils.FileUtils;
@@ -48,6 +49,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 /**
  * Created by mrpan on 16/5/24.
@@ -118,8 +120,10 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
             }
         }else{
             share_image.setImageResource(R.mipmap.bg_search);
+
         }
     }
+
     public static Bitmap getBitmapByView(ScrollView scrollView) {
         int h = 0;
         Bitmap bitmap = null;
@@ -262,10 +266,17 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
                 ContentResolver cr = context.getContentResolver();
                 try {
                     Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                    BitmapUtils.saveBitmapToSDCard(bitmap, Config.DIR_IMAGE_PATH + "take/", "take");
+//                ImageView imageView = (ImageView) currentView.findViewById(R.id.iv01);
+                    path="take";
+                    Bitmap bm = BitmapUtils.revitionImageSize(Config.DIR_IMAGE_PATH + "take/" + path + ".jpg");
+                    BitmapUtils.saveBitmapToSDCard(bm, Config.DIR_IMAGE_PATH + "take/", "take");
+
+                    share_image.setImageBitmap(bm);
 //                ImageView imageView = (ImageView) currentView.findViewById(R.id.iv01);
 //                /* 将Bitmap设定到ImageView */
 //                imageView.setImageBitmap(bitmap);
-                } catch (FileNotFoundException e) {
+                } catch (Exception e) {
                     MyLog.i("Exception", e.getMessage());
                 }
                 break;
@@ -321,8 +332,9 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
                 share.setAPP_NAME("梦想");
                 Bitmap bitmap=getViewBitmap(s);
                 FileUtils.saveBitmap(bitmap, "share", Config.DIR_IMAGE_PATH);
-                share.setSUMMARY("test");
-                share.setTITLE("test");
+                share.setSUMMARY("拯救世界的小安安");
+                share.setTITLE("梦想");
+                share.setTARGET_URL("http://www.mrpann.com");
                 share.setIMAGE_URL(Config.DIR_IMAGE_PATH + "share.JPEG");
                 new SharePopupWindows(context,currentView,1,share);
 //                AllShare.getInstance(context).qq_share_image(share);

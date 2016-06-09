@@ -1,7 +1,12 @@
 package com.example.mrpan.dreamtogether.utils;
 
+import android.content.Context;
 import android.content.Entity;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Build;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 
 import com.example.mrpan.dreamtogether.R;
@@ -9,6 +14,7 @@ import com.example.mrpan.dreamtogether.entity.Comment;
 import com.example.mrpan.dreamtogether.entity.Dream;
 import com.example.mrpan.dreamtogether.entity.Meta;
 import com.example.mrpan.dreamtogether.entity.User;
+import com.google.zxing.WriterException;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -181,6 +187,38 @@ public class OtherUtils {
                 break;
         }
         return ResId;
+    }
+
+    //设置二维码
+    public static void calculateView(final Context context,final ImageView qrcode,final String content) {
+        final ViewTreeObserver vto = qrcode.getViewTreeObserver();
+        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                if (vto.isAlive()) {
+                    vto.removeOnPreDrawListener(this);
+                }
+                int height = qrcode.getMeasuredHeight();
+                int width = qrcode.getMeasuredWidth();
+                Bitmap logo = MakeQRCodeUtils.gainBitmap(context, R.mipmap.ic_launcher);
+                Bitmap   background = MakeQRCodeUtils.gainBitmap(context, R.mipmap.bg_search);
+                Bitmap markBMP = MakeQRCodeUtils.gainBitmap(context, R.mipmap.app_icon);
+                try {
+                    //获得二维码图片
+                    Bitmap bitmap = MakeQRCodeUtils.makeQRImage(logo,
+                            content,
+                            width, height);
+                    //给二维码加背景
+                    bitmap = MakeQRCodeUtils.addBackground(bitmap, background);
+                    //加水印
+                    bitmap = MakeQRCodeUtils.composeWatermark(bitmap, markBMP);
+                    //设置二维码图片
+                    qrcode.setImageBitmap(bitmap);
+                } catch (WriterException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            }
+        });
     }
 
 }

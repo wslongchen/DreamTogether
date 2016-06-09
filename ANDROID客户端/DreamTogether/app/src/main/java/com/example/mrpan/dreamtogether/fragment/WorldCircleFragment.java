@@ -77,8 +77,19 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
         if(viewGroup!=null){
             viewGroup.removeView(currentView);
         }
+
         initView();
+        //test();
         return currentView;
+    }
+
+    void test(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                httpHelper.verfyRealName("4130","李俊","433127199405121219",Config.DIR_IMAGE_PATH+"share.JPEG",Config.DIR_IMAGE_PATH+"share.JPEG");
+            }
+        }).start();
     }
 
     //测试下载
@@ -328,16 +339,16 @@ public class WorldCircleFragment extends Fragment implements View.OnClickListene
     public void refreshComplate() {
         if(recyclerView!=null){
             if(recyclerView.getAdapter()!=null){
-                //recyclerView.getAdapter().notifyDataSetChanged();
-                worldCircleListAdapter.notifyDataSetChanged();
+                recyclerView.getAdapter().notifyDataSetChanged();
+               // worldCircleListAdapter.notifyDataSetChanged();
             }
         }
 
     }
 
     public void loadMoreComplate() {
-        //recyclerView.getAdapter().notifyDataSetChanged();
-        worldCircleListAdapter.notifyDataSetChanged();
+        recyclerView.getAdapter().notifyDataSetChanged();
+        //worldCircleListAdapter.notifyDataSetChanged();
         recyclerView.scrollToPosition(current);
     }
 

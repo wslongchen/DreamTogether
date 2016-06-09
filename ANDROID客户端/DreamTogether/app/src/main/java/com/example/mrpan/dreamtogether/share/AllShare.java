@@ -88,7 +88,8 @@ public class AllShare {
         this.mContext=context;
         mTencent = Tencent.createInstance(APP_ID, context);
         mInfo = new UserInfo(mContext, mTencent.getQQToken());
-        iwxapi = WXAPIFactory.createWXAPI(context, Config.APP_ID, false);
+    //    iwxapi = WXAPIFactory.createWXAPI(context, Config.APP_ID, false);
+        iwxapi=WXAPIFactory.createWXAPI(context, null);
         iwxapi.registerApp(Config.APP_ID);
         //mAuthInfo = new AuthInfo(context, Config.SINA_APP_KEY, Config.SINA_REDIRECT_URL,Config.SINA_SCOPE);
     }

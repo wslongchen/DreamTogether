@@ -102,6 +102,7 @@ public class MsgListener implements MessageListener {
 					}
 				}
 				if (msgtype.equals(Config.MSG_TYPE_VOICE)) {//语音类型
+					message.getProperty("");
 					Msg msg = new Msg();
 					msg.setToUser(to);
 					msg.setFromUser(from);

@@ -26,12 +26,16 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.example.mrpan.dreamtogether.fragment.CardDreamFragment;
@@ -44,6 +48,7 @@ import com.example.mrpan.dreamtogether.fragment.StarFragment;
 import com.example.mrpan.dreamtogether.fragment.SystemSettingsFragment;
 import com.example.mrpan.dreamtogether.fragment.WorldCircleFragment;
 import com.example.mrpan.dreamtogether.http.HttpHelper;
+import com.example.mrpan.dreamtogether.music.MusicService;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DialogUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
@@ -55,6 +60,11 @@ import com.example.mrpan.dreamtogether.xmpp.MySystemService;
 import java.util.HashMap;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
+
+    private int current_position_bar;
+    private SeekBar progress;
+    Intent progress_change_intent_to_service=new Intent(Config.ACTION_PROGRESSBAR);
+
 
     public static HashMap<String,Fragment> fragmentHashMap=null;
     private WorldCircleFragment worldCircleFragment=null;
@@ -128,6 +138,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         auth_iv=(ImageView)findViewById(R.id.image_auth);
         more_iv=(ImageView)findViewById(R.id.image_more);
 
+        ImageView i= (ImageView) findViewById(R.id.imageView);
+        i.setOnClickListener(this);
+
         home_click();
     }
 
@@ -148,9 +161,29 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         boolean isLogin=new MySharePreference(this).getBoolean("isLogin",false);
         if(isLogin){
             initReceiver();
-            Intent intent = new Intent(this, MySystemService.class);
+            Intent intent = new Intent(MainActivity.this, MySystemService.class);
             startService(intent);
         }
+    }
+    private void initReceiver2() {
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getAction().equals("current")){
+                    int p=intent.getIntExtra("current",0);
+                    progress.setProgress(p);
+                }
+                if(intent.getAction().equals("info")) {
+                    int d = intent.getIntExtra("duration", 0);
+                   progress.setMax(d);
+                }
+                }
+        };
+        //注册广播接收者
+        IntentFilter mFilter = new IntentFilter();
+        mFilter.addAction("current");
+        mFilter.addAction("info");
+        registerReceiver(receiver, mFilter);
     }
     private BroadcastReceiver receiver;
     private void initReceiver() {
@@ -312,7 +345,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 more_click();
                 break;
             case R.id.menu_star:
+
                 star_click();
+                break;
+            case R.id.imageView:
+                new PopupWindows(this,home_iv);
+                initReceiver2();
+                Intent intent2 = new Intent(this, MusicService.class);
+                startService(intent2);
+                break;
             default:
 
                 break;
@@ -328,15 +369,17 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+
         unregisterReceiver(receiver);
+        MusicService.getInstance().stopSelf();
+        stopService(new Intent(this, MusicService.class));
+        super.onDestroy();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
-
             if ((System.currentTimeMillis() - exitTime) > 2000) {
                 Toast.makeText(getApplicationContext(), "再按一次退出程序",
                         Toast.LENGTH_SHORT).show();
@@ -344,14 +387,75 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             } else {
                 try{
                     MySystemService.getInstance().stopSelf();
+                    MusicService.getInstance().stopSelf();
+
                 }catch(Exception e){
 
                 }
+                stopService(new Intent(this,MusicService.class));
                 finish();
                 System.exit(0);
             }
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public class PopupWindows extends PopupWindow {
+
+        public PopupWindows(Context mContext, View parent) {
+
+            final View view = View
+                    .inflate(mContext, R.layout.music_popwindow, null);
+            view.startAnimation(AnimationUtils.loadAnimation(mContext,
+                    R.anim.fade_ins));
+
+            //setOutsideTouchable(true);
+            setContentView(view);
+            setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+            setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+            setBackgroundDrawable(new BitmapDrawable());
+            setFocusable(true);
+
+            progress= (SeekBar) view.findViewById(R.id.seekbar);
+            progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    current_position_bar = seekBar.getProgress();
+                    if (fromUser) {
+                        progress_change_intent_to_service.putExtra("touch", false);
+                        progress_change_intent_to_service.putExtra("current_position", current_position_bar);
+                        sendBroadcast(progress_change_intent_to_service);
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    progress_change_intent_to_service.putExtra("touch",true);
+                    sendBroadcast(progress_change_intent_to_service);
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    progress_change_intent_to_service.putExtra("touch",false);
+                    sendBroadcast(progress_change_intent_to_service);
+                }
+            });
+
+
+            showAtLocation(parent, Gravity.CENTER, 0, 0);
+            update();
+
+
+
+
+            setOnDismissListener(new OnDismissListener() {
+                @Override
+                public void onDismiss() {
+
+                }
+            });
+
+        }
     }
 }

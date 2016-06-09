@@ -1,14 +1,22 @@
 package com.example.mrpan.dreamtogether.http;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
 import com.example.mrpan.dreamtogether.MyApplication;
 import com.example.mrpan.dreamtogether.utils.Config;
+import com.example.mrpan.dreamtogether.utils.Md5Utils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.utils.MySharePreference;
 import com.example.mrpan.dreamtogether.utils.Network;
 
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
@@ -34,6 +42,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,9 +60,12 @@ import java.net.UnknownHostException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -688,5 +700,150 @@ public class HttpHelper {
             return sslContext.getSocketFactory().createSocket();
         }
     }
+    public String verfyRealName(String userId, String realName,String idcard, String img1, String img2) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userId", userId);
+        params.put("realName", realName);
+        params.put("idcard", idcard);
+        List<String> files = new ArrayList<String>();
+        files.add(img1);
+        files.add(img2);
+
+        /** 时间戳/MD5加密 */
+        long TimeStamp = System.currentTimeMillis();
+        String string3 = "sfd,.*-app" + TimeStamp + "verfyrealname";
+        String string2 = md5(string3);
+        params.put("sign", string2);
+        params.put("timestamp", "" + TimeStamp);
+
+        String url = "http://demo.sanfendai.cn/app/uc/verfyRealName";
+        return uploadFileClient(url, params, img1, img2);
+    }
+
+    public static String md5(String string) {
+        byte[] hash;
+        try {
+            hash = MessageDigest.getInstance("MD5").digest(
+                    string.getBytes("UTF-8"));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Huh, MD5 should be supported?", e);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Huh, UTF-8 should be supported?", e);
+        }
+
+        StringBuilder hex = new StringBuilder(hash.length * 2);
+        for (byte b : hash) {
+            if ((b & 0xFF) < 0x10)
+                hex.append("0");
+            hex.append(Integer.toHexString(b & 0xFF));
+        }
+        return hex.toString();
+    }
+
+    public static String uploadFileClient(String url,
+                                          Map<String, String> params, String img1, String img2) {
+
+        File targetFile = new File(img1);// 指定上传文件
+        File targetFile2 = new File(img2);
+
+        PostMethod filePost = new PostMethod(url);
+
+        try {
+            // 通过以下方法可以模拟页面参数提交
+            // filePost.setParameter("name", "中文");
+            // filePost.setParameter("pass", "1234");
+            byte[] buffer = new byte[1024];
+            Part[] parts = { new FilePart("img1", targetFile),
+                    new FilePart("img2", targetFile2),new StringPart("sign",params.get("sign").toString()),new StringPart("timestamp",params.get("timestamp").toString()),
+                    new StringPart("userId",params.get("userId").toString()),new StringPart("idcard",params.get("idcard").toString()),
+                        new StringPart("realName",params.get("realName"))};
+            if ((params != null) && !params.isEmpty()) {
+                for (Map.Entry<String, String> param : params.entrySet()) {
+                    filePost.setParameter(param.getKey(), param.getValue());
+                     MyLog.i("data",param.getKey()+":key,value:"+param.getValue());
+                }
+            }
+            filePost.setRequestEntity(new MultipartRequestEntity(parts,
+                    filePost.getParams()));
+            org.apache.commons.httpclient.HttpClient client = new org.apache.commons.httpclient.HttpClient();
+            client.getHttpConnectionManager().getParams()
+                    .setConnectionTimeout(5000);
+            int status = client.executeMethod(filePost);
+            MyLog.i("TEST",status+",1111");
+            if (status == HttpStatus.SC_OK) {
+                String str = "";
+                str = filePost.getResponseBodyAsString();
+                MyLog.i("TEST",str);
+                return str;
+                // 上传成功
+            } else {
+                String str = "";
+                str = filePost.getResponseBodyAsString();
+                MyLog.i("TEST",str);
+                return str;
+                // 上传失败
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            filePost.releaseConnection();
+        }
+        return "";
+    }
+
+    public String uploadFileClient2(String url, Map<String, String> params,String img1,String image2)
+    {
+
+        File targetFile = new File(img1);// 指定上传文件
+        File targetFile2 = new File(image2);
+
+        PostMethod filePost = new PostMethod(url);
+
+        try
+        {
+
+            // 通过以下方法可以模拟页面参数提交
+            // filePost.setParameter("name", "中文");
+            // filePost.setParameter("pass", "1234");
+            byte[] buffer = new byte[1024];
+            Part[] parts =
+                    { new FilePart("img1",
+                            targetFile),new FilePart("img2",
+                            targetFile2)};
+            if ((params != null) && !params.isEmpty()) {
+                for (Map.Entry<String, String> param : params.entrySet()) {
+                    filePost.setParameter(param.getKey(),param.getValue());
+                }
+            }
+            filePost.setRequestEntity(new MultipartRequestEntity(parts,
+                    filePost.getParams()));
+            org.apache.commons.httpclient.HttpClient client = new org.apache.commons.httpclient.HttpClient();
+            client.getHttpConnectionManager().getParams()
+                    .setConnectionTimeout(5000);
+            int status = client.executeMethod(filePost);
+
+            if (status == HttpStatus.SC_OK)
+            {
+                String str = "";
+                str = filePost.getResponseBodyAsString();
+                return str;
+                // 上传成功
+            } else
+            {
+                String str = "";
+                str = filePost.getResponseBodyAsString();
+                return str;
+                // 上传失败
+            }
+        } catch (Exception ex)
+        {
+            ex.printStackTrace();
+        } finally
+        {
+            filePost.releaseConnection();
+        }
+        return "";
+    }
+
 
 }

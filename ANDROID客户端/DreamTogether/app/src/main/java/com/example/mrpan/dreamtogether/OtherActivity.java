@@ -12,10 +12,12 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.example.mrpan.dreamtogether.entity.Dream;
+import com.example.mrpan.dreamtogether.entity.DreamPosts;
 import com.example.mrpan.dreamtogether.fragment.BrowserFragment;
 import com.example.mrpan.dreamtogether.fragment.CardDreamFragment;
 import com.example.mrpan.dreamtogether.fragment.ChatFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamDetailFragment;
+import com.example.mrpan.dreamtogether.fragment.DreamMapInfo;
 import com.example.mrpan.dreamtogether.fragment.DreamPostFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamRadomFragment;
 import com.example.mrpan.dreamtogether.fragment.DreamXiuXiuFragment;
@@ -33,6 +35,7 @@ import com.example.mrpan.dreamtogether.utils.MyLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by mrpan on 16/3/26.
@@ -55,6 +58,7 @@ public class OtherActivity extends FragmentActivity {
     private MessegeFragment messegeFragment=null;
     private EditFragment editFragment=null;
     private ShareFragment shareFragment=null;
+    private DreamMapInfo dreamMapInfo=null;
 
 
     @Override
@@ -154,6 +158,18 @@ public class OtherActivity extends FragmentActivity {
                 //transaction.addToBackStack(null);
                 transaction.commit();
                 break;
+            case Config.DREAM_MAPS:
+                DreamPosts dreams= (DreamPosts) bundle.getSerializable("data");
+                transaction = getSupportFragmentManager().beginTransaction();
+                if(dreams!=null){
+                    ((DreamMapInfo)fragmentHashMap.get(DreamMapInfo.TAG)).setDreams(dreams.getPost());
+                    MyLog.i("other",dreams.getPost().size()+",dddddddddddd");
+                }
+                //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
+                transaction.replace(R.id.other_layout, fragmentHashMap.get(DreamMapInfo.TAG));
+                //transaction.addToBackStack(null);
+                transaction.commit();
+                break;
             default:
                 break;
         }
@@ -175,6 +191,7 @@ public class OtherActivity extends FragmentActivity {
         messegeFragment=new MessegeFragment();
         editFragment=new EditFragment();
         shareFragment=new ShareFragment();
+        dreamMapInfo=new DreamMapInfo();
 
         fragmentHashMap.put(DreamerRegisterFragment.TAG, dreamerRegisterFragment);
         fragmentHashMap.put(UserDreamListFragment.TAG,userDreamListFragment);
@@ -190,6 +207,7 @@ public class OtherActivity extends FragmentActivity {
         fragmentHashMap.put(MessegeFragment.TAG,messegeFragment);
         fragmentHashMap.put(EditFragment.TAG,editFragment);
         fragmentHashMap.put(ShareFragment.TAG,shareFragment);
+        fragmentHashMap.put(DreamMapInfo.TAG,dreamMapInfo);
 
     }
 

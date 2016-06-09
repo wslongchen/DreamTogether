@@ -17,8 +17,10 @@ import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.adapter.DreamImageGridAdapter;
 import com.example.mrpan.dreamtogether.entity.Dream;
+import com.example.mrpan.dreamtogether.entity.Share;
 import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.utils.Config;
+import com.example.mrpan.dreamtogether.view.SharePopupWindows;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -45,9 +47,22 @@ public class CardDreamFragment extends Fragment {
         //final View tv1 = root.findViewById(R.id.textView1);
         //final View tv2 = root.findViewById(R.id.textView2);
         TextView author=(TextView)root.findViewById(R.id.dream_random_author);
-        TextView content=(TextView)root.findViewById(R.id.dream_random_content);
+        final TextView content=(TextView)root.findViewById(R.id.dream_random_content);
         ImageView iv = (ImageView) root.findViewById(R.id.dream_random_img);
+        ImageView share=(ImageView)root.findViewById(R.id.dream_random_share);
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Share share=new Share();
+                share.setAPP_NAME("梦想");
 
+                share.setSUMMARY("拯救世界的小安安");
+                share.setTITLE("梦想");
+                share.setTARGET_URL("http://www.mrpann.com");
+                share.setIMAGE_URL(Config.DIR_IMAGE_PATH + "share.JPEG");
+                new SharePopupWindows(getContext(),content,0,share);
+            }
+        });
         //Bundle bundle = getArguments();
         User user =dream.getPost_author(); //bundle.getInt(Config.KEY, R.mipmap.bg_search);
         final String[] imgs;

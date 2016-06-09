@@ -102,6 +102,7 @@ public class SharePopupWindows extends PopupWindow implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+        dismiss();
         switch (v.getId()){
             case R.id.share_qq:
                 switch (type){

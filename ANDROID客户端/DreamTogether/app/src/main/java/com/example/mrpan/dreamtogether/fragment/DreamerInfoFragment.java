@@ -196,6 +196,7 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
 
         if (user != null) {
             userNickname.setText(user.getUser_nickname());
+            ImageLoader.getInstance().displayImage("http://"+user.getUser_img(),userImg);
             user_head_sign.setText(user.getUser_display_name());
         }
 

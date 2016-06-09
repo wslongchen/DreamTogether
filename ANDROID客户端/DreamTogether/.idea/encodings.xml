@@ -3,5 +3,6 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/mrpan/dreamtogether/view/OverScrollView.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/mrpan/dreamtogether/view/OverScrollWarpLayout.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/mrpan/dreamtogether/zxing/view/ViewfinderView.java" charset="UTF-8" />
   </component>
 </project>

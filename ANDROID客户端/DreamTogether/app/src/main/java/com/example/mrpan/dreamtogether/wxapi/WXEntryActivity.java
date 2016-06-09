@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.utils.Config;
+import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
@@ -28,8 +29,10 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		api = WXAPIFactory.createWXAPI(this, Config.APP_ID, false);
+		api = WXAPIFactory.createWXAPI(this, Config.APP_ID,false);
+		api.registerApp(Config.APP_ID);
 		api.handleIntent(getIntent(), this);
+		MyLog.i("wechat", "test");
 	}
 
 	@Override
@@ -42,21 +45,22 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
 	@Override
 	public void onReq(BaseReq baseReq) {
-		Toast.makeText(this, "openid = " + baseReq.openId, Toast.LENGTH_SHORT).show();
-
-		switch (baseReq.getType()) {
-			case ConstantsAPI.COMMAND_GETMESSAGE_FROM_WX:
-				goToGetMsg();
-				break;
-			case ConstantsAPI.COMMAND_SHOWMESSAGE_FROM_WX:
-				goToShowMsg((ShowMessageFromWX.Req) baseReq);
-				break;
-			case ConstantsAPI.COMMAND_LAUNCH_BY_WX:
-				Toast.makeText(this, "微信", Toast.LENGTH_SHORT).show();
-				break;
-			default:
-				break;
-		}
+		MyLog.i("wechat","test");
+//		Toast.makeText(this, "openid = " + baseReq.openId, Toast.LENGTH_SHORT).show();
+//
+//		switch (baseReq.getType()) {
+//			case ConstantsAPI.COMMAND_GETMESSAGE_FROM_WX:
+//				goToGetMsg();
+//				break;
+//			case ConstantsAPI.COMMAND_SHOWMESSAGE_FROM_WX:
+//				goToShowMsg((ShowMessageFromWX.Req) baseReq);
+//				break;
+//			case ConstantsAPI.COMMAND_LAUNCH_BY_WX:
+//				Toast.makeText(this, "微信", Toast.LENGTH_SHORT).show();
+//				break;
+//			default:
+//				break;
+//		}
 	}
 	private void goToGetMsg() {
 
@@ -90,29 +94,30 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 	}
 	@Override
 	public void onResp(BaseResp baseResp) {
-		Toast.makeText(this, "openid = " + baseResp.openId, Toast.LENGTH_SHORT).show();
-
-		if (baseResp.getType() == ConstantsAPI.COMMAND_SENDAUTH) {
-			Toast.makeText(this, "code = " + ((SendAuth.Resp) baseResp).code, Toast.LENGTH_SHORT).show();
-		}
-
-		int result = 0;
-
-		switch (baseResp.errCode) {
-			case BaseResp.ErrCode.ERR_OK:
-				result = R.string.errcode_success;
-				break;
-			case BaseResp.ErrCode.ERR_USER_CANCEL:
-				result = R.string.errcode_cancel;
-				break;
-			case BaseResp.ErrCode.ERR_AUTH_DENIED:
-				result = R.string.errcode_deny;
-				break;
-			default:
-				result = R.string.errcode_unknown;
-				break;
-		}
-
-		Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+		MyLog.i("wechat","test");
+//		Toast.makeText(this, "openid = " + baseResp.openId, Toast.LENGTH_SHORT).show();
+//
+//		if (baseResp.getType() == ConstantsAPI.COMMAND_SENDAUTH) {
+//			Toast.makeText(this, "code = " + ((SendAuth.Resp) baseResp).code, Toast.LENGTH_SHORT).show();
+//		}
+//
+//		int result = 0;
+//
+//		switch (baseResp.errCode) {
+//			case BaseResp.ErrCode.ERR_OK:
+//				result = R.string.errcode_success;
+//				break;
+//			case BaseResp.ErrCode.ERR_USER_CANCEL:
+//				result = R.string.errcode_cancel;
+//				break;
+//			case BaseResp.ErrCode.ERR_AUTH_DENIED:
+//				result = R.string.errcode_deny;
+//				break;
+//			default:
+//				result = R.string.errcode_unknown;
+//				break;
+//		}
+//
+//		Toast.makeText(this, result, Toast.LENGTH_LONG).show();
 	}
 }

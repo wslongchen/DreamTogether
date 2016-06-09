@@ -1,6 +1,7 @@
 package com.example.mrpan.dreamtogether.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import com.example.mrpan.dreamtogether.OtherActivity;
 import com.example.mrpan.dreamtogether.R;
 import com.example.mrpan.dreamtogether.adapter.TestFragPagerAdapter;
 import com.example.mrpan.dreamtogether.entity.Dream;
@@ -23,6 +25,7 @@ import com.example.mrpan.dreamtogether.view.DeletableEditText;
 import com.example.mrpan.dreamtogether.view.StarViewPager;
 import com.example.mrpan.dreamtogether.view.TitleBar;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -37,6 +40,8 @@ public class StarFragment extends Fragment implements View.OnClickListener{
     ViewPager pager=null;
 
     private Context context=null;
+
+    private DreamPosts dreams;
 
     private TitleBar titleBar;
 
@@ -55,10 +60,12 @@ public class StarFragment extends Fragment implements View.OnClickListener{
 
     private void initView(){
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
+        titleBar.showLeftStrAndRightStr("精选","","附近",this,this);
         pager=(ViewPager) currentView.findViewById(R.id.myViewPager1);
         DreamPosts cache= (DreamPosts) CacheUtils.readHttpCache(Config.DIR_CACHE_PATH, "all_dream");
         if(cache!=null)
         {
+            dreams=cache;
             pager.setAdapter(new StarPagerAdapter(getFragmentManager(),cache.getPost()));
 
         }
@@ -96,7 +103,13 @@ public class StarFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case 1:
+            case R.id.titleBarRightStr:
+                Intent intent=new Intent(context, OtherActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putInt("type",Config.DREAM_MAPS);
+                bundle.putSerializable("data",dreams);
+                intent.putExtras(bundle);
+                startActivity(intent);
                 break;
             default:
                 break;
