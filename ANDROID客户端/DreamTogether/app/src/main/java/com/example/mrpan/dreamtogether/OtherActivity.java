@@ -26,6 +26,7 @@ import com.example.mrpan.dreamtogether.fragment.EditFragment;
 import com.example.mrpan.dreamtogether.fragment.MessegeFragment;
 import com.example.mrpan.dreamtogether.fragment.PhotoFragment;
 import com.example.mrpan.dreamtogether.fragment.PicSelectFragment;
+import com.example.mrpan.dreamtogether.fragment.QRCodeFragment;
 import com.example.mrpan.dreamtogether.fragment.SelectImageGridFragment;
 import com.example.mrpan.dreamtogether.fragment.ShareFragment;
 import com.example.mrpan.dreamtogether.fragment.UserDreamListFragment;
@@ -59,6 +60,7 @@ public class OtherActivity extends FragmentActivity {
     private EditFragment editFragment=null;
     private ShareFragment shareFragment=null;
     private DreamMapInfo dreamMapInfo=null;
+    private QRCodeFragment qrCodeFragment=null;
 
 
     @Override
@@ -163,10 +165,22 @@ public class OtherActivity extends FragmentActivity {
                 transaction = getSupportFragmentManager().beginTransaction();
                 if(dreams!=null){
                     ((DreamMapInfo)fragmentHashMap.get(DreamMapInfo.TAG)).setDreams(dreams.getPost());
-                    MyLog.i("other",dreams.getPost().size()+",dddddddddddd");
+                    MyLog.i("other", dreams.getPost().size() + ",dddddddddddd");
                 }
                 //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
                 transaction.replace(R.id.other_layout, fragmentHashMap.get(DreamMapInfo.TAG));
+                //transaction.addToBackStack(null);
+                transaction.commit();
+                break;
+            case Config.DREAM_QRCODE:
+//                DreamPosts dreams= (DreamPosts) bundle.getSerializable("data");
+                transaction = getSupportFragmentManager().beginTransaction();
+//                if(dreams!=null){
+//                    ((DreamMapInfo)fragmentHashMap.get(DreamMapInfo.TAG)).setDreams(dreams.getPost());
+//                    MyLog.i("other",dreams.getPost().size()+",dddddddddddd");
+//                }
+                //transaction.setCustomAnimations(R.anim.left_in,R.anim.left_out,R.anim.right_in,R.anim.right_out);
+                transaction.replace(R.id.other_layout, fragmentHashMap.get(QRCodeFragment.TAG));
                 //transaction.addToBackStack(null);
                 transaction.commit();
                 break;
@@ -192,6 +206,7 @@ public class OtherActivity extends FragmentActivity {
         editFragment=new EditFragment();
         shareFragment=new ShareFragment();
         dreamMapInfo=new DreamMapInfo();
+        qrCodeFragment=new QRCodeFragment();
 
         fragmentHashMap.put(DreamerRegisterFragment.TAG, dreamerRegisterFragment);
         fragmentHashMap.put(UserDreamListFragment.TAG,userDreamListFragment);
@@ -208,6 +223,7 @@ public class OtherActivity extends FragmentActivity {
         fragmentHashMap.put(EditFragment.TAG,editFragment);
         fragmentHashMap.put(ShareFragment.TAG,shareFragment);
         fragmentHashMap.put(DreamMapInfo.TAG,dreamMapInfo);
+        fragmentHashMap.put(QRCodeFragment.TAG,qrCodeFragment);
 
     }
 

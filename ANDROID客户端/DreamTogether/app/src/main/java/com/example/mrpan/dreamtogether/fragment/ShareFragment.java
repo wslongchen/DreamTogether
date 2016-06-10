@@ -43,6 +43,8 @@ import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DateUtils;
 import com.example.mrpan.dreamtogether.utils.FileUtils;
 import com.example.mrpan.dreamtogether.utils.MyLog;
+import com.example.mrpan.dreamtogether.utils.OtherUtils;
+import com.example.mrpan.dreamtogether.view.ActionSheetDialog;
 import com.example.mrpan.dreamtogether.view.SharePopupWindows;
 import com.example.mrpan.dreamtogether.view.TitleBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -54,7 +56,7 @@ import java.util.ArrayList;
 /**
  * Created by mrpan on 16/5/24.
  */
-public class ShareFragment extends Fragment implements View.OnClickListener{
+public class ShareFragment extends Fragment implements View.OnClickListener,ActionSheetDialog.OnSheetItemClickListener{
 
     public static final String TAG="Share";
     private Context context;
@@ -62,9 +64,10 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
     private Dream dream;
     private TitleBar titleBar;
 
+    private ActionSheetDialog actionSheet;
 
     private TextView temprature,dream_location,time,content,author;
-    private ImageView share_image;
+    private ImageView share_image,weather_image;
     private ScrollView scrollView;
     private LinearLayout s;
 
@@ -85,6 +88,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
 
     private void init(){
         share_image=(ImageView)currentView.findViewById(R.id.share_image);
+        weather_image=(ImageView)currentView.findViewById(R.id.image_weather);
         titleBar=(TitleBar)currentView.findViewById(R.id.top_bar);
         titleBar.showLeftStrAndRightStr("小记","取消","分享",this,this);
         scrollView=(ScrollView)currentView.findViewById(R.id.share_view);
@@ -111,6 +115,14 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
         content.setText(dream.getPost_content());
         author=(TextView)currentView.findViewById(R.id.author);
         author.setText(dream.getPost_author().getUser_nickname());
+        if(dream.getPost_guid()!=null){
+            String[] args=dream.getPost_type().split(",");
+            if(args.length==3){
+                weather_image.setImageResource(OtherUtils.revertWeatherToImg(args[0]));
+                temprature.setText(args[1]);
+                dream_location.setText(args[2]);
+            }
+        }
         if(dream.getPost_imgs()!=null && !dream.getPost_imgs().equals("")) {
             if (dream.getPost_imgs().length() > 0 && !dream.getPost_imgs().trim().isEmpty() && !dream.getPost_imgs().equals("")) {
                 String[] imgs = dream.getPost_imgs().split(",");
@@ -174,6 +186,22 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
 
         return bitmap;
 
+    }
+
+    @Override
+    public void onClick(int which) {
+        switch (which){
+            case 1:
+                photo();
+                break;
+            case 2:
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");//相片类型
+                startActivityForResult(intent, 7);
+
+                break;
+
+        }
     }
 
     public class PopupWindows extends PopupWindow {
@@ -340,8 +368,16 @@ public class ShareFragment extends Fragment implements View.OnClickListener{
 //                AllShare.getInstance(context).qq_share_image(share);
                 break;
             case R.id.share_image:
-                new PopupWindows(context, currentView);
-                backgroundAlpha(0.7f);
+                //new PopupWindows(context, currentView);
+                actionSheet = new ActionSheetDialog(context)
+                        .builder()
+                        .setCancelable(false)
+                        .setCanceledOnTouchOutside(true)
+                        .addSheetItem("拍照", ActionSheetDialog.SheetItemColor.Blue ,this)
+                        .addSheetItem("本地相册", ActionSheetDialog.SheetItemColor.Blue, this);
+
+                actionSheet.show();
+                //backgroundAlpha(0.7f);
                 break;
             default:
                 break;

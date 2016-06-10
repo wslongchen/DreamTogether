@@ -31,6 +31,7 @@ import com.example.mrpan.dreamtogether.entity.User;
 import com.example.mrpan.dreamtogether.utils.CacheUtils;
 import com.example.mrpan.dreamtogether.utils.Config;
 import com.example.mrpan.dreamtogether.utils.DateUtils;
+import com.example.mrpan.dreamtogether.utils.MyLog;
 import com.example.mrpan.dreamtogether.utils.MySharePreference;
 import com.example.mrpan.dreamtogether.view.CustomDialog;
 import com.example.mrpan.dreamtogether.view.NoScrollGridView;
@@ -179,6 +180,7 @@ public class SystemSettingsFragment extends Fragment implements View.OnClickList
             User user = (User) CacheUtils.readHttpCache(Config.DIR_CACHE_PATH, "user_info");
             if(user!=null){
                 total_use_day.setText(DateUtils.getDays(user.getUser_registered()));
+                MyLog.i(TAG,user.getUser_registered()+"Dddddddd");
             }
         }else{
             total_use_day.setText("请登录");

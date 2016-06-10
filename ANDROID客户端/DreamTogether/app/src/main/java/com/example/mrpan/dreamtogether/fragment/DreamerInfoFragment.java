@@ -207,6 +207,12 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
         datas.add(data);
         data = new HashMap<>();
         data.put("isNull", false);
+        data.put("menuImg", R.mipmap.dreamer_qr);
+        data.put("menuText", "我的二维码");
+        data.put("menu", "menu0");
+        datas.add(data);
+        data = new HashMap<>();
+        data.put("isNull", false);
         data.put("menuImg", R.mipmap.licheng);
         data.put("menuText", "我的梦想历程");
         data.put("menu", "menu1");
@@ -214,7 +220,7 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
         data = new HashMap<>();
         data.put("isNull", false);
         data.put("menuImg", R.mipmap.new_message);
-        data.put("menuText", "梦想消息");
+        data.put("menuText", "我的梦想消息");
         data.put("menu", "menu2");
         datas.add(data);
         data = new HashMap<>();
@@ -247,6 +253,16 @@ public class DreamerInfoFragment extends Fragment implements AdapterView.OnItemC
         Intent intent = null;
         Bundle bundle = null;
         switch (map.get("menu").toString()) {
+            case "menu0":
+                intent = new Intent();
+                bundle = new Bundle();
+                bundle.putInt("type", Config.DREAM_QRCODE);
+                bundle.putSerializable("data", user);
+                intent.putExtras(bundle);
+                intent.setClass(context, OtherActivity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.left_in, R.anim.left_out);
+                break;
             case "menu1":
                 intent = new Intent();
                 bundle = new Bundle();

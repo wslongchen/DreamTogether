@@ -47,7 +47,7 @@ public class MakeQRCodeUtils {
             Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
             hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
             hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);// 容错率
-            hints.put(EncodeHintType.MARGIN, 2); // default is 4
+           // hints.put(EncodeHintType.MARGIN, 2); // default is 4
             hints.put(EncodeHintType.MAX_SIZE, 350);
             hints.put(EncodeHintType.MIN_SIZE, 100);
 
@@ -97,8 +97,8 @@ public class MakeQRCodeUtils {
             }
 
             // 图片绘制在二维码中央，合成二维码图片
-            // logo大小为二维码整体大小的1/2
-            float scaleFactor = QR_WIDTH * 1.0f / 2 / logoWidth;
+            // logo大小为二维码整体大小的1/4
+            float scaleFactor = QR_WIDTH * 1.0f / 4 / logoWidth;
             try {
                 Canvas canvas = new Canvas(bitmap);
                 canvas.drawBitmap(bitmap, 0, 0, null);

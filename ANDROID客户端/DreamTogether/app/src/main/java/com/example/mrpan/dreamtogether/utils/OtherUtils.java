@@ -201,16 +201,16 @@ public class OtherUtils {
                 int width = qrcode.getMeasuredWidth();
                 Bitmap logo = MakeQRCodeUtils.gainBitmap(context, R.mipmap.ic_launcher);
                 Bitmap   background = MakeQRCodeUtils.gainBitmap(context, R.mipmap.bg_search);
-                Bitmap markBMP = MakeQRCodeUtils.gainBitmap(context, R.mipmap.app_icon);
+                //Bitmap markBMP = MakeQRCodeUtils.gainBitmap(context, R.mipmap.app_icon);
                 try {
                     //获得二维码图片
-                    Bitmap bitmap = MakeQRCodeUtils.makeQRImage(logo,
+                    Bitmap bitmap = MakeQRCodeUtils.makeQRImage(
                             content,
                             width, height);
                     //给二维码加背景
-                    bitmap = MakeQRCodeUtils.addBackground(bitmap, background);
+                   // bitmap = MakeQRCodeUtils.addBackground(bitmap, background);
                     //加水印
-                    bitmap = MakeQRCodeUtils.composeWatermark(bitmap, markBMP);
+                    //bitmap = MakeQRCodeUtils.composeWatermark(bitmap, markBMP);
                     //设置二维码图片
                     qrcode.setImageBitmap(bitmap);
                 } catch (WriterException e) {

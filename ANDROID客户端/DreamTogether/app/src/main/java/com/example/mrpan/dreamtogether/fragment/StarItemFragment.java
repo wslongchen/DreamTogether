@@ -137,6 +137,7 @@ public class StarItemFragment extends Fragment {
                             temprature.setText(wendu.getString("wendu"));
                             String tianqi=info.getJSONObject(0).getString("type");
                             image_weather.setImageResource(OtherUtils.revertWeatherToImg(tianqi));
+                            dream.setPost_guid(tianqi+","+wendu.getString("wendu")+","+mLocation.getCity());
                         }
 
                     } catch (JSONException e) {

@@ -123,6 +123,7 @@ public class Config {
     public static final int EDIT_TYPE=1018;
     public static final int SHARE_TYPE=1019;
     public static final int DREAM_MAPS=1020;
+    public static final int DREAM_QRCODE=1021;
 
 
     public static final int SHARE=1019;

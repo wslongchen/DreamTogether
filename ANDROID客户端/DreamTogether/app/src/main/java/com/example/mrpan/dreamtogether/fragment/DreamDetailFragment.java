@@ -148,6 +148,7 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
         dream_content=(TextView)currentView.findViewById(R.id.content);
         dream_deviceinfo=(TextView)currentView.findViewById(R.id.dream_deviceinfo);
         user_img=(ImageView)currentView.findViewById(R.id.user_img);
+        user_img.setOnClickListener(this);
         gridView=(NoScrollGridView)currentView.findViewById(R.id.gridView);
         comment_img=(ImageView)currentView.findViewById(R.id.comment_img);
         comment_img.setOnClickListener(this);
@@ -291,6 +292,15 @@ public class DreamDetailFragment extends Fragment implements View.OnClickListene
                 //让输入框获取焦点
                 commentText.requestFocus();
                 showSoftInputView(commentText);
+                break;
+            case R.id.user_img:
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", Config.TIMELINE_TYPE);
+                bundle.putInt("data", dream.getPost_author().getID());
+                intent.putExtras(bundle);
+                intent.setClass(context, OtherActivity.class);
+                context.startActivity(intent);
                 break;
             default:
                 hideSoftInputView();

@@ -711,4 +711,40 @@ public class BitmapUtils {
 
 		return null;
 	}
+
+
+	public static Bitmap getViewBitmap( View view ){
+
+		view.setDrawingCacheEnabled( true );
+		view.buildDrawingCache();
+
+		Bitmap bitmap = null;
+
+		try{
+
+			if( null != view.getDrawingCache( ) ){
+
+				bitmap = Bitmap.createBitmap(view.getDrawingCache());
+
+			}else{
+
+				//Bitmap bitmapTmp =( (BitmapDrawable)( getResources( ).getDrawable( R.drawable.syncompdetailcontent_background ) ) ).getBitmap( );
+
+			}
+
+		}catch( OutOfMemoryError e ){
+
+			e.printStackTrace( );
+
+		}finally{
+
+			view.setDrawingCacheEnabled( false );
+
+			view.destroyDrawingCache( );
+
+		}
+
+		return bitmap;
+
+	}
 }
