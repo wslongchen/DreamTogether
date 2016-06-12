@@ -29,6 +29,15 @@
                     android:scaleType="fitXY"
                     android:src="@mipmap/ic_launcher"
                     />
+                <ImageView
+                    android:id="@+id/personalized_code2"
+
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:scaleType="fitXY"
+                    android:visibility="gone"
+                    android:src="@mipmap/ic_launcher"
+                    />
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -64,4 +73,26 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        >
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_saoyisao"
+            android:id="@+id/saoyisao"
+
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="扫一扫"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/saoyisao"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 </LinearLayout>

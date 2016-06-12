@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import com.example.mrpan.dreamtogether.utils.OtherUtils;
 import com.example.mrpan.dreamtogether.view.ActionSheetDialog;
 import com.example.mrpan.dreamtogether.view.SharePopupWindows;
 import com.example.mrpan.dreamtogether.view.TitleBar;
+import com.example.mrpan.dreamtogether.zxing.MipcaActivityCapture;
 import com.google.zxing.WriterException;
 import com.sina.weibo.sdk.utils.ImageUtils;
 
@@ -42,13 +44,13 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener,Act
 
     private View currentView;
 
-    private ImageView qr_code;
+    private ImageView qr_code,qr_code2;
+
+    private ImageButton saoyisao;
 
     private Context context;
 
     private TitleBar topbar;
-
-    private Bitmap qr_1=null,qr_2=null,qr_3=null,current=null;
 
     private boolean current_qr=true;
 
@@ -63,7 +65,7 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener,Act
         }
         context=getActivity();
         initView();
-        //handler.sendEmptyMessage(1);
+        handler.sendEmptyMessage(1);
         return currentView;
     }
 
@@ -72,7 +74,9 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener,Act
         topbar.showLeftStrAndRightStr("梦想", "返回", "分享", this, this);
         qr_code=(ImageView)currentView.findViewById(R.id.personalized_code);
         qr_View=(LinearLayout)currentView.findViewById(R.id.qr_view);
-        initOtherQrImage("潘安");
+        qr_code2=(ImageView)currentView.findViewById(R.id.personalized_code2);
+        saoyisao=(ImageButton)currentView.findViewById(R.id.saoyisao);
+        saoyisao.setOnClickListener(this);
     }
     @Override
     public void onResume() {
@@ -80,6 +84,13 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener,Act
         //获得控件的宽高
         calculateView("潘安");
         qr_code.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                share();
+                return false;
+            }
+        });
+        qr_code2.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 share();
@@ -109,6 +120,10 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener,Act
             case R.id.titleBarLeftStr:
                 getActivity().finish();
                 break;
+            case R.id.saoyisao:
+                Intent intent=new Intent(context, MipcaActivityCapture.class);
+                startActivity(intent);
+                break;
             default:
                 break;
         }
@@ -118,19 +133,29 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener,Act
     public void onClick(int which) {
         switch (which){
             case 1:
-                if(qr_1!=null&&qr_2!=null){
-                    if(current_qr){
-                        qr_code.setImageBitmap(qr_2);
-                        current=qr_2;
-                        current_qr=false;
-
-                    }else {
-                        qr_code.setImageBitmap(qr_1);
-                        current=qr_1;
-                        current_qr=true;
-                    }
-                    Toast.makeText(context,"已更换",Toast.LENGTH_SHORT).show();
+//                if(qr_1!=null&&qr_2!=null){
+//                    if(current_qr){
+//                        qr_code.setImageBitmap(qr_2);
+//                        current=qr_2;
+//                        current_qr=false;
+//
+//                    }else {
+//                        qr_code.setImageBitmap(qr_1);
+//                        current=qr_1;
+//                        current_qr=true;
+//                    }
+//                    Toast.makeText(context,"已更换",Toast.LENGTH_SHORT).show();
+//                }
+                if(current_qr){
+                    qr_code2.setVisibility(View.VISIBLE);
+                    qr_code.setVisibility(View.GONE);
+                    current_qr=false;
+                }else{
+                    qr_code2.setVisibility(View.GONE);
+                    qr_code.setVisibility(View.VISIBLE);
+                    current_qr=true;
                 }
+
                 break;
             case 2:
                 sendToFriends();
@@ -145,7 +170,7 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener,Act
     private void saveLocal(){
 
         Bitmap bitmap=BitmapUtils.getViewBitmap(qr_View);
-        BitmapUtils.saveBitmapToSDCard(bitmap,Config.DIR_IMAGE_PATH+"code","qrcode");
+        BitmapUtils.saveBitmapToSDCard(bitmap, Config.DIR_IMAGE_PATH + "code", "qrcode");
         Uri imageUri=  Uri.parse(Config.DIR_IMAGE_PATH+"code/qrcode.jpg");
         // 其次把文件插入到系统图库
         String filename="qrcode.jpg";
@@ -177,22 +202,9 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener,Act
             super.handleMessage(msg);
             switch (msg.what){
                 case 1://换个样式初始化
-                        initOtherQrImage("潘安");
+                     calculateView2("潘安");
                     break;
                 case 2:
-                    if(qr_1!=null&&qr_2!=null){
-                        if(current_qr){
-                            qr_code.setImageResource(R.mipmap.ic_launcher);
-                            current=qr_2;
-                            current_qr=false;
-
-                        }else {
-                            qr_code.setImageBitmap(qr_1);
-                            current=qr_1;
-                            current_qr=true;
-                        }
-                        Toast.makeText(context,"已更换",Toast.LENGTH_SHORT).show();
-                    }
 
                     break;
                 default:
@@ -201,27 +213,6 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener,Act
         }
     };
 
-
-    private void initOtherQrImage(final String content){
-        int height = qr_code.getMeasuredHeight();
-        int width = qr_code.getMeasuredWidth();
-        Bitmap logo = MakeQRCodeUtils.gainBitmap(context, R.mipmap.ic_launcher);
-        Bitmap   background = MakeQRCodeUtils.gainBitmap(context, R.mipmap.bg_search);
-        try {
-            //获得二维码图片
-            qr_2 = MakeQRCodeUtils.makeQRImage(logo,
-                    content,
-                    width, height);
-
-            //给二维码加背景
-            // bitmap = MakeQRCodeUtils.addBackground(bitmap, background);
-            //加水印
-            //bitmap = MakeQRCodeUtils.composeWatermark(bitmap, markBMP);
-            //设置二维码图片
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
     //设置二维码
     private void calculateView(final String content) {
         final ViewTreeObserver vto = qr_code.getViewTreeObserver();
@@ -246,9 +237,39 @@ public class QRCodeFragment extends Fragment implements View.OnClickListener,Act
                     //bitmap = MakeQRCodeUtils.composeWatermark(bitmap, markBMP);
                     //设置二维码图片
                     qr_code.setImageBitmap(bitmap);
-                    qr_1=bitmap;
-                    current=bitmap;
                    // current_qr=0;
+                } catch (WriterException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            }
+        });
+    }
+
+    private void calculateView2(final String content) {
+        final ViewTreeObserver vto = qr_code2.getViewTreeObserver();
+        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                if (vto.isAlive()) {
+                    vto.removeOnPreDrawListener(this);
+                }
+                int height = 300;
+                int width = 300;
+                Bitmap logo = MakeQRCodeUtils.gainBitmap(context, R.mipmap.ic_launcher);
+                Bitmap   background = MakeQRCodeUtils.gainBitmap(context, R.mipmap.bg_search);
+                //Bitmap markBMP = MakeQRCodeUtils.gainBitmap(context, R.mipmap.app_icon);
+                try {
+                    //获得二维码图片
+                    Bitmap bitmap = MakeQRCodeUtils.makeQRImage(logo,
+                            content,
+                            width, height);
+                    //给二维码加背景
+                     bitmap = MakeQRCodeUtils.addBackground(bitmap, background);
+                    //加水印
+                    //bitmap = MakeQRCodeUtils.composeWatermark(bitmap, markBMP);
+                    //设置二维码图片
+                    qr_code2.setImageBitmap(bitmap);
+                    // current_qr=0;
                 } catch (WriterException e) {
                     e.printStackTrace();
                 }

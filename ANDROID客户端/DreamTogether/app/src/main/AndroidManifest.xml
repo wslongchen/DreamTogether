@@ -109,6 +109,8 @@
 
         </activity>
 
+        <activity android:name=".zxing.MipcaActivityCapture"/>
+
         <activity android:name=".wxapi.WXPayEntryActivity"/>
         <service android:name=".xmpp.MySystemService"/>
         <service android:name=".music.MusicService"/>
