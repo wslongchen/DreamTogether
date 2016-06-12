@@ -109,7 +109,8 @@
 
         </activity>
 
-        <activity android:name=".zxing.MipcaActivityCapture"/>
+        <activity android:name=".zxing.MipcaActivityCapture"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".wxapi.WXPayEntryActivity"/>
         <service android:name=".xmpp.MySystemService"/>
