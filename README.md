@@ -78,6 +78,7 @@
 + 
 <img src="https://github.com/wslongchen/DreamTogether/blob/master/截图/Screenshot_20160612-141433.png" width="260px" height="480px"/>
 <img src="https://github.com/wslongchen/DreamTogether/blob/master/截图/Screenshot_20160612-151958.png" width="260px" height="480px"/>
+<img src="https://raw.githubusercontent.com/wslongchen/DreamTogether/master/截图/D45FCA65207E4FA08528DC6432508030.png" width="260px" height="480px"/>
 + 我的梦想历程。
 + 
 <img src="https://github.com/wslongchen/DreamTogether/blob/master/截图/Screenshot_20160612-160007.png" width="260px" height="480px"/>
@@ -88,6 +89,17 @@
 + 
 <img src="https://github.com/wslongchen/DreamTogether/blob/master/截图/Screenshot_20160612-161602.png" width="260px" height="480px"/>
 + 可以查看周围人们发表的梦想。
++ 
+
+<img src="https://raw.githubusercontent.com/wslongchen/DreamTogether/master/截图/81CAEFCE1FBE5F47E6959227F896FA0D.png" width="260px" height="480px"/>
++ 发表梦想
++ 
+<img src="https://raw.githubusercontent.com/wslongchen/DreamTogether/master/截图/7937F69EEBE3177C7CBD281C3727E1B3.png" width="260px" height="480px"/>
+
+
+
+
+
 
 **********************************************************
 ######更新于2016/04/10
