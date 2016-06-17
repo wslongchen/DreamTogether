@@ -1,0 +1,353 @@
+接口访问
+appKey:dream ,.*-app
+出于接口的安全性考虑，每次调用本文档接口时，都需要传两个参数：
+1、 timestamp 时间戳，即调用接口时的时间戳
+2、 sign 签名 ,根据appKey、timestamp和调用的接口名字按规则生成
+注意：用作生成sign的timestamp和作为参数传递的timestamp必须一致
+
+sign生成规则：appKey+timestamp+actionName（当前接口名称，全部转换成小写）字符串拼接后MD5 加密
+例：postUser接口 ，appKey 为 dream,.*-app， timestamp为123456789
+则sign 为 md5(dream,.*-app123456789postuser)
+最后的值为 4d7393a35f972f3f15710bbf1a920746
+
+### 梦想
+#### 1.发表梦想
+url:http://dream.mrpann.com/app.php?action=post&type=dream
+输入参数：
+author，梦想作者，不能为空
+date，发表时间，不能为空
+content，梦想内容，可以为空
+title，标题，默认为空
+status，状态，默认为0
+password，密码，默认为空
+guid，链接地址，可以为空
+type，类型，默认为0
+commentstatus，评论状态，默认为0
+commentcount，评论总数，默认为0
+返回参数：
+ret 0为成功，1为失败
+post 提示内容
+#### 2.发表梦想（带图片）
+url:http://dream.mrpann.com/allpost.php?action=postDreamImg
+输入参数：
+author，梦想作者，不能为空
+date，发表时间，不能为空
+content，梦想内容，可以为空
+title，标题，默认为空
+status，状态，默认为0
+password，密码，默认为空
+guid，链接地址，可以为空
+type，类型，默认为0
+commentstatus，评论状态，默认为0
+commentcount，评论总数，默认为0
+file0-file8，图片，file格式
+返回参数：
+ret 0为成功，1为失败
+post 提示内容
+#### 3.创建评论
+url:http://dream.mrpann.com/index.php?action=comment&type=postComment
+输入参数：
+author，梦想作者，不能为空
+userid，评论者id，不能为空
+dreamid，梦想id，不能为空
+content，评论内容,不能为空
+time，评论时间，不能为空
+返回参数：
+ret 0为成功，1为失败
+post 提示内容
+#### 4.查询所有梦想
+url:http://dream.mrpann.com/index.php?action=list&type=dream&page=1
+get参数：
+page，页数
+返回参数：
+ret 0为成功，1为失败
+post 提示内容
+```
+示例：{
+    "ret": 0,
+    "post": [
+        {
+            "ID": "44",
+            "post_author": {
+                "ID": "5",
+                "user_login": "longchen",
+                "user_pass": "662e0103accf08eecbefc3d51302d182",
+                "user_nickname": "潘安",
+                "user_img": "",
+                "user_phone": "15574968443",
+                "user_email": "wslongchen@qq.com",
+                "user_url": "",
+                "user_registered": "2016-04-09 14:44:08",
+                "user_activation_key": "",
+                "user_status": "0",
+                "user_display_name": "i am the king"
+            },
+            "post_date": "2016-06-01 00:06:55",
+            "post_content": "我说所有的酒，都不如你。\n @如如",
+            "post_titile": "none",
+            "post_imgs": "dream.mrpann.com/uploads/CR-ovrJjcbMgV.jpeg",
+            "post_status": "0",
+            "post_password": "null",
+            "post_guid": "null",
+            "post_type": "0",
+            "post_comment_status": "0",
+            "post_comment_count": "0",
+            "metas": []
+        }
+     ]
+ }
+ ```
+#### 5.查询某用户所有梦想
+url:http://dream.mrpann.com/index.php?action=list&type=getDreamByAuthor&id=2
+get参数：
+id，用户id
+返回参数：
+ret 0为成功，1为失败
+post 提示内容
+示例：
+```
+{
+    "ret": 0,
+    "post": [
+        {
+            "ID": "44",
+            "post_author": {
+                "ID": "5",
+                "user_login": "longchen",
+                "user_pass": "662e0103accf08eecbefc3d51302d182",
+                "user_nickname": "潘安",
+                "user_img": "",
+                "user_phone": "15574968443",
+                "user_email": "wslongchen@qq.com",
+                "user_url": "",
+                "user_registered": "2016-04-09 14:44:08",
+                "user_activation_key": "",
+                "user_status": "0",
+                "user_display_name": "i am the king"
+            },
+            "post_date": "2016-06-01 00:06:55",
+            "post_content": "我说所有的酒，都不如你。\n @如如",
+            "post_titile": "none",
+            "post_imgs": "dream.mrpann.com/uploads/CR-ovrJjcbMgV.jpeg",
+            "post_status": "0",
+            "post_password": "null",
+            "post_guid": "null",
+            "post_type": "0",
+            "post_comment_status": "0",
+            "post_comment_count": "0",
+            "metas": []
+        }
+     ]
+}
+```
+#### 6.获取随机梦想
+url:http://dream.mrpann.com/index.php?action=list&type=getRandomDream
+返回参数：
+ret 0为成功，1为失败
+post 提示内容
+示例：
+```
+{
+    "ret": 0,
+    "post": [
+        {
+            "ID": "41",
+            "post_author": {
+                "ID": "5",
+                "user_login": "longchen",
+                "user_pass": "662e0103accf08eecbefc3d51302d182",
+                "user_nickname": "潘安",
+                "user_img": "",
+                "user_phone": "15574968443",
+                "user_email": "wslongchen@qq.com",
+                "user_url": "",
+                "user_registered": "2016-04-09 14:44:08",
+                "user_activation_key": "",
+                "user_status": "0",
+                "user_display_name": "i am the king"
+            },
+            "post_date": "2016-05-31 23:56:23",
+            "post_content": "我说所有的酒，都不如你。",
+            "post_titile": "none",
+            "post_imgs": null,
+            "post_status": "0",
+            "post_password": "null",
+            "post_guid": "null",
+            "post_type": "0",
+            "post_comment_status": "0",
+            "post_comment_count": "0",
+            "metas": [
+                {
+                    "dpmeta_id": "9",
+                    "post_id": "41",
+                    "meta_key": "hot_info",
+                    "meta_value": "1"
+                },
+                {
+                    "dpmeta_id": "10",
+                    "post_id": "41",
+                    "meta_key": "device_info",
+                    "meta_value": "htc"
+                },
+                {
+                    "dpmeta_id": "11",
+                    "post_id": "41",
+                    "meta_key": "location",
+                    "meta_value": "{\"addr\":\"中国湖南省张家界市永定区子午路\",\"latitude\":\"29.143375\",\"lontitude\":\"110.468211\"}"
+                }
+            ]
+        }
+     ]
+}
+```
+#### 7.获取某条梦想评论
+url:http://dream.mrpann.com/index.php?action=comment&type=getComment&id=
+get参数：
+id，梦想id
+返回参数：
+ret 0为成功，1为失败
+post 提示内容
+````
+示例：
+{
+    "ret": 0,
+    "post": [
+        {
+            "ID": "2",
+            "post_id": "20",
+            "comment_user_id": {
+                "ID": "5",
+                "user_login": "longchen",
+                "user_pass": "662e0103accf08eecbefc3d51302d182",
+                "user_nickname": "潘安",
+                "user_img": "",
+                "user_phone": "15574968443",
+                "user_email": "wslongchen@qq.com",
+                "user_url": "",
+                "user_registered": "2016-04-09 14:44:08",
+                "user_activation_key": "",
+                "user_status": "0",
+                "user_display_name": "i am the king"
+            },
+            "comment_content": "sounds good~",
+            "comment_time": "2016-05-09 17:59:26"
+        }
+    ]
+}
+```
+#### 8.删除一条梦想
+url:http://dream.mrpann.com/index.php?action=comment&type=getComment&id=
+输入参数：
+id，梦想id
+返回参数：
+ret 0为成功，1为失败
+post 提示内容
+### 用户
+#### 1.注册用户
+url:http://dream.mrpann.com/app.php?action=post&type=user
+输入参数：
+name，用户名，不能为空
+pass，密码，不能为空
+nickname，昵称，可以为空
+img，头像，默认为空
+phone，电话，不能为空
+email，邮箱，不能为空
+url，个人地址，可以为空
+registeredate，注册地址，不能为空
+activation key，激活码，默认为空
+status，状态码，默认为0
+displayname，签名，默认为空
+返回参数：
+ret 0为成功，1为失败
+post 提示内容
+#### 2.用户登陆
+url:http://dream.mrpann.com/index.php?action=list&type=loginUser&name=xx&password=xx
+输入参数：
+name，用户名，不能为空
+password，密码，不能为空
+返回参数：
+ret 0为成功，1为失败
+post 提示内容
+```
+示例：
+{
+    "ret": 0,
+    "post": [
+        {
+            "ID": "1",
+            "user_login": "wslongchen",
+            "user_pass": "662e0103accf08eecbefc3d51302d182",
+            "user_nickname": "panan",
+            "user_img": "dream.mrpann.com/uploads/CR-iWwvmNwLjR.jpg",
+            "user_phone": "15574968433",
+            "user_email": "wslongchen@vip.qq.com",
+            "user_url": null,
+            "user_registered": "2016-10-10 00:00:00",
+            "user_activation_key": null,
+            "user_status": "0",
+            "user_display_name": "我这辈子最爱的一个人她有一个好听的名字叫做田如男。"
+        }
+    ],
+    "meta": [
+        {
+            "dumeta_id": "2",
+            "user_id": "1",
+            "meta_key": "headimg",
+            "meta_value": "dream.mrpann.com/uploads/CR-tzBIkrwKtI.jpeg"
+        }
+    ]
+}
+```
+#### 3.查询用户
+url:http://dream.mrpann.com/index.php?action=list&type=getUserByID&id=1
+输入参数：
+id，用户id，不能为空
+返回参数：
+ret 0为成功，1为失败
+post 提示内容
+示例：
+```
+{
+    "ret": 0,
+    "post": [
+        {
+            "ID": "1",
+            "user_login": "wslongchen",
+            "user_pass": "662e0103accf08eecbefc3d51302d182",
+            "user_nickname": "panan",
+            "user_img": "dream.mrpann.com/uploads/CR-iWwvmNwLjR.jpg",
+            "user_phone": "15574968433",
+            "user_email": "wslongchen@vip.qq.com",
+            "user_url": null,
+            "user_registered": "2016-10-10 00:00:00",
+            "user_activation_key": null,
+            "user_status": "0",
+            "user_display_name": "我这辈子最爱的一个人她有一个好听的名字叫做田如男。"
+        }
+    ],
+    "meta": [
+        {
+            "dumeta_id": "2",
+            "user_id": "1",
+            "meta_key": "headimg",
+            "meta_value": "dream.mrpann.com/uploads/CR-tzBIkrwKtI.jpeg"
+        }
+    ]
+}
+```
+4.更改个性签名
+url:http://dream.mrpann.com/index.php?action=update&type=sign
+输入参数：
+sign，签名内容，不能为空
+id，用户id，不能为空
+返回参数：
+ret 0为成功，1为失败
+post 提示内容
+5.更改用户头像
+url:http://dream.mrpann.com/allpost.php?action=updateUserImg
+输入参数：
+id，用户id，不能为空
+file0，图像文件，file格式，不能为空
+返回参数：
+ret 0为成功，1为失败
+post 提示内容
